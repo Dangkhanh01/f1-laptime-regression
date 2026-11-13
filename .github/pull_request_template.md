@@ -1,14 +1,4 @@
-## Problem and result
+<!-- Hoàn tất toàn bộ task: Closes #...; chỉ xong một phần: Refs #... -->
 
-Issue:
-Owner / reviewer:
-
-## Validation
-
-- [ ] Ruff passes; relevant tests pass when present
-- [ ] Dataset/target/split changes documented and reviewed (if applicable)
-- [ ] Metrics link to a real run and identify validation versus test
-- [ ] No raw data, model binaries or secrets committed
-
-Artifact/run ID:
-Limitations:
+- Thay đổi/kết quả:
+- Đã kiểm tra:

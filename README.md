@@ -73,6 +73,7 @@ app/              Ứng dụng Streamlit
 reports/          Báo cáo, bảng và biểu đồ
 tests/            Kiểm thử
 .github/          Workflow CI và mẫu pull request
+docs/tasks/       Hướng dẫn giao việc và bàn giao theo từng task
 ```
 
 Hiện các thư mục nghiệp vụ mới là bộ khung. Dữ liệu raw/processed, model artifacts và
@@ -88,9 +89,15 @@ uv run ruff format --check .
 CI kiểm tra lint/format và môi trường trên Windows/Linux/macOS. pytest đã được cấu hình;
 khi bổ sung tests, chạy `uv run pytest -q` và bật bước pytest trong workflow.
 
-Nhóm sử dụng **GitHub Issues** để mô tả công việc, người phụ trách và tiêu chí hoàn thành.
-Mỗi thay đổi thực hiện trên nhánh riêng, gửi **pull request** và có thành viên khác review.
-Tài liệu kỹ thuật được bổ sung cùng phần triển khai tương ứng.
+**Nói miệng để tranh luận — Issue chỉ để chốt hạ và lưu vết.** Nhóm dùng đúng một Issue
+cho mỗi mã task lớn F1-01 đến F1-07. Trao đổi và góp ý trực tiếp/qua call; sau quyết định
+quan trọng, người phụ trách ghi 2–3 gạch đầu dòng trong Issue tương ứng.
+Làm trên nhánh riêng, mở **pull request**; PR hoàn tất task ghi `Closes #...` để Issue đóng
+khi merge vào `main`. PR một phần ghi `Refs #...`.
+Tài liệu giao việc chi tiết nằm tại [Hướng dẫn khởi động nhóm](docs/tasks/README.md).
+Mỗi thành viên đọc trang task của mình để nắm phạm vi, các bước làm, đầu ra và tiêu chí
+nghiệm thu. Tài liệu kỹ thuật và các task tiếp theo được bổ sung khi có kết quả và quyết định
+từ bước trước.
 
 ## Thành viên và sản phẩm bàn giao
 
