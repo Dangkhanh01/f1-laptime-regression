@@ -14,14 +14,12 @@ Các trang dưới đây là hướng dẫn kỹ thuật để biết làm ở f
 | [#2](https://github.com/Dangkhanh01/f1-laptime-regression/issues/2) | [F1-02 — Kiểm tra dataset](F1-02-dataset-inventory.md) | Nguyên | Khi môi trường của Nguyên chạy được |
 | [#3](https://github.com/Dangkhanh01/f1-laptime-regression/issues/3) | [F1-03 — Protocol chung](F1-03-experiment-protocol.md) | Danh, đề xuất | Đọc yêu cầu ngay; chốt từ inventory |
 | [#4](https://github.com/Dangkhanh01/f1-laptime-regression/issues/4) | [F1-04 — EDA](F1-04-exploratory-analysis.md) | Khang | Sau inventory và ranh giới split |
-| Chưa tạo | [F1-05 — Chuẩn bị dữ liệu chung](F1-05-shared-data-preparation.md) | Nguyên | Sau protocol và EDA |
+| [#8](https://github.com/Dangkhanh01/f1-laptime-regression/issues/8) | [F1-05 — Chuẩn bị dữ liệu chung](F1-05-shared-data-preparation.md) | Nguyên | Sau protocol và EDA |
 | [#5](https://github.com/Dangkhanh01/f1-laptime-regression/issues/5) | [F1-06 — Mô hình và đánh giá](F1-06-models-evaluation.md) | Cả nhóm, mỗi người một model | Sau dữ liệu nền/split từ F1-05 |
 | [#6](https://github.com/Dangkhanh01/f1-laptime-regression/issues/6) | [F1-07 — Demo và video](F1-07-demo-video.md) | Nguyên, đề xuất | Sau pipeline/artifact từ F1-06 |
 | [#7](https://github.com/Dangkhanh01/f1-laptime-regression/issues/7) | [F1-08 — Báo cáo và nộp bài](F1-08-report-outline.md) | Khang tổng hợp, cả nhóm viết | Backlog; sau EDA và có định hướng model |
 
-Mã task khác số Issue GitHub. Bảng giữ các Issue hiện có theo nội dung công việc;
-Issue #5/#6/#7 cần đổi tiêu đề và đường dẫn doc theo mã mới, F1-05 cần một Issue mới.
-Lần chỉnh tài liệu này chưa cập nhật GitHub; khi mở PR, dùng số Issue thực tế trong bảng.
+Khi mở PR, tra số Issue GitHub theo mã task trong bảng trên.
 
 Khánh là leader; các phân công ghi “đề xuất” được nhóm thống nhất khi nói chuyện.
 F1-06/07 hiện chỉ mô tả phạm vi và vị trí đầu ra; chi tiết bổ sung trong chính trang task
