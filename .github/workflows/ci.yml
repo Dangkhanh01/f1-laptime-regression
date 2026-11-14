@@ -16,6 +16,7 @@ jobs:
       - run: uv sync --locked
       - run: uv run ruff check .
       - run: uv run ruff format --check .
+      - run: uv run pytest -q
   environment:
     strategy:
       fail-fast: false
@@ -29,5 +30,3 @@ jobs:
           version: "0.13.6"
       - run: uv sync --locked
       - run: uv run python scripts/check_environment.py
-      # Enable once implementation adds tests under tests/:
-      # - run: uv run pytest -q

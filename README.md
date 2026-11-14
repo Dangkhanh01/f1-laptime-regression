@@ -4,8 +4,8 @@ Dự án Machine Learning nghiên cứu và dự đoán thời gian hoàn thành
 bằng Linear Regression. Dự án tập trung vào thiết kế đặc trưng, đánh giá công bằng giữa
 các mô hình và diễn giải kết quả trên dữ liệu nhiều mùa giải.
 
-**Trạng thái:** khởi tạo cấu trúc và môi trường phát triển. Pipeline dữ liệu, mô hình và
-ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
+**Trạng thái:** đã có cấu trúc, môi trường và kiểm kê dữ liệu F1-02. Pipeline tiền xử lý,
+mô hình và ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
 
 ## Mục tiêu
 
@@ -28,8 +28,11 @@ Target dự kiến là lap time tính bằng giây. Các cột sử dụng, quy 
 train/validation/test sẽ được xác định sau khi khảo sát dữ liệu. Các mô hình phải dùng chung
 giao thức đánh giá; không sử dụng thông tin chưa có tại thời điểm dự đoán.
 
-Dữ liệu được lưu local, không commit vào Git. Quy trình tải và xác minh checksum sẽ được
-bổ sung trong phần triển khai dữ liệu.
+Repo chia sẻ trực tiếp các file cần dùng trong `data/raw/` để cả nhóm clone về là có dữ liệu.
+ZIP nguồn và cache FastF1 đã được xóa vì không cần cho kiểm kê; không cần tải lại để chạy
+`uv run python -m scripts.download_data` và `uv run python -m scripts.inspect_data`.
+[Kiểm kê F1-02](docs/data-inventory.md) ghi checksum, cách kiểm tra và các giới hạn cần
+chốt trước khi làm EDA.
 
 ## Công nghệ
 
@@ -76,8 +79,9 @@ tests/            Kiểm thử
 docs/tasks/       Hướng dẫn giao việc và bàn giao theo từng task
 ```
 
-Hiện các thư mục nghiệp vụ mới là bộ khung. Dữ liệu raw/processed, model artifacts và
-môi trường Python được loại khỏi Git bằng `.gitignore`.
+Hiện các thư mục nghiệp vụ mới là bộ khung. `.gitignore` không loại trừ thư mục nào trong
+`data/`; nhóm có thể chia sẻ dữ liệu cần thiết qua Git mà không phải tải riêng. Model artifacts
+và môi trường Python vẫn bị loại khỏi Git.
 
 ## Phát triển và kiểm tra
 

@@ -1,0 +1,36 @@
+column,dtype,missing_count,missing_pct,placeholder_count,meaning,unit,evidence
+Driver,str,0,0.0,0,Mã tay đua,,tên cột
+Team,str,0,0.0,0,Tên đội đua,,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+LapNumber,float64,0,0.0,0,Số vòng của tay đua trong sự kiện,vòng,tên cột
+LapTime,float64,0,0.0,0,Thời gian vòng; đối chiếu với LapTimeSec,giây,đối chiếu dữ liệu
+Sector1Time,float64,0,0.0,0,Thời gian sector 1,giây,tổng sector đối chiếu LapTimeSec
+Sector2Time,float64,0,0.0,0,Thời gian sector 2,giây,tổng sector đối chiếu LapTimeSec
+Sector3Time,float64,0,0.0,0,Thời gian sector 3,giây,tổng sector đối chiếu LapTimeSec
+Compound,str,0,0.0,765,Loại lốp trong sự kiện,,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+TyreLife,float64,887,0.9858,0,"Số vòng đã chạy trên bộ lốp, kể cả phiên khác",vòng,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+FreshTyre,bool,0,0.0,0,Lốp mới khi bắt đầu stint,đúng/sai,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+Stint,float64,382,0.4245,0,Số thứ tự stint,stint,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+IsAccurate,bool,0,0.0,0,Cờ kiểm tra đồng bộ đầu/cuối vòng; không bảo đảm mọi dữ liệu chính xác,đúng/sai,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+TrackStatus,str,0,0.0,0,Chuỗi mã các trạng thái đường đua xảy ra trong vòng,mã,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+PitInTime,float64,89980,100.0,0,Thời điểm xe vào pit tính từ đầu phiên; đơn vị sau chuyển đổi chưa xác minh,,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+PitOutTime,float64,89980,100.0,0,Thời điểm xe ra pit tính từ đầu phiên; đơn vị sau chuyển đổi chưa xác minh,,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+Position,float64,0,0.0,0,Vị trí tay đua khi kết thúc vòng,vị trí,https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+Time,float64,0,0.0,0,Thời điểm kết thúc vòng tính từ đầu phiên; đơn vị giây là suy luận,giây (suy luận),https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst
+Year,int64,0,0.0,0,Mùa giải,năm,tên cột
+EventName,str,0,0.0,0,Tên sự kiện,,tên cột
+Session,str,0,0.0,0,Mã phiên,,tên cột
+AirTemp,float64,0,0.0,0,Nhiệt độ không khí,°C,https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+TrackTemp,float64,0,0.0,0,Nhiệt độ mặt đường đua,°C,https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+Humidity,float64,0,0.0,0,Độ ẩm tương đối,%,https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+Pressure,float64,0,0.0,0,Áp suất không khí,mbar,https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+Rainfall,bool,0,0.0,0,Cờ có mưa tại thời điểm đo thời tiết,đúng/sai,https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+WindSpeed,float64,0,0.0,0,Tốc độ gió,m/s,https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+WindDirection,int64,0,0.0,0,Hướng gió,độ (0–359),https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py
+IsSafetyCar,int64,0,0.0,0,Nhãn Safety Car từ race control,0/1,mô tả nguồn
+IsVSC,int64,0,0.0,0,Nhãn Virtual Safety Car từ race control,0/1,mô tả nguồn
+LapTimeSec,float64,0,0.0,0,Thời gian vòng,giây,tên cột và đối chiếu dữ liệu
+RaceProgress,float64,0,0.0,0,Tiến độ cuộc đua; công thức chưa xác minh,tỷ lệ 0–1 (quan sát),https://data.mendeley.com/datasets/djr8rnjtjp/1
+HasPitIn,int64,0,0.0,0,Cờ có pit-in theo tên cột; công thức chưa xác minh,0/1 (quan sát),suy luận từ tên cột; chưa có định nghĩa nguồn
+HasPitOut,int64,0,0.0,0,Cờ có pit-out theo tên cột; công thức chưa xác minh,0/1 (quan sát),suy luận từ tên cột; chưa có định nghĩa nguồn
+EventKey,str,0,0.0,0,Khóa sự kiện do tác giả tạo,,đối chiếu dữ liệu
+Risk_SafetyCar,float32,0,0.0,0,Đầu ra mô hình rủi ro Safety Car của tác giả,,dataset_card.json

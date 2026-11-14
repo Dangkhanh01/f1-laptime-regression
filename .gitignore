@@ -10,8 +10,6 @@ build/
 .env.*
 !.env.example
 .DS_Store
-data/raw/
-data/processed/
 artifacts/
 tmp/
 *.log

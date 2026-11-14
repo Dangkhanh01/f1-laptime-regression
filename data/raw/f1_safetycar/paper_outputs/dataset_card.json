@@ -1,0 +1,25 @@
+{
+  "dataset_name": "F1 laps dataset (FastF1) + RaceControlMessages labels",
+  "years_included": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "session": [
+    "R"
+  ],
+  "rows": 89980,
+  "drivers": 31,
+  "events": 95,
+  "target": "IsSafetyCar",
+  "positives": 621,
+  "positive_rate": 0.006901533674149811,
+  "risk_column": "Risk_SafetyCar",
+  "notes": [
+    "Data collected via FastF1 cache; stored as Parquet on Google Drive.",
+    "Safety Car / VSC labels derived from RaceControlMessages (keyword-based).",
+    "Model: XGBoost classifier with categorical one-hot + numerical features.",
+    "Split strategy: event-stratified when possible; otherwise stratified row split."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "source": {
+    "title": "Multi-Season Formula 1 Lap Dataset with Race-Control-Based Safety Car Labels (2022-2025)",
+    "url": "https://data.mendeley.com/datasets/djr8rnjtjp/1",
+    "doi": "10.17632/djr8rnjtjp.1",
+    "version": 1,
+    "license": "CC BY 4.0"
+  },
+  "archive": {
+    "filename": "Multi-Season Formula 1 Lap Dataset with Race-Contr.zip",
+    "size_bytes": 99140796,
+    "sha256": "162dedd9786005976edd5973556f29971e6425df266accf0bafa355a5f75e402",
+    "hash_origin": "computed locally; no publisher checksum available"
+  },
+  "extracted": {
+    "file_count": 107,
+    "event_parquet_files": 95
+  },
+  "selected_file": {
+    "filename": "f1_research_dataset_with_risk_safetycar.parquet",
+    "path": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+    "archive_member": "Multi-Season Formula 1 Lap Dataset with Race-Contr/F1_SafetyCar_Research_2022_2025/F1_SafetyCar_Research_2022_2025/datasets/f1_research_dataset_with_risk_safetycar.parquet",
+    "size_bytes": 3001931,
+    "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+    "hash_origin": "computed locally; no publisher checksum available"
+  }
+}

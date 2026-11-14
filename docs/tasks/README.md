@@ -55,7 +55,8 @@ owner tự thiết kế code, trang task chỉ chốt trách nhiệm và đầu 
 
 - `docs/tasks/`: hướng dẫn giao việc; `docs/`: giải thích chuyên môn khi thực sự cần.
 - `scripts/`, `src/f1_lap_time/`: lệnh chạy và logic dùng chung; `configs/`: cấu hình thực thi.
-- `data/manifest.json`: nguồn/version/hash; `data/raw/`, `data/processed/`: dữ liệu local, không commit.
+- `data/manifest.json`: nguồn/version/hash; `data/raw/`: dữ liệu F1-02 đã trích để chia sẻ;
+  `data/processed/`: đầu ra F1-05 khi có, chia sẻ file cần thiết qua Git.
 - `reports/`: bảng/ảnh/báo cáo gọn cần chia sẻ; `artifacts/`: model và run local, không commit.
 - `tests/`: kiểm chứng logic cần thiết khi triển khai, không phải số liệu nghiên cứu.
 
