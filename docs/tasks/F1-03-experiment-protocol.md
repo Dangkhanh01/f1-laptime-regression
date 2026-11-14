@@ -31,6 +31,9 @@ Ngồi cùng/call với Nguyên, Khang và Khánh để tranh luận, không c�
    Nếu đổi config, chỉ rõ phần EDA nào cần chạy lại; không dùng final test để chọn thiết kế.
 6. Thống nhất metrics MAE/MSE/R², có thể thêm RMSE; quy ước lưu config, data/split,
    code version, metrics và artifact cho từng run để nhóm chạy lại và so sánh được.
+7. Bàn giao protocol/config cho Nguyên thực thi tại [F1-05](F1-05-shared-data-preparation.md).
+   Phân biệt quy tắc làm sạch/split chung với các biến đổi học từ dữ liệu trong Pipeline
+   của [F1-06](F1-06-models-evaluation.md); không để mỗi người tự lọc hoặc chia dataset riêng.
 
 ## Quy tắc diễn giải kết quả
 

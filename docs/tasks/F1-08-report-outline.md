@@ -1,7 +1,8 @@
-# F1-07 — Báo cáo và hoàn thiện gói nộp
+# F1-08 — Báo cáo và hoàn thiện gói nộp
 
 **Phụ trách:** Khang tổng hợp, cả nhóm viết phần mình thực hiện; Khánh điều phối nộp bài.
-**Issue:** #7. **Backlog:** bắt đầu sau EDA và khi có định hướng model, không ưu tiên trước F1-04.
+**Issue hiện có:** #7 (cần cập nhật mã task trong tiêu đề trên GitHub).
+**Backlog:** bắt đầu sau EDA và khi có định hướng model, không ưu tiên trước F1-04.
 Đề cương, viết báo cáo và hoàn thiện gói nộp đều nằm trong Issue này.
 
 ## Làm ở file nào

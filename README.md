@@ -90,7 +90,9 @@ CI kiểm tra lint/format và môi trường trên Windows/Linux/macOS. pytest �
 khi bổ sung tests, chạy `uv run pytest -q` và bật bước pytest trong workflow.
 
 **Nói miệng để tranh luận — Issue chỉ để chốt hạ và lưu vết.** Nhóm dùng đúng một Issue
-cho mỗi mã task lớn F1-01 đến F1-07. Trao đổi và góp ý trực tiếp/qua call; sau quyết định
+cho mỗi mã task lớn F1-01 đến F1-08. F1-05 chuẩn bị dữ liệu/split dùng chung; F1-06 xây
+bốn model từ đầu vào đó, các biến đổi có học nằm trong Pipeline và chỉ fit trên train.
+Trao đổi và góp ý trực tiếp/qua call; sau quyết định
 quan trọng, người phụ trách ghi 2–3 gạch đầu dòng trong Issue tương ứng.
 Làm trên nhánh riêng, mở **pull request**; PR hoàn tất task ghi `Closes #...` để Issue đóng
 khi merge vào `main`. PR một phần ghi `Refs #...`.

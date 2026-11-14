@@ -4,6 +4,8 @@
 
 Mục tiêu: lấy đúng dữ liệu, xác minh schema/chất lượng và bàn giao đủ căn cứ cho Danh
 chốt protocol, Khang làm EDA. Đây là kiểm kê, không phải toàn bộ phân tích khám phá.
+Nguyên thực thi làm sạch và xuất dữ liệu nền/split chung ở [F1-05](F1-05-shared-data-preparation.md)
+sau khi có protocol và EDA; F1-02 giữ nguyên raw, chưa xuất dataset sẵn sàng train.
 
 ## Làm ở file nào
 
