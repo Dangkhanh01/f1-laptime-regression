@@ -14,6 +14,7 @@ for module, package in [
     ("matplotlib", "matplotlib"),
     ("seaborn", "seaborn"),
     ("streamlit", "streamlit"),
+    ("pyarrow", "pyarrow"),
 ]:
     importlib.import_module(module)
     print(f"OK {package} {importlib.metadata.version(package)}")

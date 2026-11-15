@@ -1,0 +1,26 @@
+{
+  "target": "IsSafetyCar",
+  "risk_col_used": "Risk_SafetyCar_cal",
+  "rows": 89980,
+  "events": 95,
+  "years": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "features_numeric": [
+    "LapNumber",
+    "RaceProgress",
+    "TyreLife",
+    "Position",
+    "AirTemp",
+    "TrackTemp",
+    "Humidity",
+    "Rainfall"
+  ],
+  "features_categorical": [
+    "Compound",
+    "Team"
+  ]
+}

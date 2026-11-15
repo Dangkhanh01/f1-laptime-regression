@@ -14,7 +14,7 @@ sau khi có protocol và EDA; F1-02 giữ nguyên raw, chưa xuất dataset sẵ
 | `README.md`, `Lab 01 - Linear Regression.pdf` | Đã có; đọc nguồn dataset và yêu cầu bài toán |
 | `scripts/download_data.py` | Tạo khi làm; tải file đã chọn và kiểm tra hash/kích thước |
 | `data/manifest.json` | Tạo khi làm; ghi DOI/version/license, URL, tên file, kích thước, SHA-256 và đường dẫn local |
-| `data/raw/<tên-file-gốc>` | File tải local; giữ nguyên, không commit |
+| `data/raw/` | Chia sẻ các file đã trích cần dùng qua Git; không đưa ZIP/cache vào repo |
 | `scripts/inspect_data.py` | Tạo khi làm; chạy các kiểm tra cấu trúc/chất lượng từ manifest |
 | `reports/data-inventory/schema.csv` | Kết quả chạy; dtype, missing và ý nghĩa/đơn vị đã xác minh |
 | `reports/data-inventory/quality.json` | Kết quả chạy; số dòng/cột, duplicate/key, coverage mùa/event/session |
