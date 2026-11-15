@@ -14,7 +14,545 @@
   },
   "extracted": {
     "file_count": 107,
-    "event_parquet_files": 95
+    "event_parquet_files": 95,
+    "hash_origin": "computed from Git-tracked local files; no publisher checksum available",
+    "files": [
+      {
+        "path": "f1_safetycar/datasets/f1_research_dataset_with_risk_safetycar.parquet",
+        "size_bytes": 3001931,
+        "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=abu_dhabi_grand_prix_session=R.parquet",
+        "size_bytes": 52491,
+        "sha256": "873150cb1995ed2d0378567ad4d0d8395713bfdb405de0e87e04a81596984947"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=australian_grand_prix_session=R.parquet",
+        "size_bytes": 52565,
+        "sha256": "7d281ea3c47c3a534d729217ca8f2cee6c58db1bdd2060f2f14fbda06777bde8"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=austrian_grand_prix_session=R.parquet",
+        "size_bytes": 59785,
+        "sha256": "7294295a5a0c585a3ba5af495c31f4b62d188d45eaf4e95a5caf926d45288a88"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=azerbaijan_grand_prix_session=R.parquet",
+        "size_bytes": 48163,
+        "sha256": "33a65a59fac320685c1d209fff7aa2f358631e1662bdd207bd04968dc8a66f95"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=bahrain_grand_prix_session=R.parquet",
+        "size_bytes": 56417,
+        "sha256": "1792bdbe933398bbc47123c6ea9e84262ed6da97f94c91f13aa838854493859c"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=belgian_grand_prix_session=R.parquet",
+        "size_bytes": 45136,
+        "sha256": "351f3fcb0620d724215a8fb4a27da545353e300bec7df36e2af028daf086cc64"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=british_grand_prix_session=R.parquet",
+        "size_bytes": 47515,
+        "sha256": "6c3ac212c610cd8f8c2de6f2b04dbd2ba616cfdd0a70c55828c03d74d1174922"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=canadian_grand_prix_session=R.parquet",
+        "size_bytes": 58604,
+        "sha256": "228f7ba6614d7e44eac5b2bb5ee91ea6aa5fe7f5e97c23342ec36364cb258199"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=dutch_grand_prix_session=R.parquet",
+        "size_bytes": 62811,
+        "sha256": "73fce23f0c79b8b3425ef6a7e1181c5c94c54bbb408ec4b63786d4c9b8ef6ba3"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=emilia_romagna_grand_prix_session=R.parquet",
+        "size_bytes": 55414,
+        "sha256": "2e22a9aad20d52a5023ee1a3fe78a63901c07052487678755aa59bf4829023a4"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=french_grand_prix_session=R.parquet",
+        "size_bytes": 48803,
+        "sha256": "260bbfe54030a14a9e5cc1b2ebac5c20dedb46d5b83d13ef8285782aa4fca56d"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=hungarian_grand_prix_session=R.parquet",
+        "size_bytes": 61855,
+        "sha256": "450e6be92e5e0c30cb53fb8cbc41d61544fc93d8d8e8ea6147faeb0e21164fb5"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=italian_grand_prix_session=R.parquet",
+        "size_bytes": 49784,
+        "sha256": "b8d2f82f402191f7a51b1f7408b2c77f03c0803dddfe176481eac3875c2ee48b"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=japanese_grand_prix_session=R.parquet",
+        "size_bytes": 35339,
+        "sha256": "2cade4ed1d4a928d6a214e74d2bf6755b13ce3db0643a12f5ee5c0433bd9ac52"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=mexico_city_grand_prix_session=R.parquet",
+        "size_bytes": 59905,
+        "sha256": "83f61c5f1a38ca404acaf6ec87568bb6d7f78473196bdc7079741e8d36d3ffba"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=miami_grand_prix_session=R.parquet",
+        "size_bytes": 52922,
+        "sha256": "ecf23126bc090ff16beb526317a05d63b265201449bdaa855004ca0754e9aeb0"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=monaco_grand_prix_session=R.parquet",
+        "size_bytes": 60345,
+        "sha256": "5c7481589242da6a36b5f8c199c1b83909190e13c908af31acf6f145cb51d71a"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=pre_season_test_session=R.parquet",
+        "size_bytes": 51307,
+        "sha256": "f6602d4c853b9884c56b32c008d7e23bd1ebf968ce318691e49a99dad2d86f95"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=pre_season_track_session_session=R.parquet",
+        "size_bytes": 47545,
+        "sha256": "09d321ef918dd70838a9a6092e9ed5f8d76c11fa4a074dd45549ffd31a37d4d0"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=s_o_paulo_grand_prix_session=R.parquet",
+        "size_bytes": 59226,
+        "sha256": "c2db9c38609933d81f8247eb8f3e5e945d6ed75e5275db25281baa9c4a807267"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=saudi_arabian_grand_prix_session=R.parquet",
+        "size_bytes": 45916,
+        "sha256": "1f828f21ce6e5a54e1194b04104877b23953cd36515eadd7bff150a57dd0e052"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=singapore_grand_prix_session=R.parquet",
+        "size_bytes": 51550,
+        "sha256": "9756d6924d2e1ab8242d7f4ad1ebbe4ab8bfb678056f0d452748395c308dd7c1"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=spanish_grand_prix_session=R.parquet",
+        "size_bytes": 58322,
+        "sha256": "a24c341313c159f697133d494b72b52d6dd7ebc335380465828074823f34e61a"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2022/event=united_states_grand_prix_session=R.parquet",
+        "size_bytes": 51352,
+        "sha256": "4e01dd5794839b2a0dbd50d2e04baf70e16682119a3bf1f6525e3718ae8cc9c2"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=abu_dhabi_grand_prix_session=R.parquet",
+        "size_bytes": 53261,
+        "sha256": "03a179dd6c2fc482852b9badc9040c0e03bf5463884654d4eab9f4b040860eae"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=australian_grand_prix_session=R.parquet",
+        "size_bytes": 51097,
+        "sha256": "a24763ba1eac17555111f6f128a85644e7884d674dd76d0f2632885a0379badf"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=austrian_grand_prix_session=R.parquet",
+        "size_bytes": 60001,
+        "sha256": "7f9cc732c7da9b8b3d1fc0f57789266a0fcf7ee1c7c0ff224b4efa5f5f59bf24"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=azerbaijan_grand_prix_session=R.parquet",
+        "size_bytes": 48429,
+        "sha256": "77e3fdfb37d19c050ac06afe62e20159aa62c117e8088311cb9602a5e3fa5dfc"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=bahrain_grand_prix_session=R.parquet",
+        "size_bytes": 51985,
+        "sha256": "858e77d6b35a455410069a06173560ff6289cbefae19c8f37eeb45721edd2d85"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=belgian_grand_prix_session=R.parquet",
+        "size_bytes": 45917,
+        "sha256": "e1bf351db32aeb551c303e43057d334cafdaed4c813c16f9fab50e4de9e7383e"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=british_grand_prix_session=R.parquet",
+        "size_bytes": 49260,
+        "sha256": "a77aec4a3f20c3a209eecd40b2201f8f4e2cf05758d2cc20979daf52bf01bcfb"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=canadian_grand_prix_session=R.parquet",
+        "size_bytes": 58005,
+        "sha256": "2acd5c4e6acab9777098e9acb3821c1b7ccf4540f2d6b34431127a79501d6a90"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=dutch_grand_prix_session=R.parquet",
+        "size_bytes": 65708,
+        "sha256": "088debde6ac5b2b252f94b6fc8267bf51ff6b588d9761b3f2495a4a9c8fce867"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=hungarian_grand_prix_session=R.parquet",
+        "size_bytes": 56780,
+        "sha256": "b5a84eb960b6f0a08fa320f879259928add6133f0800fd87236a8cd0deb910d4"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=italian_grand_prix_session=R.parquet",
+        "size_bytes": 46796,
+        "sha256": "a4be3a20bed559a3c506b4af08895eb041dfb9e45f412073f1aaf1b1f95bdf14"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=japanese_grand_prix_session=R.parquet",
+        "size_bytes": 47994,
+        "sha256": "38d241e255dd928be74a3d4318f5ec403e90d0e85a5e9161a148053cdc35790d"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=las_vegas_grand_prix_session=R.parquet",
+        "size_bytes": 49751,
+        "sha256": "b11100bab09ae09416060aefcab8bdfb57ecd90f1e658b70fbeaa177683f2460"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=mexico_city_grand_prix_session=R.parquet",
+        "size_bytes": 57379,
+        "sha256": "3725391eca3074bbf2a28b571665c20e638953081316b758149bacfb6f00008b"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=monaco_grand_prix_session=R.parquet",
+        "size_bytes": 68813,
+        "sha256": "d15b833160a1146fc1a12f4af3b9297917ca8347b4d1a51f38266a0a2761170c"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=pre_season_testing_session=R.parquet",
+        "size_bytes": 49260,
+        "sha256": "bf848790e436abde676518dd36a9752b5ec9c1766367df15e38a75679c47ef92"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=qatar_grand_prix_session=R.parquet",
+        "size_bytes": 52200,
+        "sha256": "3b71058624650cac7575359c112f14c7f498db6130572bf80caca81ed46737e5"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=s_o_paulo_grand_prix_session=R.parquet",
+        "size_bytes": 53164,
+        "sha256": "9a6a209eea147d83c35c4492d81c035e1197be8e032abc0a1083797d20a95264"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=saudi_arabian_grand_prix_session=R.parquet",
+        "size_bytes": 48075,
+        "sha256": "40398a85328c23bc4f769942bbf8d3a652f1bdfa306403abd0350e92a4a59e5c"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=singapore_grand_prix_session=R.parquet",
+        "size_bytes": 52135,
+        "sha256": "d4d41dd2bda112db9dc46ebfbfc64eb51a938035b012bb14e792cf9cc4e68a33"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=spanish_grand_prix_session=R.parquet",
+        "size_bytes": 58901,
+        "sha256": "179267d118d24df23eab8912433dd093e8adabd00b2d90630113caf1be855141"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2023/event=united_states_grand_prix_session=R.parquet",
+        "size_bytes": 50320,
+        "sha256": "caddccb81158e59cd796e52b686de42f5e99c38c819da8add691687d650ed1bd"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=abu_dhabi_grand_prix_session=R.parquet",
+        "size_bytes": 50538,
+        "sha256": "55343f342229d414ce645bcbda04a3010c100bfa0ef2a67f8f5a45bd2244b074"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=australian_grand_prix_session=R.parquet",
+        "size_bytes": 49854,
+        "sha256": "7b3c4be7951306a37fc161ed98854e0ab72cf35c6be29a807a6cf0acc83c7584"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=austrian_grand_prix_session=R.parquet",
+        "size_bytes": 60295,
+        "sha256": "fd0a35089004ebbd680aa9837dbf4d97b19f5a5ba599bbcdf0e7277a4abec1ab"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=azerbaijan_grand_prix_session=R.parquet",
+        "size_bytes": 49638,
+        "sha256": "60bc198537ad42f6bd6fb9873a89d513b309a79f411bed2c7ec6e9749abe9dc9"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=bahrain_grand_prix_session=R.parquet",
+        "size_bytes": 53323,
+        "sha256": "64169ddfc97fe2b3674a9a257b474ab6d662275c01ac707421e44ccefa8a2463"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=belgian_grand_prix_session=R.parquet",
+        "size_bytes": 45679,
+        "sha256": "7072ab927143d5458341e2118bf2e1f876dd8c5896af25509c0c06d688a65995"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=british_grand_prix_session=R.parquet",
+        "size_bytes": 52144,
+        "sha256": "21f64294e98968c5800cd13c36b905782152b8de16671233ff911dabdb618e3d"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=canadian_grand_prix_session=R.parquet",
+        "size_bytes": 64105,
+        "sha256": "fd31b5126f5521cea8d22357b7839367adcbd81c0aaef8392912a66c739d4301"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=chinese_grand_prix_session=R.parquet",
+        "size_bytes": 52911,
+        "sha256": "d7d0d71edd440103afdf7f4982bdcb285ffdfbccf9ff165b79c64697a87a6297"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=dutch_grand_prix_session=R.parquet",
+        "size_bytes": 59662,
+        "sha256": "5f3419c8bf55b595bdaed6fcc9dd539cdac1bb9008c9fad68ac33f452389f5e0"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=emilia_romagna_grand_prix_session=R.parquet",
+        "size_bytes": 55578,
+        "sha256": "b7c8fdc4502fcd1457939a4a7cc845e93e6e5e2797d985aac5a1638f87c4598c"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=hungarian_grand_prix_session=R.parquet",
+        "size_bytes": 60668,
+        "sha256": "bf108b478919a03093035ab89e286902324320bd196ca0ee988c6a6a4c2a7659"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=italian_grand_prix_session=R.parquet",
+        "size_bytes": 50207,
+        "sha256": "b1f39cb90fb0e62b1bf58d3e12b854ee3650b4638840074e0ce98d30e561c33d"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=japanese_grand_prix_session=R.parquet",
+        "size_bytes": 48942,
+        "sha256": "33a12ac907d80b1a51a940fc8c5248c055f8eb92654deb5cd5d11574851fc940"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=las_vegas_grand_prix_session=R.parquet",
+        "size_bytes": 48832,
+        "sha256": "14c6f0d7754c1afaf29a94d993e9b278611aacf57e922884b4d9cfa627082939"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=mexico_city_grand_prix_session=R.parquet",
+        "size_bytes": 57139,
+        "sha256": "09ed92aaa97fa7ee5587be03f54c8816330f93eff6f3e23670bd0a4eb9fbf0ab"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=miami_grand_prix_session=R.parquet",
+        "size_bytes": 53241,
+        "sha256": "40c9690e38167189ffa22c0c054d11697b4853bd990d3eaff45f66ffb4c0a217"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=monaco_grand_prix_session=R.parquet",
+        "size_bytes": 57948,
+        "sha256": "294a49a1937be4608fceee5acef3c090f506342c7436c2210de65c9d21a958f2"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=pre_season_testing_session=R.parquet",
+        "size_bytes": 54837,
+        "sha256": "398bd191966fd4b0e4e9e504293da66b76a462bd7497a9ccaa3062d0f68724c2"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=qatar_grand_prix_session=R.parquet",
+        "size_bytes": 50830,
+        "sha256": "7856d09508fb4e7f2a89023e8cffa7086dbd37bb7d86cdd16c7a085d8ba013bd"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=s_o_paulo_grand_prix_session=R.parquet",
+        "size_bytes": 55209,
+        "sha256": "73af298e759321d9f1162f45b9b82bc26338ae1488f02ccb7e601bb61a00af94"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=saudi_arabian_grand_prix_session=R.parquet",
+        "size_bytes": 46592,
+        "sha256": "2142eba2e2ee5de988db0102c753b350ce99d71b82f652f0c5ab41f1106b3d4c"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=singapore_grand_prix_session=R.parquet",
+        "size_bytes": 54847,
+        "sha256": "7e49b78b84fb4764e4b598ce94dde436a279c8741f8843b0466c4f9474e2528b"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=spanish_grand_prix_session=R.parquet",
+        "size_bytes": 59371,
+        "sha256": "135e002ba8cb305864924247e36b1553209e4fb816ac1865a02293dc77640efc"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2024/event=united_states_grand_prix_session=R.parquet",
+        "size_bytes": 52625,
+        "sha256": "d5384f8cec7b59ecb6c52c8f3e044c72058cd97f91e82f69c913d9a47c3cd87f"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=abu_dhabi_grand_prix_session=R.parquet",
+        "size_bytes": 52469,
+        "sha256": "e63d25ab6dcd5fb780f2d56d0f4b97430c129f427c176e7c2f78082bf8f6a021"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=australian_grand_prix_session=R.parquet",
+        "size_bytes": 51626,
+        "sha256": "6674cd5e41ce1ce26cf0964c82cb8d51c4f57374a80a74022a01d4be26f8f241"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=austrian_grand_prix_session=R.parquet",
+        "size_bytes": 53000,
+        "sha256": "d99b0b57e1d3149ae736acead1afb0b2eee88cc87b63c026943f440a93c501fb"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=azerbaijan_grand_prix_session=R.parquet",
+        "size_bytes": 48491,
+        "sha256": "a3be8c196c90c8254f91abb78ddb9cb91dd52208436e6af6522b01927e7b62ab"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=bahrain_grand_prix_session=R.parquet",
+        "size_bytes": 52712,
+        "sha256": "8c2f56eecd5373a437c063ec5ead037b4cc97b8397b6b58c022ead15043e1280"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=belgian_grand_prix_session=R.parquet",
+        "size_bytes": 46929,
+        "sha256": "abd8aca55f1c291aa6584a6c8da92740c112d77f589d18fd3a3db859421a5d1c"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=british_grand_prix_session=R.parquet",
+        "size_bytes": 49041,
+        "sha256": "d2423bfa86d2cc48c5fcc9e7f501e8a1a67cd444018db93f0c3d2244d2543382"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=canadian_grand_prix_session=R.parquet",
+        "size_bytes": 61060,
+        "sha256": "dcf9d96fb2dc4f6a35a000795d0c8101d08d6f934bc50d342c93d38334082187"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=chinese_grand_prix_session=R.parquet",
+        "size_bytes": 51132,
+        "sha256": "abc261a4d355c22de86cbbee25a671dd24ea90fed8e9290459177cf710a3e0bc"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=dutch_grand_prix_session=R.parquet",
+        "size_bytes": 61878,
+        "sha256": "3163be4e99893fdb1ac2c8de11c9810cc59ad19700f4507fedfa8cc79356f5c4"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=emilia_romagna_grand_prix_session=R.parquet",
+        "size_bytes": 57099,
+        "sha256": "2d002cffd0d162f9ce89695e8adc851da7eaea6287403ddc2c4d8a3bb16ed49b"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=hungarian_grand_prix_session=R.parquet",
+        "size_bytes": 59472,
+        "sha256": "4dae2ae4ffe661b54ed51a356599a14a78ad0149cbd11ca2c982c1bdb37f2238"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=italian_grand_prix_session=R.parquet",
+        "size_bytes": 48129,
+        "sha256": "3331287fb6ab3aff4300ca27020b15f35e7d73bea418eeb32e281cf651926357"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=japanese_grand_prix_session=R.parquet",
+        "size_bytes": 49714,
+        "sha256": "cb64e0f623fd1b16381113db8b81d3a4aa8745b7a36232c13824a6d5abfbc775"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=las_vegas_grand_prix_session=R.parquet",
+        "size_bytes": 46737,
+        "sha256": "1efa422e6a82f8b22b93c0da166b5cba5e046f27daf825a640e17cca71ec723f"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=mexico_city_grand_prix_session=R.parquet",
+        "size_bytes": 57393,
+        "sha256": "ad37739eeb970f0013f7a9fa881e69b7fdb0a138176fc6df8a2689437ec7e974"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=miami_grand_prix_session=R.parquet",
+        "size_bytes": 49379,
+        "sha256": "349fd492f711ae3418da940b4f2b340a12cdb01e09314753ee8bd8d00c87cff3"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=monaco_grand_prix_session=R.parquet",
+        "size_bytes": 65914,
+        "sha256": "9d0558ca01b00843161cfb5497f1b0df62d12804daa9d2c0185173e77ee97d19"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=pre_season_testing_session=R.parquet",
+        "size_bytes": 55767,
+        "sha256": "7e40ae00de29722d03b5080fdc25c722a755a76b73c6fd1bec99e7acb19892c0"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=qatar_grand_prix_session=R.parquet",
+        "size_bytes": 51786,
+        "sha256": "0c08d165a797ec0276443392b83d5733c8d9e6474111240bce7f3d257ee36354"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=s_o_paulo_grand_prix_session=R.parquet",
+        "size_bytes": 56691,
+        "sha256": "d96f8d78230436567b43dbb95ced5f976fa8b9aff3f8caa21926fe4e2c39cabf"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=saudi_arabian_grand_prix_session=R.parquet",
+        "size_bytes": 46376,
+        "sha256": "9e88d9484c623c683e426d3458f15e6a3303499103095c4cc75d33f9b12e3d88"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=singapore_grand_prix_session=R.parquet",
+        "size_bytes": 55777,
+        "sha256": "278fbd29ce8f9044088f51c23f6d07e75cb527d6cf348d98203488ffae15fadc"
+      },
+      {
+        "path": "f1_safetycar/datasets/year=2025/event=united_states_grand_prix_session=R.parquet",
+        "size_bytes": 51474,
+        "sha256": "66d24ddd61917010c6d2173f69ea6137b9886ca7cb49afc5bce8054d27c01c93"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/dataset_card.json",
+        "size_bytes": 684,
+        "sha256": "61532e17dde6cce94c08b2090a875d2b7c9c39d9f9d00f94fd7348f032e6195d"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/event_level_evaluation.csv",
+        "size_bytes": 10952,
+        "sha256": "23fd045c879f5afc332769208dc274bc707e77b2ce672b501dad59707e72f686"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/figures/calibration_curve.png",
+        "size_bytes": 70569,
+        "sha256": "7475a4aac4a332769e770c86f747143262eec70a45a044e3c029baa7ba3bc51b"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/final_figures/calibration_curve.png",
+        "size_bytes": 107161,
+        "sha256": "801a9635cf83a9166d2a464e46ef1289db9a6c7d7911cb4ac68f57e077e6a337"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/final_figures/per_lap_risk.png",
+        "size_bytes": 152378,
+        "sha256": "723ad411f520a53e16fa7dc2acbfa3fe1acb7c74e7bf0d6f283a0acf27b238e9"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/final_figures/shap_summary.png",
+        "size_bytes": 582548,
+        "sha256": "e16815d79238746ada865407496f4a71c12fcb5abdec041da5556923dc022c7e"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/paper_release_risk_safetycar.parquet",
+        "size_bytes": 1803977,
+        "sha256": "5d9b4dade667a89c0a58545b1ff91726bbe2238e024d57eef5f81bb5ec8cdaec"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/repro_pack/event_level_evaluation.csv",
+        "size_bytes": 10952,
+        "sha256": "23fd045c879f5afc332769208dc274bc707e77b2ce672b501dad59707e72f686"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/repro_pack/meta.json",
+        "size_bytes": 381,
+        "sha256": "a9b61ee0cd88c4827eaa95422f26d6df7c321c002581ac046c2fc15d60f1f527"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/repro_pack/model_pipeline.joblib",
+        "size_bytes": 1223378,
+        "sha256": "0c76e7d2c1696328b3b1edaadd749b1b0c894d4e93c8fd0676f0305c0e806385"
+      },
+      {
+        "path": "f1_safetycar/paper_outputs/top_risk_windows_by_event.csv",
+        "size_bytes": 8092,
+        "sha256": "16721263f8b4655fdfccfd6c5ed93bfb6414106f4c98345c2463945ba2d2c70b"
+      }
+    ]
   },
   "selected_file": {
     "filename": "f1_research_dataset_with_risk_safetycar.parquet",

@@ -187,5 +187,47 @@
     "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
     "archive_sha256": "162dedd9786005976edd5973556f29971e6425df266accf0bafa355a5f75e402"
   },
-  "event_parquet_files": 95
+  "event_parquet_files": 95,
+  "event_data_comparison": {
+    "rows": 104140,
+    "columns": 29,
+    "candidate_key": [
+      "Year",
+      "EventName",
+      "Session",
+      "Driver",
+      "LapNumber"
+    ],
+    "IsAccurate": {
+      "True": 89980,
+      "False": 14160
+    },
+    "matched_keys": 89980,
+    "event_only_keys": 14160,
+    "selected_only_keys": 0,
+    "selected_keys_equal_accurate_event_keys": true,
+    "event_only_IsAccurate": {
+      "False": 14160
+    },
+    "selected_only_columns": [
+      "EventKey",
+      "HasPitIn",
+      "HasPitOut",
+      "LapTimeSec",
+      "RaceProgress",
+      "Risk_SafetyCar"
+    ],
+    "pit_times": {
+      "PitInTime": {
+        "nonmissing_rows": 3554,
+        "nonmissing_accurate_rows": 0,
+        "nonmissing_event_only_rows": 3554
+      },
+      "PitOutTime": {
+        "nonmissing_rows": 3548,
+        "nonmissing_accurate_rows": 0,
+        "nonmissing_event_only_rows": 3548
+      }
+    }
+  }
 }

@@ -9,7 +9,7 @@ chưa có checksum do nhà xuất bản công bố để đối chiếu độc l
 ## Chạy lại
 
 Sau khi nhóm duyệt và đưa dữ liệu lên GitHub, clone repo sẽ có sẵn các file đã trích,
-không cần ZIP. Chạy lệnh dưới đây để kiểm tra số file, hash hai bản Parquet tổng hợp và
+không cần ZIP. Chạy lệnh dưới đây để kiểm tra đường dẫn, kích thước, hash từng file và
 tái tạo báo cáo. Nếu cần khôi phục dữ liệu, tải **Download All** trên trang nguồn rồi chạy
 `uv run python -m scripts.download_data --archive "<đường dẫn ZIP>"`. Lệnh kiểm tra hash/kích
 thước ZIP, trích `datasets/` (96 file Parquet) và `paper_outputs/` (11 file tham khảo) vào
@@ -30,9 +30,10 @@ chuỗi giả thiếu, ý nghĩa/đơn vị và nguồn đối chiếu; [quality
 ghi số dòng/cột, khóa ứng viên, giá trị nghi vấn và coverage. Ô chưa xác minh để trống.
 Script đọc file từ manifest và xác minh SHA-256 trước khi thống kê; không sửa raw. Manifest
 giữ SHA-256 của ZIP làm thông tin nguồn, nhưng lệnh kiểm kê không xác minh ZIP khi ZIP vắng mặt.
-Khi chạy kiểm tra không có ZIP, script chỉ xác minh SHA-256 của hai bản Parquet tổng hợp và kiểm tra
-số lượng 95 file sự kiện (tổng 107 file). Đây là giới hạn: nếu F1-03 quyết định dùng trực tiếp các
-file sự kiện lẻ thay vì file tổng hợp, nhóm cần bổ sung manifest/hash cho từng file sự kiện.
+`extracted.files` trong manifest ghi đường dẫn tương đối từ `data/raw/`, kích thước và SHA-256
+của cả 107 file trong gói; bản Parquet tổng hợp bên ngoài gói được kiểm tra riêng. Hash từng file
+được tính từ dữ liệu đã lưu trong Git, không phải checksum nhà xuất bản. `.gitattributes` giữ
+nguyên byte trong `data/raw/` để Git không tự đổi xuống dòng làm lệch hash giữa các hệ điều hành.
 
 Ý nghĩa các cột lap và thời tiết được đối chiếu với [FastF1 lap timing](https://github.com/theOehrly/Fast-F1/blob/main/docs/api_reference/timing_data.rst)
 và [FastF1 weather data](https://github.com/theOehrly/Fast-F1/blob/main/fastf1/_api.py).
@@ -46,18 +47,16 @@ công thức tạo cột chưa được công bố. Không dùng nghĩa suy lu�
 - Một dòng là một vòng của một tay đua trong một sự kiện/phiên. File tổng hợp có **89.980 dòng,
   35 cột**, bốn mùa 2022–2025, **95 sự kiện**, chỉ có mã phiên `R`. Khóa ứng viên
   `(Year, EventName, Session, Driver, LapNumber)` không trùng và không thiếu trên file này.
-- **Khác biệt giữa 95 file sự kiện và file tổng hợp:**
-  - 95 file sự kiện trong `data/raw/f1_safetycar/datasets/` có tổng cộng **104.140 dòng**
-    (gồm 89.980 dòng `IsAccurate=True` và 14.160 dòng `IsAccurate=False`).
-  - File tổng hợp `f1_research_dataset_with_risk_safetycar.parquet` khớp đúng 100%
-    tập khóa của **89.980 dòng `IsAccurate=True`** (đã lọc bỏ 14.160 dòng `False`).
-  - Trong 95 file sự kiện, thông tin pit stop xuất hiện ở 3.554 dòng `PitInTime` và 3.548 dòng
-    `PitOutTime`, nhưng tất cả các dòng có pit này đều mang cờ `IsAccurate=False` (theo quy ước
-    FastF1 đối với in-lap/out-lap). Vì file tổng hợp chỉ giữ `IsAccurate=True` nên toàn bộ
-    `PitInTime`/`PitOutTime` bị trống 100% (và `HasPitIn`/`HasPitOut` do tác giả thêm vào đều bằng 0).
-  - Căn cứ quan trọng cho F1-03: Nếu bài toán chỉ dự đoán vòng chạy chuẩn ("flying lap"),
-    dùng file tổng hợp là đủ; nếu cần xét cả vòng vào/ra pit hoặc chiến thuật dừng pit, nhóm
-    cần dùng 95 file sự kiện thay vì file tổng hợp.
+- 95 file sự kiện có **104.140 dòng, 29 cột**: 89.980 dòng `IsAccurate=True` và
+  14.160 dòng `False`. File tổng hợp khớp đúng tập khóa của nhóm `True`; toàn bộ 14.160
+  dòng chỉ có ở file sự kiện mang cờ `False`. Đây là đối chiếu khóa quan sát được,
+  chưa xác minh toàn bộ quy trình tạo file tổng hợp của tác giả.
+- Các file sự kiện có **3.554 dòng `PitInTime`** và **3.548 dòng `PitOutTime`** không thiếu;
+  tất cả thuộc nhóm không có trong file tổng hợp và mang cờ `IsAccurate=False`.
+  `quality.json` mục `event_data_comparison` tái tạo các đối chiếu này, gồm số khóa lệch,
+  phân bố cờ accuracy, coverage pit và các cột chỉ có trong file tổng hợp.
+  F1-03 cần chọn nguồn theo thời điểm dự đoán/phạm vi; nếu cần xét vòng vào/ra pit,
+  phải khảo sát thêm file sự kiện. Cờ `IsAccurate=True` chưa đủ để chốt bộ lọc bài toán.
 - `LapTimeSec` là target ứng viên tính bằng giây; khoảng quan sát **67,012–149,321 giây**.
   `LapTime` trùng hoàn toàn với `LapTimeSec`; tổng ba sector cũng khớp target.
   Không dùng các cột này làm feature nếu dự đoán lap time trước khi vòng kết thúc.

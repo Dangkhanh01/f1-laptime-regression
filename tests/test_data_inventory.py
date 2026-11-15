@@ -7,7 +7,7 @@ import pandas as pd
 import pytest
 
 from scripts.download_data import extract_package, extract_selected, verify_extracted, verify_file
-from scripts.inspect_data import inspect_frame, schema_rows
+from scripts.inspect_data import KEY, compare_event_data, inspect_frame, schema_rows
 
 
 def test_extract_selected_checks_content_before_writing(tmp_path):
@@ -83,9 +83,29 @@ def test_verify_extracted_works_without_zip_and_rejects_missing_files(tmp_path):
         "size_bytes": len(content),
         "sha256": hashlib.sha256(content).hexdigest(),
     }
-    expected = {"file_count": 2, "event_parquet_files": 1}
+    expected = {
+        "file_count": 2,
+        "event_parquet_files": 1,
+        "files": [
+            {
+                "path": path.relative_to(raw).as_posix(),
+                "size_bytes": path.stat().st_size,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            }
+            for path in sorted(datasets.iterdir())
+        ],
+    }
     assert verify_extracted(raw, record, expected) == 2
-    (datasets / "event=one_session=R.parquet").unlink()
+    event = datasets / "event=one_session=R.parquet"
+    event.write_bytes(b"EVENT")  # Same size and count must not hide content changes.
+    with pytest.raises(ValueError, match="SHA-256"):
+        verify_extracted(raw, record, expected)
+    event.write_bytes(b"event")
+    renamed = event.with_name("event=other_session=R.parquet")
+    event.rename(renamed)
+    with pytest.raises(ValueError, match="paths differ"):
+        verify_extracted(raw, record, expected)
+    renamed.unlink()
     with pytest.raises(ValueError, match="incomplete"):
         verify_extracted(raw, record, expected)
 
@@ -118,3 +138,43 @@ def test_inventory_counts_duplicate_key_and_bad_lap():
     compound = next(row for row in schema_rows(frame) if row["column"] == "Compound")
     assert compound["missing_count"] == 0
     assert compound["placeholder_count"] == 1
+
+
+def test_event_comparison_measures_filter_and_pit_coverage():
+    events = pd.DataFrame(
+        {
+            "Year": [2022] * 3,
+            "EventName": ["Test"] * 3,
+            "Session": ["R"] * 3,
+            "Driver": ["ABC"] * 3,
+            "LapNumber": [1, 2, 3],
+            "IsAccurate": [True, False, True],
+            "PitInTime": [None, 180.0, None],
+            "PitOutTime": [None, 200.0, None],
+        }
+    )
+    selected = events.loc[[2, 0]].copy()  # Match by key, regardless of row order.
+    selected["LapTimeSec"] = [90.0, 91.0]
+    report = compare_event_data(events, selected)
+    assert report["selected_keys_equal_accurate_event_keys"] is True
+    assert report["matched_keys"] == 2
+    assert report["event_only_keys"] == 1
+    assert report["selected_only_keys"] == 0
+    assert report["event_only_IsAccurate"] == {"False": 1}
+    assert report["selected_only_columns"] == ["LapTimeSec"]
+    assert report["pit_times"]["PitInTime"] == {
+        "nonmissing_rows": 1,
+        "nonmissing_accurate_rows": 0,
+        "nonmissing_event_only_rows": 1,
+    }
+    selected.loc[0, "LapNumber"] = 99
+    report = compare_event_data(events, selected)
+    assert report["selected_keys_equal_accurate_event_keys"] is False
+    assert report["selected_only_keys"] == 1
+    assert report["event_only_keys"] == 2
+
+    with pytest.raises(ValueError, match="duplicate keys"):
+        compare_event_data(pd.concat([events, events.iloc[[0]]]), selected)
+    events.loc[0, KEY[0]] = None
+    with pytest.raises(ValueError, match="missing or duplicate keys"):
+        compare_event_data(events, selected)

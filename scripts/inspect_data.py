@@ -175,6 +175,44 @@ def inspect_frame(frame: pd.DataFrame) -> dict:
     return result
 
 
+def compare_event_data(events: pd.DataFrame, selected: pd.DataFrame) -> dict:
+    """Measure source coverage; compare keys without claiming a processing recipe."""
+    for label, frame in (("event", events), ("selected", selected)):
+        if frame[KEY].isna().any(axis=None) or frame.duplicated(KEY).any():
+            raise ValueError(f"Cannot compare {label} data with missing or duplicate keys")
+    event_keys = pd.MultiIndex.from_frame(events[KEY])
+    selected_keys = pd.MultiIndex.from_frame(selected[KEY])
+    accurate = events["IsAccurate"].eq(True).fillna(False)
+    accurate_keys = event_keys[accurate.to_numpy(dtype=bool)]
+    excluded = events.loc[~event_keys.isin(selected_keys)]
+    return {
+        "rows": len(events),
+        "columns": len(events.columns),
+        "candidate_key": KEY,
+        "IsAccurate": {
+            str(k): int(v) for k, v in events["IsAccurate"].value_counts(dropna=False).items()
+        },
+        "matched_keys": int(event_keys.isin(selected_keys).sum()),
+        "event_only_keys": len(excluded),
+        "selected_only_keys": int((~selected_keys.isin(event_keys)).sum()),
+        "selected_keys_equal_accurate_event_keys": bool(
+            len(accurate_keys) == len(selected_keys) and accurate_keys.isin(selected_keys).all()
+        ),
+        "event_only_IsAccurate": {
+            str(k): int(v) for k, v in excluded["IsAccurate"].value_counts(dropna=False).items()
+        },
+        "selected_only_columns": sorted(set(selected.columns) - set(events.columns)),
+        "pit_times": {
+            column: {
+                "nonmissing_rows": int(events[column].notna().sum()),
+                "nonmissing_accurate_rows": int((events[column].notna() & accurate).sum()),
+                "nonmissing_event_only_rows": int(excluded[column].notna().sum()),
+            }
+            for column in ("PitInTime", "PitOutTime")
+        },
+    }
+
+
 def main() -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     record = manifest["selected_file"]
@@ -194,11 +232,15 @@ def main() -> None:
         "archive_sha256": archive_record["sha256"],
     }
     quality["event_parquet_files"] = manifest["extracted"]["event_parquet_files"]
+    event_paths = sorted((ROOT / "data/raw/f1_safetycar/datasets").rglob("event=*.parquet"))
+    events = pd.concat([pd.read_parquet(path) for path in event_paths], ignore_index=True)
+    quality["event_data_comparison"] = compare_event_data(events, frame)
     REPORT.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(schema_rows(frame)).to_csv(REPORT / "schema.csv", index=False, encoding="utf-8")
-    (REPORT / "quality.json").write_text(
-        json.dumps(quality, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
-        encoding="utf-8",
+    pd.DataFrame(schema_rows(frame)).to_csv(
+        REPORT / "schema.csv", index=False, encoding="utf-8", lineterminator="\n"
+    )
+    (REPORT / "quality.json").write_bytes(
+        (json.dumps(quality, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
     )
     print(f"Inspected {len(frame)} rows, {len(frame.columns)} columns from {record['path']}")
 

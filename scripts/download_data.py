@@ -102,17 +102,23 @@ def extract_package(archive: Path, raw_root: Path, selected_record: dict) -> int
 
 
 def verify_extracted(raw_root: Path, selected_record: dict, expected: dict) -> int:
-    """Verify extracted tree counts and hashes of combined parquet copies.
-
-    When running without the source ZIP, event parquet files are verified by
-    count rather than individual SHA-256. If F1-03/F1-05 chooses to use event
-    files directly, individual hashes should be added to manifest.json.
-    """
+    """Verify exact package paths, sizes and hashes without requiring the ZIP."""
+    raw_root = raw_root.resolve()
     package = raw_root / "f1_safetycar"
     files = [path for path in package.rglob("*") if path.is_file()]
     events = list((package / "datasets").rglob("event=*_session=*.parquet"))
     if len(files) != expected["file_count"] or len(events) != expected["event_parquet_files"]:
         raise ValueError("Extracted files are incomplete; restore them from Git or --archive")
+    records = expected["files"]
+    paths = [record["path"] for record in records]
+    actual = {path.relative_to(raw_root).as_posix() for path in files}
+    if len(paths) != len(set(paths)) or set(paths) != actual:
+        raise ValueError("Extracted file paths differ from manifest")
+    for record in records:
+        path = raw_root / record["path"]
+        if not path.resolve().is_relative_to(package.resolve()) or path.is_symlink():
+            raise ValueError(f"Unsafe extracted file: {path}")
+        verify_file(path, record)
     verify_file(package / "datasets" / selected_record["filename"], selected_record)
     verify_file(raw_root / selected_record["filename"], selected_record)
     return len(files)
