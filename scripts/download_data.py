@@ -102,6 +102,12 @@ def extract_package(archive: Path, raw_root: Path, selected_record: dict) -> int
 
 
 def verify_extracted(raw_root: Path, selected_record: dict, expected: dict) -> int:
+    """Verify extracted tree counts and hashes of combined parquet copies.
+
+    When running without the source ZIP, event parquet files are verified by
+    count rather than individual SHA-256. If F1-03/F1-05 chooses to use event
+    files directly, individual hashes should be added to manifest.json.
+    """
     package = raw_root / "f1_safetycar"
     files = [path for path in package.rglob("*") if path.is_file()]
     events = list((package / "datasets").rglob("event=*_session=*.parquet"))
