@@ -88,10 +88,10 @@ và môi trường Python vẫn bị loại khỏi Git.
 ```sh
 uv run ruff check .
 uv run ruff format --check .
+uv run pytest -q
 ```
 
-CI kiểm tra lint/format và môi trường trên Windows/Linux/macOS. pytest đã được cấu hình;
-khi bổ sung tests, chạy `uv run pytest -q` và bật bước pytest trong workflow.
+CI kiểm tra lint/format, chạy pytest (`uv run pytest -q`) và kiểm tra môi trường trên Windows/Linux/macOS.
 
 **Nói miệng để tranh luận — Issue chỉ để chốt hạ và lưu vết.** Nhóm dùng đúng một Issue
 cho mỗi mã task lớn F1-01 đến F1-08. F1-05 chuẩn bị dữ liệu/split dùng chung; F1-06 xây
