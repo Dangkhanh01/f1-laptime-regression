@@ -1,6 +1,6 @@
 # F1-05 — Chuẩn bị dữ liệu chung
 
-**Phụ trách:** Nguyên. **Issue:** chưa tạo; xem bảng liên kết trong [Giao việc](README.md).
+**Phụ trách:** Nguyên. **Issue:** [#8](https://github.com/Dangkhanh01/f1-laptime-regression/issues/8).
 **Bắt đầu:** sau khi F1-03 chốt protocol từ inventory và EDA F1-04.
 
 Mục tiêu: thực thi protocol để tạo một bộ dữ liệu nền và thông tin chia tập duy nhất
@@ -87,4 +87,4 @@ dòng đánh giá; xử lý missing theo protocol thay vì mỗi người tự b
 toàn bộ điều kiện nghiệm thu đã đạt, không còn lỗi chặn đã biết, và bốn model có thể dùng
 chung đầu vào này. Khi bàn giao, giữ cố định phiên bản dữ liệu/config/split để so sánh model.
 Trao đổi bằng miệng/call; chỉ ghi 2–3 gạch chốt trong Issue của task.
-PR hoàn tất dùng `Closes #<số Issue thực tế của F1-05>` sau khi Issue được tạo.
+PR hoàn tất task ghi `Closes #8`.

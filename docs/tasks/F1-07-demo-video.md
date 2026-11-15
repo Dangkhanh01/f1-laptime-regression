@@ -1,7 +1,7 @@
 # F1-07 — Ứng dụng demo và video
 
 **Phụ trách đề xuất:** Nguyên, các thành viên phối hợp giải thích model.
-**Issue hiện có:** #6 (cần cập nhật mã task trong tiêu đề trên GitHub).
+**Issue:** #6.
 Chờ pipeline/artifact và đầu vào đã thống nhất từ F1-06.
 Trang này mới chốt phạm vi; màn hình/input cụ thể bổ sung sau khi có model.
 

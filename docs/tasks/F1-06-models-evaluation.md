@@ -1,7 +1,7 @@
 # F1-06 — Xây dựng và đánh giá các mô hình
 
 **Phụ trách:** cả nhóm, mỗi người một Linear Regression model; Khánh điều phối.
-**Issue hiện có:** #5 (cần cập nhật mã task trong tiêu đề trên GitHub).
+**Issue:** #5.
 Chờ dữ liệu nền và split từ F1-05. Chi tiết thiết kế sẽ bổ sung sau khi nhóm bàn bạc.
 
 Mục tiêu: xây dựng và so sánh ít nhất bốn model trên cùng dữ liệu nền, target và tập đánh giá.
