@@ -4,8 +4,8 @@ Dự án Machine Learning nghiên cứu và dự đoán thời gian hoàn thành
 bằng Linear Regression. Dự án tập trung vào thiết kế đặc trưng, đánh giá công bằng giữa
 các mô hình và diễn giải kết quả trên dữ liệu nhiều mùa giải.
 
-**Trạng thái:** đã có cấu trúc, môi trường và kiểm kê dữ liệu F1-02. Pipeline tiền xử lý,
-mô hình và ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
+**Trạng thái:** đã có cấu trúc, môi trường, kiểm kê dữ liệu F1-02 và giao thức thực nghiệm F1-03.
+Pipeline tiền xử lý, mô hình và ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
 
 ## Mục tiêu
 
@@ -24,9 +24,10 @@ do Tanvinur Rahman Siam công bố trên Mendeley Data.
 - DOI: [10.17632/djr8rnjtjp.1](https://doi.org/10.17632/djr8rnjtjp.1).
 - Giấy phép: **CC BY 4.0**.
 
-Target dự kiến là lap time tính bằng giây. Các cột sử dụng, quy tắc lọc và cách chia
-train/validation/test sẽ được xác định sau khi khảo sát dữ liệu. Các mô hình phải dùng chung
-giao thức đánh giá; không sử dụng thông tin chưa có tại thời điểm dự đoán.
+Target là `LapTimeSec` tính bằng giây. [Giao thức F1-03](docs/experiment-protocol.md)
+và [configs/experiment.json](configs/experiment.json) quy định bài toán, bộ lọc phạm vi
+(loại Pre-Season, vòng pit và SC/VSC), temporal split (Train 2022–2023, Validation 2024,
+Final Test 2025) và chống rò rỉ dữ liệu. Các mô hình dùng chung giao thức này.
 
 Repo chia sẻ trực tiếp các file cần dùng trong `data/raw/` để cả nhóm clone về là có dữ liệu.
 ZIP nguồn và cache FastF1 đã được xóa vì không cần cho kiểm kê; không cần tải lại để chạy
@@ -89,6 +90,7 @@ và môi trường Python vẫn bị loại khỏi Git.
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest -q
+uv run python scripts/check_experiment_config.py
 ```
 
 CI chạy lint/format và pytest trên Linux; kiểm tra môi trường, checksum toàn bộ dữ liệu

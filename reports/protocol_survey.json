@@ -1,0 +1,306 @@
+{
+  "provenance": {
+    "survey_version": 1,
+    "config_path": "configs/experiment.json",
+    "config_sha256": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d",
+    "config_snapshot": {
+      "problem_definition": {
+        "task_type": "regression",
+        "objective": "Dự đoán thời gian hoàn thành một vòng đua của một tay đua (tính bằng giây) trước khi vòng đó bắt đầu",
+        "observation_unit": "Một vòng đua của một tay đua trong một chặng đua chính thức (Session = 'R')",
+        "target_column": "LapTimeSec",
+        "target_unit": "seconds",
+        "target_meaning": "Thời gian hoàn thành vòng đua tính bằng giây (trùng khớp giá trị số học với LapTime)",
+        "primary_metric": "MAE",
+        "reported_metrics": [
+          "MAE",
+          "MSE",
+          "R2",
+          "RMSE"
+        ],
+        "metric_units": {
+          "MAE": "seconds",
+          "MSE": "seconds^2",
+          "R2": "unitless",
+          "RMSE": "seconds"
+        }
+      },
+      "data_source": {
+        "primary_file": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+        "source_doi": "10.17632/djr8rnjtjp.1",
+        "version": 1,
+        "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+        "raw_rows": 89980,
+        "raw_columns": 35,
+        "candidate_key": [
+          "Year",
+          "EventName",
+          "Session",
+          "Driver",
+          "LapNumber"
+        ]
+      },
+      "scope_and_filters": {
+        "session_scope": "R",
+        "session_rule": "Session == 'R'",
+        "preseason_filter": {
+          "action": "exclude",
+          "condition": "starts_with_any",
+          "match_prefixes": [
+            "Pre-Season"
+          ],
+          "matched_events": [
+            "Pre-Season Test",
+            "Pre-Season Track Session",
+            "Pre-Season Testing"
+          ],
+          "rows_excluded": 4526
+        },
+        "safety_car_filter": {
+          "action": "exclude",
+          "condition": "any_equals_1",
+          "columns_checked": [
+            "IsSafetyCar",
+            "IsVSC"
+          ],
+          "rows_excluded_outside_preseason": 813
+        },
+        "pit_laps_policy": {
+          "action": "excluded_at_source",
+          "rule": "IsAccurate == True",
+          "explanation": "Trên bộ dữ liệu raw quan sát được, 100% các dòng có thông tin vào pit (3.554 dòng PitInTime) và ra pit (3.548 dòng PitOutTime) từ 95 file sự kiện đều mang cờ IsAccurate=False. Do file tổng hợp được tác giả trích xuất với tập khóa khớp tập IsAccurate=True, các vòng vào/ra pit quan sát được này đã không xuất hiện trong file tổng hợp."
+        },
+        "target_validity": {
+          "target_column": "LapTimeSec",
+          "condition": "numeric_positive_finite"
+        },
+        "duplicate_handling": {
+          "key": [
+            "Year",
+            "EventName",
+            "Session",
+            "Driver",
+            "LapNumber"
+          ],
+          "action": "raise_on_conflict_else_drop",
+          "expected_raw_duplicates": 0,
+          "explanation": "Nếu xuất hiện bản ghi trùng khóa định danh mà xung đột giá trị target hoặc feature, F1-05 phải ghi nhận lỗi và dừng xử lý; nếu trùng hoàn toàn thì chỉ giữ một bản ghi."
+        },
+        "expected_clean_rows": 84641
+      },
+      "split_protocol": {
+        "strategy": "temporal_by_year",
+        "valid_years": [
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "train": {
+          "years": [
+            2022,
+            2023
+          ],
+          "expected_rows": 39433,
+          "distinct_event_names": 24,
+          "event_session_groups": 43,
+          "purpose": "Khám phá EDA, tiền xử lý (fit) và huấn luyện mô hình"
+        },
+        "validation": {
+          "years": [
+            2024
+          ],
+          "expected_rows": 23426,
+          "distinct_event_names": 24,
+          "event_session_groups": 24,
+          "purpose": "Đánh giá độc lập, tinh chỉnh siêu tham số và chọn mô hình tốt nhất (tiêu chí MAE)"
+        },
+        "final_test": {
+          "years": [
+            2025
+          ],
+          "expected_rows": 21782,
+          "distinct_event_names": 23,
+          "event_session_groups": 23,
+          "purpose": "Đánh giá kiểm định cuối cùng một lần duy nhất cho mô hình đã khóa cứng; tuyệt đối không dùng để chọn mô hình, feature, ngưỡng hoặc fit tiền xử lý"
+        }
+      },
+      "features": {
+        "target": "LapTimeSec",
+        "allowed_candidate_features": [
+          "Driver",
+          "Team",
+          "EventName",
+          "LapNumber",
+          "Compound",
+          "FreshTyre",
+          "Stint",
+          "TyreLife"
+        ],
+        "allowed_derived_features_in_pipeline": [
+          {
+            "name": "TyreLife_start",
+            "formula_type": "subtract_constant",
+            "formula": "TyreLife - 1.0",
+            "condition": "TyreLife >= 1.0",
+            "input_feature": "TyreLife",
+            "missing_handling": "SimpleImputer(strategy='median') fit on train",
+            "invalid_handling": "Giữ NaN là missing; giá trị không phải số, vô cực hoặc hữu hạn < 1.0 phải báo lỗi và dừng, không tự sửa hoặc loại dòng. Trừ 1.0 trước rồi fit imputer trên TyreLife_start của train. Raw TyreLife không đưa trực tiếp vào model.",
+            "meaning": "Số vòng bộ lốp đã chạy trước khi vòng đua hiện tại bắt đầu. F1-05 giữ raw TyreLife trong base.csv; F1-06 bắt buộc thay thế bằng TyreLife_start trong pipeline huấn luyện và loại bỏ raw TyreLife khỏi ma trận đặc trưng mô hình (không đưa cả hai)."
+          }
+        ],
+        "pending_verification_features": [
+          "AirTemp",
+          "TrackTemp",
+          "Humidity",
+          "Pressure",
+          "Rainfall",
+          "WindSpeed",
+          "WindDirection"
+        ],
+        "pending_verification_reason": "Khảo sát trên tập Train cho thấy TrackTemp có thể khác nhau giữa các xe có cùng số vòng trong cùng sự kiện/phiên (chiếm 62,52% số nhóm vòng); quan sát này chưa xác định thời điểm lấy mẫu hoặc cách ghép thời tiết từ dữ liệu nguồn. Tạm thời xếp nhóm thời tiết vào danh sách chưa được phép sử dụng ở phiên bản protocol này để phòng ngừa nguy cơ rò rỉ dữ liệu.",
+        "forbidden_features": [
+          "LapTime",
+          "Sector1Time",
+          "Sector2Time",
+          "Sector3Time",
+          "Time",
+          "Position",
+          "TrackStatus",
+          "IsSafetyCar",
+          "IsVSC",
+          "PitInTime",
+          "PitOutTime",
+          "HasPitIn",
+          "HasPitOut",
+          "RaceProgress",
+          "Risk_SafetyCar"
+        ],
+        "tracking_and_split_columns": [
+          "Year",
+          "Session",
+          "EventKey",
+          "IsAccurate"
+        ]
+      },
+      "preprocessing_and_pipeline": {
+        "pseudo_missing_strings": [
+          "None",
+          "nan"
+        ],
+        "missing_policy": {
+          "numeric_columns": {
+            "strategy": "median",
+            "implementation": "SimpleImputer(strategy='median')",
+            "scope": "Fit strictly on Train, transform on Validation, Test, and App"
+          },
+          "categorical_columns": {
+            "strategy": "constant_unknown",
+            "fill_value": "UNKNOWN",
+            "implementation": "SimpleImputer(strategy='constant', fill_value='UNKNOWN')",
+            "scope": "Fit strictly on Train, transform on Validation, Test, and App"
+          },
+          "all_missing_on_train_rule": "Nếu một feature bị khuyết 100% trên tập Train, feature đó phải bị loại bỏ khỏi không gian đặc trưng của lượt huấn luyện; không được lấy giá trị từ Validation/Test để điền."
+        },
+        "unseen_category_policy": {
+          "encoder": "OneHotEncoder(handle_unknown='ignore', sparse_output=False)",
+          "explanation": "Đảm bảo pipeline hoạt động ổn định khi gặp tay đua mới (BEA, COL, DOO, ANT, BOR, HAD), chặng đua mới (Chinese Grand Prix), hoặc danh mục lạ trong ứng dụng dự đoán."
+        },
+        "team_naming_policy": "Giữ nguyên tên gốc từ nguồn dữ liệu (không tự ý map lại tên thương hiệu); xử lý category mới qua OneHotEncoder(handle_unknown='ignore').",
+        "lagged_features_policy": "Chưa cho phép sử dụng Lag features (PrevLapTime, PrevPosition) ở phiên bản protocol này do cần cơ chế truyền lịch sử tuần tự chuyên biệt và tránh rò rỉ target.",
+        "leakage_boundary": "Tất cả các bước học từ dữ liệu (Imputer, Scaler, Encoder) phải được đóng gói bên trong scikit-learn Pipeline và CHỈ fit trên tập Train (hoặc fold train khi cross-validation)."
+      },
+      "evaluation": {
+        "model_selection": {
+          "primary_criterion": "MAE thấp nhất trên tập Validation (mùa 2024)",
+          "tie_breaking_threshold_seconds": 0.005,
+          "tie_breaking_rules": [
+            "Nếu độ chênh lệch Validation MAE <= 0.005 giây, ưu tiên mô hình có Validation RMSE thấp hơn",
+            "Nếu Validation RMSE vẫn tương đương (chênh lệch <= 0.005 giây), ưu tiên mô hình có số lượng đặc trưng ít hơn (đơn giản, dễ giải thích hơn)"
+          ]
+        },
+        "provenance_metadata": [
+          "run_id",
+          "timestamp_utc",
+          "data_source_sha256",
+          "processed_base_sha256",
+          "processed_splits_sha256",
+          "config_path",
+          "config_sha256",
+          "split_version",
+          "git_commit_hash",
+          "git_dirty_flag",
+          "model_class",
+          "hyperparameters",
+          "random_seed",
+          "features_list",
+          "metrics",
+          "artifact_path"
+        ],
+        "interpretation_rules": [
+          "Mọi phân tích hệ số (coefficients) và nhận xét dữ liệu phải dựa hoàn toàn trên kết quả chạy thực tế của mô hình và đối chiếu đúng run ID.",
+          "Người diễn giải phải nắm rõ dấu, đơn vị của hệ số và tác động của scaling.",
+          "Đối với mô hình OLS thuần có intercept, OneHotEncoder bắt buộc dùng drop='first' để tránh bẫy biến giả (dummy variable trap); khi đó hệ số thể hiện độ lệch so với nhóm tham chiếu. Cần lưu ý drop='first' chỉ xử lý hoàn toàn đa cộng tuyến hoàn hảo trong từng biến phân loại riêng lẻ; nếu có quan hệ phụ thuộc chéo giữa các biến (ví dụ Driver và Team), đa cộng tuyến vẫn có thể tồn tại và cần cẩn trọng khi diễn giải t-statistic hoặc p-value. Đối với mô hình Regularized (Ridge, Lasso) dùng drop=None, mỗi category có hệ số riêng đo độ lệch dưới tác động của hàm phạt.",
+          "Không suy diễn tương quan thống kê thành mối quan hệ nhân quả.",
+          "Không sao chép nguyên văn các lời giải thích tự động từ AI; thành viên phải tự kiểm chứng và viết bằng ngôn ngữ hiểu biết của mình."
+        ]
+      }
+    },
+    "git_commit_hash": "3d727a9590c827e7dbf4cad3e4e58e91bc702cf6",
+    "git_dirty_flag": true,
+    "code_sha256": {
+      "scripts/survey_protocol_evidence.py": "fdffc966e04d74cd8d17d01da772cfafd5c31c695b57b4228d4ff4c0fc39c6e5",
+      "src/f1_lap_time/protocol.py": "4bc435f7005ec4dc46e78c369a7024bb39d04c363b998f68773028134f63be3a"
+    },
+    "reproduce_command": "uv run python -m scripts.survey_protocol_evidence",
+    "lap_group_keys": [
+      "Year",
+      "EventName",
+      "Session",
+      "LapNumber"
+    ],
+    "driver_group_keys": [
+      "Year",
+      "EventName",
+      "Session",
+      "Driver"
+    ]
+  },
+  "raw_source": {
+    "path": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+    "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+    "total_rows": 89980
+  },
+  "train_scope": {
+    "years": [
+      2022,
+      2023
+    ],
+    "total_clean_train_rows": 39433,
+    "distinct_event_names": 24,
+    "event_session_groups": 43
+  },
+  "tyrelife_train_survey": {
+    "missing_count": 428,
+    "missing_pct": 1.0854,
+    "min_value": 2.0,
+    "max_value": 63.0
+  },
+  "compound_placeholders_train": {
+    "None": 327,
+    "nan": 0
+  },
+  "lags_train_survey": {
+    "first_observed_per_driver_event": 832,
+    "gaps_lap_diff_greater_than_1": 2006,
+    "total_missing_strict_l_minus_1": 2838,
+    "strict_l_minus_1_available": 36595,
+    "strict_l_minus_1_available_pct": 92.803
+  },
+  "weather_intra_lap_observation": {
+    "total_lap_groups": 2305,
+    "laps_with_multiple_tracktemp_values": 1441,
+    "multiple_tracktemp_pct": 62.5163,
+    "note": "TrackTemp có thể khác nhau giữa các xe có cùng số vòng trong cùng sự kiện/phiên; quan sát này chưa xác định thời điểm lấy mẫu hoặc cách ghép thời tiết."
+  }
+}

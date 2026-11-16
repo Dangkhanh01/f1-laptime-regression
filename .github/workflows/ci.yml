@@ -33,3 +33,4 @@ jobs:
       - run: uv run python -m scripts.download_data
       - run: uv run python -m scripts.inspect_data
       - run: git diff --exit-code -- reports/data-inventory
+      - run: uv run python scripts/check_experiment_config.py
