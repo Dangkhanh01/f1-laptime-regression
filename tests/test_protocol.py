@@ -455,6 +455,81 @@ def test_validate_catches_year_overlap_between_splits() -> None:
     assert any("Year overlap between train and validation" in e for e in errors)
 
 
+@pytest.mark.parametrize(
+    ("earlier", "later"),
+    [("train", "validation"), ("validation", "final_test"), ("train", "final_test")],
+)
+def test_rejects_reversed_temporal_splits(tmp_path: Path, earlier: str, later: str) -> None:
+    cfg, raw_file = setup_mini_valid_dataset(tmp_path)
+    splits = cfg["split_protocol"]
+    splits[earlier], splits[later] = splits[later], splits[earlier]
+
+    assert any("Temporal split order" in error for error in validate_config_structure(cfg))
+    with pytest.raises(ValueError, match="Temporal split order"):
+        extract_split_subset(pd.read_parquet(raw_file), cfg, "train")
+    with pytest.raises(ValueError, match="Temporal split order"):
+        verify_config_against_raw_data(cfg, tmp_path)
+
+
+def test_temporal_order_checks_all_years_and_accepts_new_boundaries() -> None:
+    cfg = get_sample_valid_config()
+    splits = cfg["split_protocol"]
+    splits["train"]["years"] = [2022, 2024]
+    splits["validation"]["years"] = [2023]
+    assert any("Temporal split order" in error for error in validate_config_structure(cfg))
+
+    splits["valid_years"] = [2020, 2021, 2022, 2023]
+    splits["train"]["years"] = [2021, 2020]
+    splits["validation"]["years"] = [2022]
+    splits["final_test"]["years"] = [2023]
+    assert validate_config_structure(cfg) == []
+
+
+def test_rejects_unsupported_split_strategy(tmp_path: Path) -> None:
+    cfg, raw_file = setup_mini_valid_dataset(tmp_path)
+    cfg["split_protocol"]["strategy"] = "random_rows"
+
+    assert any("split_protocol.strategy" in error for error in validate_config_structure(cfg))
+    with pytest.raises(ValueError, match="split_protocol.strategy"):
+        extract_split_subset(pd.read_parquet(raw_file), cfg, "train")
+    with pytest.raises(ValueError, match="split_protocol.strategy"):
+        verify_config_against_raw_data(cfg, tmp_path)
+
+
+@pytest.mark.parametrize("filter_name", ["preseason_filter", "safety_car_filter"])
+def test_rejects_unsupported_filter_action(tmp_path: Path, filter_name: str) -> None:
+    cfg, raw_file = setup_mini_valid_dataset(tmp_path)
+    cfg["scope_and_filters"][filter_name]["action"] = "include"
+    field = f"{filter_name}.action"
+
+    assert any(field in error for error in validate_config_structure(cfg))
+    with pytest.raises(ValueError, match=field):
+        apply_protocol_filters(pd.read_parquet(raw_file), cfg)
+    with pytest.raises(ValueError, match=field):
+        verify_config_against_raw_data(cfg, tmp_path)
+
+
+@pytest.mark.parametrize("section", ["problem_definition", "features", "target_validity"])
+def test_rejects_inconsistent_target_declarations(tmp_path: Path, section: str) -> None:
+    cfg, _ = setup_mini_valid_dataset(tmp_path)
+    target_config = cfg["scope_and_filters"] if section == "target_validity" else cfg
+    target_field = "target" if section == "features" else "target_column"
+    target_config[section][target_field] = "Sector1Time"
+
+    assert any("Target mismatch" in error for error in validate_config_structure(cfg))
+    with pytest.raises(ValueError, match="Target mismatch"):
+        verify_config_against_raw_data(cfg, tmp_path)
+
+
+def test_validate_requires_target_validity_column() -> None:
+    cfg = get_sample_valid_config()
+    del cfg["scope_and_filters"]["target_validity"]["target_column"]
+    assert any(
+        "scope_and_filters.target_validity.target_column" in error
+        for error in validate_config_structure(cfg)
+    )
+
+
 def test_validate_catches_empty_scope_and_filters() -> None:
     cfg = get_sample_valid_config()
     cfg["scope_and_filters"] = {}
@@ -546,6 +621,40 @@ def test_cli_missing_config_returns_error(tmp_path: Path) -> None:
     ]
     res = subprocess.run(cmd, capture_output=True, text=True, check=False)
     assert res.returncode != 0
+
+
+@pytest.mark.parametrize("structure_only", [False, True])
+@pytest.mark.parametrize("bad_rule", ["temporal_order", "filter_action", "target"])
+def test_cli_rejects_inconsistent_protocol(
+    tmp_path: Path, bad_rule: str, structure_only: bool
+) -> None:
+    cfg = get_sample_valid_config()
+    if bad_rule == "temporal_order":
+        splits = cfg["split_protocol"]
+        splits["train"], splits["final_test"] = splits["final_test"], splits["train"]
+        expected_error = "Temporal split order"
+    elif bad_rule == "filter_action":
+        cfg["scope_and_filters"]["preseason_filter"]["action"] = "include"
+        expected_error = "preseason_filter.action"
+    else:
+        cfg["scope_and_filters"]["target_validity"]["target_column"] = "Sector1Time"
+        expected_error = "Target mismatch"
+
+    config_path = tmp_path / "experiment.json"
+    config_path.write_text(json.dumps(cfg), encoding="utf-8")
+    repo_root = Path(__file__).resolve().parents[1]
+    cmd = [
+        sys.executable,
+        str(repo_root / "scripts" / "check_experiment_config.py"),
+        "--config",
+        str(config_path),
+    ]
+    if structure_only:
+        cmd.append("--check-structure-only")
+    result = subprocess.run(cmd, capture_output=True, text=True, check=False)
+    assert result.returncode == 1
+    assert "Configuration validation failed" in result.stderr
+    assert expected_error in result.stderr
 
 
 def test_apply_protocol_filters_logic() -> None:

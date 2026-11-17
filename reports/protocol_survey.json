@@ -246,11 +246,11 @@
         ]
       }
     },
-    "git_commit_hash": "3d727a9590c827e7dbf4cad3e4e58e91bc702cf6",
+    "git_commit_hash": "fb73585b53d9b92dd2c0fec26c4b56b0d854be28",
     "git_dirty_flag": true,
     "code_sha256": {
       "scripts/survey_protocol_evidence.py": "fdffc966e04d74cd8d17d01da772cfafd5c31c695b57b4228d4ff4c0fc39c6e5",
-      "src/f1_lap_time/protocol.py": "4bc435f7005ec4dc46e78c369a7024bb39d04c363b998f68773028134f63be3a"
+      "src/f1_lap_time/protocol.py": "6639208d03e260ef1b71114edabe45550dd9e1a98b3c0cd04bac14363c8301d0"
     },
     "reproduce_command": "uv run python -m scripts.survey_protocol_evidence",
     "lap_group_keys": [

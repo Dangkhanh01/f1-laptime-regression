@@ -148,6 +148,15 @@ def _check_int_list(
     return val
 
 
+def _check_temporal_split_order(split_years: dict[str, set[int]], errors: list[str]) -> None:
+    """Require every year in each split to precede the following split."""
+    for earlier, later in [("train", "validation"), ("validation", "final_test")]:
+        if max(split_years[earlier]) >= min(split_years[later]):
+            errors.append(
+                f"Temporal split order requires all {earlier} years to precede all {later} years"
+            )
+
+
 def load_experiment_config(config_path: Path | str | None = None) -> dict[str, Any]:
     """Load and parse experiment JSON configuration.
 
@@ -235,7 +244,9 @@ def validate_config_structure(config: Any) -> list[str]:
         errors.append("scope_and_filters.preseason_filter must be a dict")
     else:
         ps = sf["preseason_filter"]
-        _check_str(ps, "action", "scope_and_filters.preseason_filter", errors)
+        action = _check_str(ps, "action", "scope_and_filters.preseason_filter", errors)
+        if action and action != "exclude":
+            errors.append("scope_and_filters.preseason_filter.action must be 'exclude'")
         cond = _check_str(ps, "condition", "scope_and_filters.preseason_filter", errors)
         if cond and cond not in SUPPORTED_PRESEASON_CONDITIONS:
             errors.append(
@@ -248,7 +259,9 @@ def validate_config_structure(config: Any) -> list[str]:
         errors.append("scope_and_filters.safety_car_filter must be a dict")
     else:
         sc = sf["safety_car_filter"]
-        _check_str(sc, "action", "scope_and_filters.safety_car_filter", errors)
+        action = _check_str(sc, "action", "scope_and_filters.safety_car_filter", errors)
+        if action and action != "exclude":
+            errors.append("scope_and_filters.safety_car_filter.action must be 'exclude'")
         cond_sc = _check_str(sc, "condition", "scope_and_filters.safety_car_filter", errors)
         if cond_sc and cond_sc not in SUPPORTED_SC_CONDITIONS:
             errors.append(
@@ -274,6 +287,14 @@ def validate_config_structure(config: Any) -> list[str]:
         errors.append("scope_and_filters.target_validity must be a dict")
     else:
         tv = sf["target_validity"]
+        validity_target = _check_str(
+            tv, "target_column", "scope_and_filters.target_validity", errors
+        )
+        if validity_target and validity_target != prob.get("target_column"):
+            errors.append(
+                "Target mismatch between scope_and_filters.target_validity.target_column "
+                "and problem_definition.target_column"
+            )
         cond_tv = _check_str(tv, "condition", "scope_and_filters.target_validity", errors)
         if cond_tv and cond_tv not in SUPPORTED_TARGET_CONDITIONS:
             errors.append(
@@ -289,7 +310,9 @@ def validate_config_structure(config: Any) -> list[str]:
 
     # 4. split_protocol
     split = config["split_protocol"]
-    _check_str(split, "strategy", "split_protocol", errors)
+    strategy = _check_str(split, "strategy", "split_protocol", errors)
+    if strategy and strategy != "temporal_by_year":
+        errors.append("split_protocol.strategy must be 'temporal_by_year'")
     valid_years = _check_int_list(split, "valid_years", "split_protocol", errors)
 
     split_years_seen: dict[str, set[int]] = {}
@@ -312,6 +335,7 @@ def validate_config_structure(config: Any) -> list[str]:
 
     # Check pairwise year overlap
     if len(split_years_seen) == 3:
+        _check_temporal_split_order(split_years_seen, errors)
         train_y = split_years_seen["train"]
         val_y = split_years_seen["validation"]
         test_y = split_years_seen["final_test"]
@@ -460,6 +484,9 @@ def apply_protocol_filters(
         ValueError: If filtering conditions or required columns are invalid.
     """
     sf = config["scope_and_filters"]
+    for filter_name in ["preseason_filter", "safety_car_filter"]:
+        if sf[filter_name].get("action") != "exclude":
+            raise ValueError(f"scope_and_filters.{filter_name}.action must be 'exclude'")
 
     # 1. Session scope
     sess_val = sf["session_scope"]
@@ -514,7 +541,7 @@ def extract_split_subset(
         Subset DataFrame for the given split.
 
     Raises:
-        ValueError: If split_name is not configured or 'Year' column is missing.
+        ValueError: If the split name, strategy, temporal order, or 'Year' column is invalid.
     """
     splits = config["split_protocol"]
     if split_name not in splits:
@@ -523,6 +550,19 @@ def extract_split_subset(
         )
     if "Year" not in clean_df.columns:
         raise ValueError("Missing 'Year' column in DataFrame for split extraction")
+
+    if splits.get("strategy") != "temporal_by_year":
+        raise ValueError("split_protocol.strategy must be 'temporal_by_year'")
+    split_years: dict[str, set[int]] = {}
+    errors: list[str] = []
+    for name in ["train", "validation", "final_test"]:
+        years = _check_int_list(splits[name], "years", f"split_protocol.{name}", errors)
+        if years:
+            split_years[name] = set(years)
+    if len(split_years) == 3:
+        _check_temporal_split_order(split_years, errors)
+    if errors:
+        raise ValueError("Invalid split protocol:\n - " + "\n - ".join(errors))
 
     years = splits[split_name]["years"]
     return clean_df[clean_df["Year"].isin(years)].copy()
@@ -599,7 +639,17 @@ def verify_config_against_raw_data(
         )
 
     raw_cols = set(df.columns)
-    target = config["features"]["target"]
+    target = config["scope_and_filters"]["target_validity"].get("target_column")
+    if (
+        not isinstance(target, str)
+        or not target.strip()
+        or target != config["features"]["target"]
+        or target != config["problem_definition"]["target_column"]
+    ):
+        raise ValueError(
+            "Target mismatch: scope_and_filters.target_validity.target_column, "
+            "features.target, and problem_definition.target_column must agree"
+        )
     allowed = config["features"]["allowed_candidate_features"]
     forbidden = config["features"]["forbidden_features"]
     tracking = config["features"]["tracking_and_split_columns"]
