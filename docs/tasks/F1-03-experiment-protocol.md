@@ -14,7 +14,7 @@ Ngồi cùng/call với Nguyên, Khang và Khánh để tranh luận, không c�
 | `reports/data-inventory/schema.csv`, `reports/data-inventory/quality.json` | Chờ F1-02; kiểm tra căn cứ trước khi chọn quy tắc |
 | `configs/experiment.json` | Tạo khi đủ căn cứ; cấu hình dùng chung về target/unit, source, scope/filter và split |
 | `docs/experiment-protocol.md` | Tạo khi làm; giải thích quy tắc thực nghiệm và cách dùng config, không ghi biên bản tranh luận |
-| `docs/eda-findings.md`, `reports/eda/` | Chờ F1-04; dùng phát hiện EDA để hoàn thiện protocol |
+| `docs/eda-findings.ipynb`, `reports/eda/` | Chờ F1-04; dùng phát hiện EDA để hoàn thiện protocol |
 
 ## Cách làm
 

@@ -17,7 +17,7 @@ Nguyên làm kiểm kê nguồn/schema; Khang dùng kết quả đó để phân
 | `reports/eda/metadata.json` | Kết quả chạy; nguồn/hash, config/code version, tập dữ liệu và số dòng trước/sau lọc |
 | `reports/eda/target-summary.csv`, `reports/eda/group-summary.csv` | Kết quả chạy; thống kê target/nhóm thực sự cần phân tích |
 | `reports/eda/figures/` | Biểu đồ PNG từ Matplotlib/Seaborn, tên file theo nội dung |
-| `docs/eda-findings.md` | Tạo khi làm; phát hiện, dẫn chứng và đề xuất cho protocol/model |
+| `docs/eda-findings.ipynb` | Notebook lưu phát hiện, bảng, biểu đồ và đề xuất cho protocol/model |
 | `tests/test_eda.py` | Viết khi cần kiểm tra chọn partition, giữ nguyên raw và tính đúng bảng |
 
 ## Cách làm
@@ -35,7 +35,7 @@ Nguyên làm kiểm kê nguồn/schema; Khang dùng kết quả đó để phân
    target, sector hoặc thông tin sau vòng chỉ vì có tương quan cao.
 6. Kiểm tra ảnh hưởng missing/làm sạch khi cần. Phát hiện lỗi mới thì trao đổi với Nguyên;
    đề xuất biến đổi/feature thì call với Danh để thống nhất, không tự đổi protocol chung.
-7. Tổng hợp phát hiện trong `docs/eda-findings.md`: câu hỏi, dẫn chứng, giới hạn và đề xuất.
+7. Tổng hợp câu hỏi, dẫn chứng, giới hạn và đề xuất trong `docs/eda-findings.ipynb`.
    Không suy quan hệ nhân quả từ tương quan. Lưu nguồn/bảng/ảnh để sau này dùng cho báo cáo.
 
 Thiết kế code, tên hàm và cách vẽ do Khang quyết định. Trao đổi trực tiếp khi cần góp ý;

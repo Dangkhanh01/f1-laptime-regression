@@ -10,7 +10,7 @@
 | File/vị trí | Cần làm khi task bắt đầu |
 |---|---|
 | `Lab 01 - Linear Regression.pdf` | Đã có; đối chiếu yêu cầu báo cáo và sản phẩm nộp |
-| `docs/data-inventory.md`, `docs/experiment-protocol.md`, `docs/eda-findings.md` | Đọc kết quả chuyên môn đã có, không viết lại từ suy đoán |
+| `docs/data-inventory.md`, `docs/experiment-protocol.md`, `docs/eda-findings.ipynb` | Đọc kết quả chuyên môn đã có, không viết lại từ suy đoán |
 | `reports/eda/`, `reports/models/`, `reports/demo/` | Lấy bảng/ảnh có nguồn và kết quả thật |
 | `docs/report-outline.md` | Tạo khi hữu ích để nhóm phân phần viết; chỉ là đề cương, không sao chép cả báo cáo |
 | Word/Google Docs chung | Bản nội dung chính; trao đổi quyền truy cập trực tiếp |

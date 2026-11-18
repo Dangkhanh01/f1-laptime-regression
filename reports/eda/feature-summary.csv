@@ -1,0 +1,216 @@
+feature,Year,EventName,Session,compound,reference_compound,n,reference_n,statistic,value
+LapNumber,2022,Abu Dhabi Grand Prix,R,,,1032,,pearson_r,-0.42458985
+TyreLife_start,2022,Abu Dhabi Grand Prix,R,HARD,,580,,pearson_r,0.04309435
+Compound,2022,Abu Dhabi Grand Prix,R,HARD,MEDIUM,580,409,median_difference_s,-0.66000000
+TyreLife_start,2022,Abu Dhabi Grand Prix,R,MEDIUM,,409,,pearson_r,0.25101480
+TyreLife_start,2022,Abu Dhabi Grand Prix,R,SOFT,,43,,pearson_r,0.16374368
+Compound,2022,Abu Dhabi Grand Prix,R,SOFT,MEDIUM,43,409,median_difference_s,-0.42200000
+LapNumber,2022,Australian Grand Prix,R,,,777,,pearson_r,-0.68392087
+TyreLife_start,2022,Australian Grand Prix,R,HARD,,557,,pearson_r,-0.47860882
+Compound,2022,Australian Grand Prix,R,HARD,MEDIUM,557,220,median_difference_s,-1.07550000
+TyreLife_start,2022,Australian Grand Prix,R,MEDIUM,,220,,pearson_r,-0.07827678
+LapNumber,2022,Austrian Grand Prix,R,,,1176,,pearson_r,-0.51866042
+TyreLife_start,2022,Austrian Grand Prix,R,HARD,,544,,pearson_r,0.27277723
+Compound,2022,Austrian Grand Prix,R,HARD,MEDIUM,571,346,median_difference_s,0.24950000
+TyreLife_start,2022,Austrian Grand Prix,R,MEDIUM,,298,,pearson_r,0.11074838
+LapNumber,2022,Azerbaijan Grand Prix,R,,,755,,pearson_r,-0.57092507
+TyreLife_start,2022,Azerbaijan Grand Prix,R,HARD,,538,,pearson_r,-0.05734262
+Compound,2022,Azerbaijan Grand Prix,R,HARD,MEDIUM,538,206,median_difference_s,-0.20400000
+TyreLife_start,2022,Azerbaijan Grand Prix,R,MEDIUM,,206,,pearson_r,-0.03452631
+LapNumber,2022,Bahrain Grand Prix,R,,,893,,pearson_r,-0.60846974
+TyreLife_start,2022,Bahrain Grand Prix,R,HARD,,91,,pearson_r,0.45674565
+Compound,2022,Bahrain Grand Prix,R,HARD,MEDIUM,91,294,median_difference_s,-0.33550000
+TyreLife_start,2022,Bahrain Grand Prix,R,MEDIUM,,294,,pearson_r,0.45365461
+TyreLife_start,2022,Bahrain Grand Prix,R,SOFT,,508,,pearson_r,0.01264703
+Compound,2022,Bahrain Grand Prix,R,SOFT,MEDIUM,508,294,median_difference_s,0.04800000
+LapNumber,2022,Belgian Grand Prix,R,,,645,,pearson_r,-0.48999541
+TyreLife_start,2022,Belgian Grand Prix,R,HARD,,232,,pearson_r,0.18563808
+Compound,2022,Belgian Grand Prix,R,HARD,MEDIUM,232,339,median_difference_s,0.26000000
+TyreLife_start,2022,Belgian Grand Prix,R,MEDIUM,,339,,pearson_r,0.30435798
+TyreLife_start,2022,Belgian Grand Prix,R,SOFT,,74,,pearson_r,0.58265496
+Compound,2022,Belgian Grand Prix,R,SOFT,MEDIUM,74,339,median_difference_s,-0.46350000
+LapNumber,2022,British Grand Prix,R,,,674,,pearson_r,-0.36209805
+TyreLife_start,2022,British Grand Prix,R,HARD,,151,,pearson_r,-0.15932620
+Compound,2022,British Grand Prix,R,HARD,MEDIUM,151,353,median_difference_s,-0.08000000
+TyreLife_start,2022,British Grand Prix,R,MEDIUM,,353,,pearson_r,-0.29541839
+TyreLife_start,2022,British Grand Prix,R,SOFT,,170,,pearson_r,-0.25362366
+Compound,2022,British Grand Prix,R,SOFT,MEDIUM,170,353,median_difference_s,-0.33350000
+LapNumber,2022,Canadian Grand Prix,R,,,995,,pearson_r,-0.48159357
+TyreLife_start,2022,Canadian Grand Prix,R,HARD,,736,,pearson_r,0.10403139
+Compound,2022,Canadian Grand Prix,R,HARD,MEDIUM,736,259,median_difference_s,-0.13850000
+TyreLife_start,2022,Canadian Grand Prix,R,MEDIUM,,259,,pearson_r,-0.44662958
+LapNumber,2022,Dutch Grand Prix,R,,,1123,,pearson_r,-0.65738518
+TyreLife_start,2022,Dutch Grand Prix,R,HARD,,254,,pearson_r,0.13075509
+Compound,2022,Dutch Grand Prix,R,HARD,MEDIUM,254,446,median_difference_s,-0.43950000
+TyreLife_start,2022,Dutch Grand Prix,R,MEDIUM,,446,,pearson_r,-0.10884249
+TyreLife_start,2022,Dutch Grand Prix,R,SOFT,,423,,pearson_r,-0.23174181
+Compound,2022,Dutch Grand Prix,R,SOFT,MEDIUM,423,446,median_difference_s,-0.57950000
+LapNumber,2022,Emilia Romagna Grand Prix,R,,,1006,,pearson_r,-0.81678686
+TyreLife_start,2022,Emilia Romagna Grand Prix,R,HARD,,31,,pearson_r,-0.19848006
+Compound,2022,Emilia Romagna Grand Prix,R,HARD,MEDIUM,31,699,median_difference_s,0.32400000
+TyreLife_start,2022,Emilia Romagna Grand Prix,R,INTERMEDIATE,,233,,pearson_r,0.05628973
+Compound,2022,Emilia Romagna Grand Prix,R,INTERMEDIATE,MEDIUM,233,699,median_difference_s,11.32700000
+TyreLife_start,2022,Emilia Romagna Grand Prix,R,MEDIUM,,699,,pearson_r,-0.55486938
+TyreLife_start,2022,Emilia Romagna Grand Prix,R,SOFT,,43,,pearson_r,0.43962339
+Compound,2022,Emilia Romagna Grand Prix,R,SOFT,MEDIUM,43,699,median_difference_s,-2.16400000
+LapNumber,2022,French Grand Prix,R,,,818,,pearson_r,-0.45165856
+TyreLife_start,2022,French Grand Prix,R,HARD,,511,,pearson_r,-0.34977831
+Compound,2022,French Grand Prix,R,HARD,MEDIUM,511,307,median_difference_s,-0.36500000
+TyreLife_start,2022,French Grand Prix,R,MEDIUM,,307,,pearson_r,-0.03171411
+LapNumber,2022,Hungarian Grand Prix,R,,,1188,,pearson_r,-0.35054805
+TyreLife_start,2022,Hungarian Grand Prix,R,HARD,,247,,pearson_r,-0.05704163
+Compound,2022,Hungarian Grand Prix,R,HARD,MEDIUM,247,663,median_difference_s,0.37300000
+TyreLife_start,2022,Hungarian Grand Prix,R,MEDIUM,,663,,pearson_r,0.10790522
+TyreLife_start,2022,Hungarian Grand Prix,R,SOFT,,278,,pearson_r,0.22758340
+Compound,2022,Hungarian Grand Prix,R,SOFT,MEDIUM,278,663,median_difference_s,-0.09100000
+LapNumber,2022,Italian Grand Prix,R,,,778,,pearson_r,-0.48559207
+TyreLife_start,2022,Italian Grand Prix,R,HARD,,253,,pearson_r,-0.05654962
+Compound,2022,Italian Grand Prix,R,HARD,MEDIUM,253,368,median_difference_s,-0.43000000
+TyreLife_start,2022,Italian Grand Prix,R,MEDIUM,,368,,pearson_r,-0.15918921
+TyreLife_start,2022,Italian Grand Prix,R,SOFT,,157,,pearson_r,0.07532449
+Compound,2022,Italian Grand Prix,R,SOFT,MEDIUM,157,368,median_difference_s,-1.60700000
+LapNumber,2022,Japanese Grand Prix,R,,,370,,pearson_r,-0.17296325
+TyreLife_start,2022,Japanese Grand Prix,R,INTERMEDIATE,,348,,pearson_r,0.45576916
+LapNumber,2022,Mexico City Grand Prix,R,,,1262,,pearson_r,-0.38477071
+TyreLife_start,2022,Mexico City Grand Prix,R,HARD,,214,,pearson_r,-0.06139268
+Compound,2022,Mexico City Grand Prix,R,HARD,MEDIUM,214,660,median_difference_s,-0.69850000
+TyreLife_start,2022,Mexico City Grand Prix,R,MEDIUM,,660,,pearson_r,-0.12111591
+TyreLife_start,2022,Mexico City Grand Prix,R,SOFT,,388,,pearson_r,0.11198947
+Compound,2022,Mexico City Grand Prix,R,SOFT,MEDIUM,388,660,median_difference_s,-0.30900000
+LapNumber,2022,Miami Grand Prix,R,,,878,,pearson_r,-0.62193473
+TyreLife_start,2022,Miami Grand Prix,R,HARD,,519,,pearson_r,-0.25145485
+Compound,2022,Miami Grand Prix,R,HARD,MEDIUM,519,326,median_difference_s,-0.37400000
+TyreLife_start,2022,Miami Grand Prix,R,MEDIUM,,326,,pearson_r,-0.41073437
+TyreLife_start,2022,Miami Grand Prix,R,SOFT,,33,,pearson_r,-0.41753019
+Compound,2022,Miami Grand Prix,R,SOFT,MEDIUM,33,326,median_difference_s,-1.37700000
+LapNumber,2022,Monaco Grand Prix,R,,,949,,pearson_r,-0.92382669
+TyreLife_start,2022,Monaco Grand Prix,R,HARD,,240,,pearson_r,-0.58704311
+Compound,2022,Monaco Grand Prix,R,HARD,MEDIUM,277,312,median_difference_s,0.13550000
+TyreLife_start,2022,Monaco Grand Prix,R,INTERMEDIATE,,77,,pearson_r,-0.83357658
+Compound,2022,Monaco Grand Prix,R,INTERMEDIATE,MEDIUM,92,312,median_difference_s,17.25950000
+TyreLife_start,2022,Monaco Grand Prix,R,MEDIUM,,278,,pearson_r,-0.36906269
+TyreLife_start,2022,Monaco Grand Prix,R,WET,,229,,pearson_r,-0.88271319
+Compound,2022,Monaco Grand Prix,R,WET,MEDIUM,229,312,median_difference_s,18.95550000
+LapNumber,2022,Saudi Arabian Grand Prix,R,,,625,,pearson_r,-0.56629709
+TyreLife_start,2022,Saudi Arabian Grand Prix,R,HARD,,405,,pearson_r,-0.30180129
+Compound,2022,Saudi Arabian Grand Prix,R,HARD,MEDIUM,405,220,median_difference_s,-1.65350000
+TyreLife_start,2022,Saudi Arabian Grand Prix,R,MEDIUM,,220,,pearson_r,-0.14934883
+LapNumber,2022,Singapore Grand Prix,R,,,625,,pearson_r,-0.92722741
+TyreLife_start,2022,Singapore Grand Prix,R,INTERMEDIATE,,376,,pearson_r,-0.68444029
+Compound,2022,Singapore Grand Prix,R,INTERMEDIATE,MEDIUM,376,168,median_difference_s,10.54800000
+TyreLife_start,2022,Singapore Grand Prix,R,MEDIUM,,168,,pearson_r,-0.59909360
+TyreLife_start,2022,Singapore Grand Prix,R,SOFT,,81,,pearson_r,-0.24549054
+Compound,2022,Singapore Grand Prix,R,SOFT,MEDIUM,81,168,median_difference_s,0.71400000
+LapNumber,2022,Spanish Grand Prix,R,,,1104,,pearson_r,-0.42033558
+TyreLife_start,2022,Spanish Grand Prix,R,HARD,,34,,pearson_r,0.77005173
+Compound,2022,Spanish Grand Prix,R,HARD,MEDIUM,34,463,median_difference_s,0.73050000
+TyreLife_start,2022,Spanish Grand Prix,R,MEDIUM,,463,,pearson_r,0.29848056
+TyreLife_start,2022,Spanish Grand Prix,R,SOFT,,607,,pearson_r,0.09693527
+Compound,2022,Spanish Grand Prix,R,SOFT,MEDIUM,607,463,median_difference_s,-0.05000000
+LapNumber,2022,São Paulo Grand Prix,R,,,924,,pearson_r,-0.61900178
+TyreLife_start,2022,São Paulo Grand Prix,R,MEDIUM,,468,,pearson_r,0.18808870
+TyreLife_start,2022,São Paulo Grand Prix,R,SOFT,,446,,pearson_r,-0.20187765
+Compound,2022,São Paulo Grand Prix,R,SOFT,MEDIUM,446,468,median_difference_s,-0.46450000
+LapNumber,2022,United States Grand Prix,R,,,727,,pearson_r,-0.57101102
+TyreLife_start,2022,United States Grand Prix,R,HARD,,435,,pearson_r,-0.01020130
+Compound,2022,United States Grand Prix,R,HARD,MEDIUM,435,291,median_difference_s,-0.17500000
+TyreLife_start,2022,United States Grand Prix,R,MEDIUM,,291,,pearson_r,-0.14531719
+LapNumber,2023,Abu Dhabi Grand Prix,R,,,1063,,pearson_r,-0.68854428
+TyreLife_start,2023,Abu Dhabi Grand Prix,R,HARD,,794,,pearson_r,0.10122425
+Compound,2023,Abu Dhabi Grand Prix,R,HARD,MEDIUM,794,269,median_difference_s,-1.03150000
+TyreLife_start,2023,Abu Dhabi Grand Prix,R,MEDIUM,,269,,pearson_r,-0.02097723
+LapNumber,2023,Australian Grand Prix,R,,,769,,pearson_r,-0.51215432
+TyreLife_start,2023,Australian Grand Prix,R,HARD,,667,,pearson_r,-0.49227023
+Compound,2023,Australian Grand Prix,R,HARD,MEDIUM,667,93,median_difference_s,-1.72300000
+TyreLife_start,2023,Australian Grand Prix,R,MEDIUM,,93,,pearson_r,-0.10769686
+LapNumber,2023,Austrian Grand Prix,R,,,1178,,pearson_r,-0.49579407
+TyreLife_start,2023,Austrian Grand Prix,R,HARD,,659,,pearson_r,0.21316770
+Compound,2023,Austrian Grand Prix,R,HARD,MEDIUM,659,518,median_difference_s,0.36250000
+TyreLife_start,2023,Austrian Grand Prix,R,MEDIUM,,518,,pearson_r,0.00954627
+LapNumber,2023,Azerbaijan Grand Prix,R,,,846,,pearson_r,-0.64703881
+TyreLife_start,2023,Azerbaijan Grand Prix,R,HARD,,708,,pearson_r,-0.49930802
+Compound,2023,Azerbaijan Grand Prix,R,HARD,MEDIUM,708,137,median_difference_s,-1.12850000
+TyreLife_start,2023,Azerbaijan Grand Prix,R,MEDIUM,,137,,pearson_r,-0.46354810
+LapNumber,2023,Bahrain Grand Prix,R,,,898,,pearson_r,-0.69967177
+TyreLife_start,2023,Bahrain Grand Prix,R,HARD,,504,,pearson_r,0.00106667
+TyreLife_start,2023,Bahrain Grand Prix,R,SOFT,,386,,pearson_r,-0.09650980
+LapNumber,2023,Belgian Grand Prix,R,,,721,,pearson_r,-0.51002682
+TyreLife_start,2023,Belgian Grand Prix,R,MEDIUM,,369,,pearson_r,0.28939177
+TyreLife_start,2023,Belgian Grand Prix,R,SOFT,,342,,pearson_r,0.01638850
+Compound,2023,Belgian Grand Prix,R,SOFT,MEDIUM,342,369,median_difference_s,-1.41450000
+LapNumber,2023,British Grand Prix,R,,,802,,pearson_r,-0.78747292
+TyreLife_start,2023,British Grand Prix,R,HARD,,116,,pearson_r,-0.21691657
+Compound,2023,British Grand Prix,R,HARD,MEDIUM,116,438,median_difference_s,-0.39650000
+TyreLife_start,2023,British Grand Prix,R,MEDIUM,,438,,pearson_r,-0.40027904
+TyreLife_start,2023,British Grand Prix,R,SOFT,,248,,pearson_r,-0.35982523
+Compound,2023,British Grand Prix,R,SOFT,MEDIUM,248,438,median_difference_s,-0.92900000
+LapNumber,2023,Canadian Grand Prix,R,,,1127,,pearson_r,-0.31883392
+TyreLife_start,2023,Canadian Grand Prix,R,HARD,,770,,pearson_r,-0.02412478
+Compound,2023,Canadian Grand Prix,R,HARD,MEDIUM,770,315,median_difference_s,0.04700000
+TyreLife_start,2023,Canadian Grand Prix,R,MEDIUM,,315,,pearson_r,-0.36879244
+LapNumber,2023,Dutch Grand Prix,R,,,1014,,pearson_r,-0.32635573
+TyreLife_start,2023,Dutch Grand Prix,R,HARD,,38,,pearson_r,-0.79794355
+Compound,2023,Dutch Grand Prix,R,HARD,MEDIUM,38,157,median_difference_s,-0.72900000
+TyreLife_start,2023,Dutch Grand Prix,R,INTERMEDIATE,,209,,pearson_r,-0.34247591
+Compound,2023,Dutch Grand Prix,R,INTERMEDIATE,MEDIUM,209,157,median_difference_s,7.26300000
+TyreLife_start,2023,Dutch Grand Prix,R,MEDIUM,,157,,pearson_r,-0.06714217
+TyreLife_start,2023,Dutch Grand Prix,R,SOFT,,610,,pearson_r,-0.27679088
+Compound,2023,Dutch Grand Prix,R,SOFT,MEDIUM,610,157,median_difference_s,-0.74600000
+LapNumber,2023,Hungarian Grand Prix,R,,,1158,,pearson_r,-0.58525636
+TyreLife_start,2023,Hungarian Grand Prix,R,HARD,,723,,pearson_r,0.16514485
+Compound,2023,Hungarian Grand Prix,R,HARD,MEDIUM,723,408,median_difference_s,0.30600000
+TyreLife_start,2023,Hungarian Grand Prix,R,MEDIUM,,408,,pearson_r,-0.21675921
+LapNumber,2023,Italian Grand Prix,R,,,878,,pearson_r,-0.27879555
+TyreLife_start,2023,Italian Grand Prix,R,HARD,,474,,pearson_r,0.27140067
+Compound,2023,Italian Grand Prix,R,HARD,MEDIUM,474,404,median_difference_s,-0.02550000
+TyreLife_start,2023,Italian Grand Prix,R,MEDIUM,,404,,pearson_r,0.19475079
+LapNumber,2023,Japanese Grand Prix,R,,,667,,pearson_r,-0.49089478
+TyreLife_start,2023,Japanese Grand Prix,R,HARD,,415,,pearson_r,0.35801314
+Compound,2023,Japanese Grand Prix,R,HARD,MEDIUM,415,203,median_difference_s,-0.94900000
+TyreLife_start,2023,Japanese Grand Prix,R,MEDIUM,,203,,pearson_r,0.15830202
+TyreLife_start,2023,Japanese Grand Prix,R,SOFT,,49,,pearson_r,-0.13086790
+Compound,2023,Japanese Grand Prix,R,SOFT,MEDIUM,49,203,median_difference_s,0.85800000
+LapNumber,2023,Las Vegas Grand Prix,R,,,738,,pearson_r,-0.69877086
+TyreLife_start,2023,Las Vegas Grand Prix,R,HARD,,576,,pearson_r,-0.34456946
+Compound,2023,Las Vegas Grand Prix,R,HARD,MEDIUM,576,159,median_difference_s,-1.37800000
+TyreLife_start,2023,Las Vegas Grand Prix,R,MEDIUM,,159,,pearson_r,-0.14271715
+LapNumber,2023,Mexico City Grand Prix,R,,,1131,,pearson_r,-0.09141389
+TyreLife_start,2023,Mexico City Grand Prix,R,HARD,,495,,pearson_r,-0.10525219
+Compound,2023,Mexico City Grand Prix,R,HARD,MEDIUM,495,629,median_difference_s,-0.36400000
+TyreLife_start,2023,Mexico City Grand Prix,R,MEDIUM,,629,,pearson_r,-0.18157864
+LapNumber,2023,Monaco Grand Prix,R,,,1423,,pearson_r,0.65586261
+TyreLife_start,2023,Monaco Grand Prix,R,HARD,,633,,pearson_r,0.18492209
+Compound,2023,Monaco Grand Prix,R,HARD,MEDIUM,633,347,median_difference_s,0.10100000
+TyreLife_start,2023,Monaco Grand Prix,R,INTERMEDIATE,,376,,pearson_r,-0.81678515
+Compound,2023,Monaco Grand Prix,R,INTERMEDIATE,MEDIUM,376,347,median_difference_s,17.10100000
+TyreLife_start,2023,Monaco Grand Prix,R,MEDIUM,,347,,pearson_r,0.01779236
+TyreLife_start,2023,Monaco Grand Prix,R,WET,,40,,pearson_r,-0.42394320
+Compound,2023,Monaco Grand Prix,R,WET,MEDIUM,40,347,median_difference_s,19.67800000
+LapNumber,2023,Qatar Grand Prix,R,,,834,,pearson_r,-0.80103433
+TyreLife_start,2023,Qatar Grand Prix,R,HARD,,369,,pearson_r,-0.03634351
+Compound,2023,Qatar Grand Prix,R,HARD,MEDIUM,369,455,median_difference_s,-1.35000000
+TyreLife_start,2023,Qatar Grand Prix,R,MEDIUM,,455,,pearson_r,0.01702374
+LapNumber,2023,Saudi Arabian Grand Prix,R,,,829,,pearson_r,-0.64037701
+TyreLife_start,2023,Saudi Arabian Grand Prix,R,HARD,,478,,pearson_r,-0.46678500
+Compound,2023,Saudi Arabian Grand Prix,R,HARD,MEDIUM,478,324,median_difference_s,-1.01950000
+TyreLife_start,2023,Saudi Arabian Grand Prix,R,MEDIUM,,324,,pearson_r,-0.59547034
+LapNumber,2023,Singapore Grand Prix,R,,,921,,pearson_r,-0.34143909
+TyreLife_start,2023,Singapore Grand Prix,R,HARD,,508,,pearson_r,-0.20790084
+Compound,2023,Singapore Grand Prix,R,HARD,MEDIUM,508,365,median_difference_s,-0.13950000
+TyreLife_start,2023,Singapore Grand Prix,R,MEDIUM,,365,,pearson_r,0.05062221
+TyreLife_start,2023,Singapore Grand Prix,R,SOFT,,48,,pearson_r,-0.13671833
+Compound,2023,Singapore Grand Prix,R,SOFT,MEDIUM,48,365,median_difference_s,-0.91850000
+LapNumber,2023,Spanish Grand Prix,R,,,1207,,pearson_r,-0.73752364
+TyreLife_start,2023,Spanish Grand Prix,R,HARD,,509,,pearson_r,-0.10559713
+Compound,2023,Spanish Grand Prix,R,HARD,MEDIUM,509,374,median_difference_s,-0.09250000
+TyreLife_start,2023,Spanish Grand Prix,R,MEDIUM,,374,,pearson_r,-0.10862633
+TyreLife_start,2023,Spanish Grand Prix,R,SOFT,,324,,pearson_r,-0.14686332
+Compound,2023,Spanish Grand Prix,R,SOFT,MEDIUM,324,374,median_difference_s,0.91900000
+LapNumber,2023,São Paulo Grand Prix,R,,,986,,pearson_r,-0.31418652
+TyreLife_start,2023,São Paulo Grand Prix,R,MEDIUM,,333,,pearson_r,0.05662180
+TyreLife_start,2023,São Paulo Grand Prix,R,SOFT,,653,,pearson_r,-0.13629569
+Compound,2023,São Paulo Grand Prix,R,SOFT,MEDIUM,653,333,median_difference_s,0.21300000
+LapNumber,2023,United States Grand Prix,R,,,919,,pearson_r,-0.64204710
+TyreLife_start,2023,United States Grand Prix,R,HARD,,393,,pearson_r,-0.00624777
+Compound,2023,United States Grand Prix,R,HARD,MEDIUM,393,518,median_difference_s,-0.04050000
+TyreLife_start,2023,United States Grand Prix,R,MEDIUM,,518,,pearson_r,-0.12026764
