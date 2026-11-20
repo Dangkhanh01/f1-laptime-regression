@@ -11,7 +11,7 @@ Mỗi người dùng lại đầu ra F1-05, không tự làm sạch, lọc dòng
 
 | File/vị trí | Trách nhiệm dự kiến khi bắt đầu |
 |---|---|
-| `docs/eda-findings.md`, `docs/experiment-protocol.md`, `configs/experiment.json` | Đầu vào dùng chung từ F1-03/04 |
+| `docs/eda-findings.ipynb`, `docs/experiment-protocol.md`, `configs/experiment.json` | Đầu vào dùng chung từ F1-03/04 |
 | `data/processed/base.csv`, `data/processed/splits.csv`, `data/processed/metadata.json` | Đầu ra local từ F1-05; dùng đúng phiên bản dữ liệu và danh sách dòng của từng tập |
 | `src/f1_lap_time/data_preparation.py` | Dùng lại phần chuẩn bị dữ liệu của Nguyên khi cần; không sao chép thành bốn bản |
 | `scripts/check_prepared_data.py`, `reports/data-preparation/checks.json` | Chạy kiểm tra đầu vào F1-05; đối chiếu kết quả đạt và hash phiên bản bàn giao |

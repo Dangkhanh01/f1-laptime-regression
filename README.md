@@ -4,7 +4,8 @@ Dự án Machine Learning nghiên cứu và dự đoán thời gian hoàn thành
 bằng Linear Regression. Dự án tập trung vào thiết kế đặc trưng, đánh giá công bằng giữa
 các mô hình và diễn giải kết quả trên dữ liệu nhiều mùa giải.
 
-**Trạng thái:** đã có cấu trúc, môi trường, kiểm kê dữ liệu F1-02 và giao thức thực nghiệm F1-03.
+**Trạng thái:** đã có cấu trúc, môi trường, kiểm kê dữ liệu F1-02, giao thức thực nghiệm F1-03
+và [notebook EDA F1-04 trên tập train](docs/eda-findings.ipynb).
 Pipeline tiền xử lý, mô hình và ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
 
 ## Mục tiêu

@@ -14,7 +14,7 @@ F1-06 tập trung thiết kế/train model; không cam kết dữ liệu không 
 | File/vị trí | Cần làm |
 |---|---|
 | `data/manifest.json`, `data/raw/`, `docs/data-inventory.md` | Đầu vào F1-02; xác minh đúng nguồn/hash và giữ nguyên raw |
-| `docs/experiment-protocol.md`, `configs/experiment.json`, `docs/eda-findings.md` | Đọc quy tắc đã thống nhất và căn cứ từ F1-03/04 |
+| `docs/experiment-protocol.md`, `configs/experiment.json`, `docs/eda-findings.ipynb` | Đọc quy tắc đã thống nhất và căn cứ từ F1-03/04 |
 | `src/f1_lap_time/data_preparation.py` | Tạo khi làm; logic làm sạch chung, lọc scope, chuẩn hóa đơn vị/kiểu và gán split theo protocol |
 | `scripts/prepare_data.py` | Tạo khi làm; lệnh chạy chuẩn bị dữ liệu từ manifest/config |
 | `scripts/check_prepared_data.py` | Tạo khi làm; kiểm tra đầu ra đã lưu, dùng lại logic kiểm tra chung, trả mã lỗi khi không đạt |

@@ -1,0 +1,95 @@
+{
+  "source": {
+    "path": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+    "doi": "10.17632/djr8rnjtjp.1",
+    "version": 1,
+    "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91"
+  },
+  "provenance": {
+    "command": "uv run --locked python -m scripts.run_eda",
+    "manifest_path": "data/manifest.json",
+    "manifest_sha256": "8d2d95c72454b84cfdea2ca7c3f5b2433c35a0f9d135a46946af269a7532506e",
+    "config_path": "configs/experiment.json",
+    "config_sha256": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d",
+    "code_sha256": {
+      "scripts/run_eda.py": "d6979c9aad3b32b12087860b37130e436281c229c20dec8d3cb1d0f24a3c3a42",
+      "scripts/download_data.py": "9c1ba8867addb930122bbe5545336be2837cc5a9599323dc3cb612d03225deec",
+      "src/f1_lap_time/eda.py": "a246c43965cf33bf601f1cca239c98a8caec48d86d3c3538f5bd36e39f8450a2",
+      "src/f1_lap_time/protocol.py": "6639208d03e260ef1b71114edabe45550dd9e1a98b3c0cd04bac14363c8301d0"
+    },
+    "git_commit_hash": "80249a66ea5ada65d140dd6e2f93b52c4dfd4147",
+    "git_dirty_flag": false,
+    "python": "3.11.9",
+    "package_versions": {
+      "pandas": "3.1.1",
+      "numpy": "2.4.6",
+      "pyarrow": "26.0.1",
+      "matplotlib": "3.11.2"
+    }
+  },
+  "scope": {
+    "source_total_rows": 89980,
+    "source_total_columns": 35,
+    "partition": "train",
+    "years": [
+      2022,
+      2023
+    ],
+    "columns_read": [
+      "Year",
+      "EventName",
+      "Session",
+      "Driver",
+      "LapNumber",
+      "IsSafetyCar",
+      "IsVSC",
+      "Compound",
+      "TyreLife",
+      "LapTimeSec"
+    ],
+    "rows_before_scope_filter": 42098,
+    "rows_excluded_by_scope_filter": 2665,
+    "rows_analyzed": 39433,
+    "event_sessions": 43,
+    "rows_by_year": [
+      {
+        "year": 2022,
+        "before_scope_filter": 21091,
+        "after_scope_filter": 19324
+      },
+      {
+        "year": 2023,
+        "before_scope_filter": 21007,
+        "after_scope_filter": 20109
+      }
+    ]
+  },
+  "methods": {
+    "target": "LapTimeSec",
+    "unit": "seconds",
+    "event_keys": [
+      "Year",
+      "EventName",
+      "Session"
+    ],
+    "tail_diagnostic": {
+      "iqr_multiplier": 1.5,
+      "excluded_rows": 0
+    },
+    "min_rows_per_feature_group": 30,
+    "compound_reference": "MEDIUM",
+    "compound_placeholder_strings": [
+      "None",
+      "nan"
+    ],
+    "tyre_life_start": "TyreLife - 1.0"
+  },
+  "output_sha256": {
+    "feature-summary.csv": "3b5acc83dc039e13f257979008a61c14375f1f693006c277acc02cc0f6469ada",
+    "figures/event-lap-times.png": "e107f9307acb2aa922701fa01accdf8cfbddc58610f2244f9a0dd8c4b214b61f",
+    "figures/feature-relationships.png": "ca4e8d8af280ad582a9ce2edd611764f5485b58377d070eb5f55a329af013132",
+    "figures/target-distribution.png": "c0e503ce3f4a4f65fc80edac8fa1d649633415706b2bd6e7cb0b0b285167c348",
+    "group-summary.csv": "2b1a1419e41ee53e1e4b24f6d7583d39d288fd9548ed669ba653d9c4c1538444",
+    "target-summary.csv": "3133458b6bd1c739a05a7db737103e4f3cb294036dea8e8dc51286f7d7c001f5"
+  }
+}
