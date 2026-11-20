@@ -17,9 +17,9 @@
       "src/f1_lap_time/eda.py": "a246c43965cf33bf601f1cca239c98a8caec48d86d3c3538f5bd36e39f8450a2",
       "src/f1_lap_time/protocol.py": "6639208d03e260ef1b71114edabe45550dd9e1a98b3c0cd04bac14363c8301d0"
     },
-    "git_commit_hash": "6d5fc2d07044dabb06cf89540eda5a304fbc33d3",
-    "git_dirty_flag": true,
-    "python": "3.11.18",
+    "git_commit_hash": "80249a66ea5ada65d140dd6e2f93b52c4dfd4147",
+    "git_dirty_flag": false,
+    "python": "3.11.9",
     "package_versions": {
       "pandas": "3.1.1",
       "numpy": "2.4.6",
