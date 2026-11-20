@@ -46,10 +46,14 @@ Mẫu nghiên cứu chỉ bao gồm các **vòng đua chính thức ngoài Pre-S
 | **Loại bỏ Safety Car & VSC** | `IsSafetyCar == 0 and IsVSC == 0` | **813 dòng** (ngoài Pre-Season) | Loại bỏ các vòng bị trung hòa tốc độ bởi xe an toàn (SC) hoặc xe an toàn ảo (VSC) theo nhãn Race Control. |
 | **Loại bỏ vòng Pit (Inlap/Outlap)** | Tự động loại từ nguồn | 0 dòng bổ sung | Các vòng vào pit và ra pit quan sát được đều có `IsAccurate = False` nên đã không xuất hiện trong file tổng hợp. |
 | **Vòng xuất phát (Standing Start)** | Giới hạn dữ liệu nguồn | 0 dòng bổ sung | Trên bộ dữ liệu được khảo sát, không có bản ghi nào có `LapNumber = 1.0` (dữ liệu bắt đầu từ `LapNumber = 2.0`). Đây là đặc điểm của dữ liệu nguồn do tập khóa file tổng hợp khớp tập khóa `IsAccurate = True` trong các file sự kiện. |
-| **Kiểm tra tính hợp lệ của Target** | `LapTimeSec.notna() & (LapTimeSec > 0)` | 0 dòng | Không có giá trị target nào bị khuyết hoặc mang giá trị âm/bằng 0. |
+| **Kiểm tra tính hợp lệ của target** | `LapTimeSec` phải là số hữu hạn, lớn hơn 0. Dừng nếu có vi phạm trên các dòng trong phạm vi. | 0 dòng | Dữ liệu hiện tại đạt kiểm tra này. |
 
 - **Tổng số dòng hợp lệ sau lọc**: **84.641 dòng**.
 - **Lưu ý về trạng thái cờ**: Sau khi loại SC/VSC, dữ liệu vẫn còn 2.612 dòng có cờ vàng cục bộ (`TrackStatus` là `'12'`, `'21'`, hoặc `'2'`). Do đó, không đồng nhất mẫu nghiên cứu này với trạng thái "green flag toàn phần".
+- **Rà soát sau EDA**. Giữ bộ lọc trong config. Trên 39.433 vòng train, cờ IQR tính riêng
+  theo mùa, chặng và phiên đánh dấu 115 vòng dưới ngưỡng và 466 vòng trên ngưỡng để rà soát.
+  Giữ các vòng được đánh dấu trong bộ dữ liệu; quy tắc IQR chỉ phục vụ chẩn đoán.
+  [Bảng thống kê target](../reports/eda/target-summary.csv)
 
 ---
 
@@ -107,14 +111,22 @@ Nguyên tắc cốt lõi: **Chỉ những thông tin thực sự có sẵn trư�
 | `TyreLife` | Số vòng đã chạy trên bộ lốp | Trước/cuối vòng | **Được phép (Allowed)** | Trong FastF1, `TyreLife` là số vòng lốp đã chạy tính đến cuối vòng $L$. Cần chuyển đổi thành `TyreLife_start`. |
 | `Year`, `Session`, `EventKey`, `IsAccurate` | Thuộc tính mùa giải và kỹ thuật | Quản lý hệ thống | **Chỉ dùng Split/Truy vết** | Không đưa vào ma trận đặc trưng huấn luyện. |
 
+Giữ danh sách đặc trưng ứng viên trong config. F1-06 có thể dùng `EventName` làm mô hình mốc,
+rồi đo mức cải thiện khi thêm `LapNumber`, `Compound` và `TyreLife_start` trên validation 2024.
+Trên train, `LapNumber` tương quan âm với lap time ở 42/43 phiên. Chênh lệch giữa các loại lốp
+và tương quan của tuổi lốp thay đổi theo phiên. Đây là căn cứ để so sánh các thiết kế bằng MAE.
+[Notebook F1-04](eda-findings.ipynb)
+
 ### 5.2. Đặc tả đặc trưng dẫn xuất trong Pipeline
 - **`TyreLife_start`**:
   - **Công thức**: $\text{TyreLife\_start} = \text{TyreLife} - 1.0$ (khi $\text{TyreLife} \ge 1.0$).
   - **Ý nghĩa**: Số vòng bộ lốp đã hoàn thành **trước khi** vòng đua hiện tại bắt đầu.
   - **Phân công và ranh giới**:
     + F1-05 giữ raw `TyreLife` làm thuộc tính đầu vào chuẩn trong file `data/processed/base.csv`.
-    + F1-06 khi xây dựng scikit-learn Pipeline bắt buộc thực hiện chuyển đổi thành `TyreLife_start`, và **loại bỏ hoàn toàn raw `TyreLife` khỏi ma trận đặc trưng cuối cùng đưa vào mô hình**; tuyệt đối không đưa đồng thời cả raw `TyreLife` và `TyreLife_start` để tránh trùng lặp đặc trưng.
-  - **Xử lý khuyết**: Nếu `TyreLife` bị khuyết (chiếm 1,08% trên Train), `TyreLife_start` cũng bị khuyết và được xử lý bằng `SimpleImputer(strategy='median')` chỉ fit trên Train.
+    + Khi mô hình dùng tuổi lốp, Pipeline phải chuyển raw `TyreLife` thành `TyreLife_start`
+      và chỉ đưa cột dẫn xuất vào ma trận đặc trưng.
+  - **Xử lý khuyết**. Giữ 428 dòng thiếu `TyreLife` trên train. Giá trị `TyreLife_start`
+    tương ứng vẫn khuyết cho tới bước điền trung vị trong Pipeline ở Mục 6.2.
   - **Giá trị không hợp lệ và thứ tự xử lý**: Giá trị không phải số, vô cực hoặc hữu hạn nhỏ hơn 1 phải báo lỗi và dừng để xác minh; không tự ép kiểu, đổi thành missing hoặc loại dòng. Với giá trị hợp lệ, trừ 1 trước, giữ NaN là missing, sau đó fit imputer trên `TyreLife_start` của Train và chỉ transform các tập còn lại/app. Đây là đặc tả cho F1-05/F1-06, chưa triển khai biến đổi mô hình trong F1-03.
 - **Chính sách về Lagged Features (`PrevLapTime`, `PrevPosition`)**:
   - Khảo sát trên Train (2022–2023) cho thấy có 2.838 dòng (7,20%) không có vòng liền kề nghiêm ngặt $L-1$: 832 dòng đầu tiên quan sát được theo tay đua/sự kiện/phiên và 2.006 dòng có khoảng cách số vòng lớn hơn 1 sau lọc. Phép đo này chưa xác định nguyên nhân từng khoảng trống, không quy tất cả cho pit/SC.
@@ -133,22 +145,34 @@ Nguyên tắc cốt lõi: **Chỉ những thông tin thực sự có sẵn trư�
 
 ### 6.1. Trách nhiệm của F1-05 (Chuẩn bị dữ liệu chung)
 - Thực hiện lọc phạm vi theo đúng Mục 3 trên file raw để tạo ra đúng **84.641 dòng** sạch.
-- **Chuẩn hóa giá trị giả thiếu**: Chuyển đổi các chuỗi `'None'` (327 dòng trên Train) và `'nan'` (382 dòng trên Test) trong cột `Compound` về giá trị khuyết chuẩn `np.nan`.
+- **Chuẩn hóa giá trị giả thiếu**. Đổi `'None'` và `'nan'` trong `Compound` thành giá trị
+  khuyết. Giữ các dòng thiếu đặc trưng. Trên train có 327 dòng thiếu `Compound` sau chuẩn hóa
+  và 428 dòng thiếu `TyreLife`. F1-05 đối chiếu các số này, kể cả tại Austrian GP 2022
+  (259 và 307 trên 1.176 vòng). [Bảng thống kê theo phiên](../reports/eda/group-summary.csv)
 - **Kiểm tra trùng lặp khóa định danh**: Nếu phát hiện trùng lặp khóa `(Year, EventName, Session, Driver, LapNumber)` mà giá trị xung đột nhau thì phải báo lỗi và dừng; nếu trùng lặp hoàn toàn thì loại bỏ bản sao. (Trên raw hiện tại có 0 dòng trùng lặp).
 - Giữ nguyên tên đội đua gốc (`Team`) từ dữ liệu FastF1 để không áp đặt giả định chủ quan.
 - Xuất các file local:
-  + `data/processed/base.csv`: Chứa target, các đặc trưng ứng viên hợp lệ và khóa định danh.
-  + `data/processed/splits.csv`: Ánh xạ khóa định danh sang nhãn `train`, `validation`, `test`.
-  + `data/processed/metadata.json`: Lưu hash dữ liệu nguồn, hash đầu ra, số dòng từng bước.
+  + `data/processed/base.csv` chứa `row_id` ổn định dựa trên khóa ở Mục 1, các cột khóa, target
+    và đặc trưng ứng viên từ config. Giữ `LapNumber`, `Stint`, `TyreLife` ở kiểu số,
+    `FreshTyre` ở kiểu boolean và `LapTimeSec` ở đơn vị giây.
+  + `data/processed/splits.csv` ánh xạ mỗi `row_id` sang đúng một nhãn `train`,
+    `validation` hoặc `test` (`final_test` trong config).
+  + `data/processed/metadata.json` lưu config đã dùng, phiên bản code, hash dữ liệu nguồn và
+    đầu ra, số dòng từng bước và từng tập.
 
 ### 6.2. Trách nhiệm của F1-06 (Biến đổi có học trong Scikit-Learn Pipeline)
 Tất cả các bước biến đổi có học từ dữ liệu **bắt buộc phải nằm bên trong `sklearn.pipeline.Pipeline`**:
 1. **Xử lý giá trị khuyết (Missing Values)**:
-   - Biến số dẫn xuất `TyreLife_start`: Chuyển đổi từ raw `TyreLife` theo Mục 5.2 trước, rồi dùng `SimpleImputer(strategy='median')`, fit độc quyền trên Train. Raw `TyreLife` chỉ phục vụ biến đổi, không đưa trực tiếp vào model.
-   - Biến phân loại (`Compound`): Dùng `SimpleImputer(strategy='constant', fill_value='UNKNOWN')`, fit độc quyền trên Train.
+   - Với các biến số như `Stint` và `TyreLife_start`, dùng `SimpleImputer(strategy='median')`
+     nếu cần điền thiếu. Áp dụng phép trừ ở Mục 5.2 trước khi điền `TyreLife_start`.
+   - Với các biến phân loại như `Compound`, dùng
+     `SimpleImputer(strategy='constant', fill_value='UNKNOWN')`.
+   - Fit imputer trên train hoặc fold train, rồi transform validation, final test và đầu vào app.
    - **Quy tắc cột toàn khuyết**: Nếu một đặc trưng bị khuyết 100% trên tập Train, đặc trưng đó phải bị loại bỏ khỏi không gian huấn luyện của mô hình; không được lấy giá trị từ Validation/Test để điền.
 2. **Mã hóa biến phân loại (Categorical Encoding) và xử lý Category mới**:
    - Sử dụng `OneHotEncoder(handle_unknown='ignore', sparse_output=False)` cho các cột phân loại (`Driver`, `Team`, `EventName`, `Compound`).
+   - Giữ nhãn loại lốp gốc, kể cả `INTERMEDIATE` và `WET`. Giới hạn tối thiểu 30 vòng mỗi
+     nhóm trong EDA chỉ áp dụng cho thống kê so sánh theo phiên.
    - Cấu hình `handle_unknown='ignore'` là **bắt buộc** để pipeline không bị lỗi khi gặp các tay đua mới xuất hiện ở mùa 2024 (`BEA`, `COL`, `DOO`) và mùa 2025 (`ANT`, `BOR`, `HAD`), cũng như chặng đua `Chinese Grand Prix` (chỉ xuất hiện từ 2024) hoặc khi người dùng nhập giá trị mới trên ứng dụng Streamlit.
 3. **Chuẩn hóa thang đo (Scaling)**:
    - Các biến số được chuẩn hóa bằng `StandardScaler()` (hoặc `RobustScaler()`) fit trên Train, transform trên Validation/Test.
@@ -215,12 +239,13 @@ Theo yêu cầu của Lab 01 và dự án, toàn bộ thành viên khi viết b�
 
 ## 9. Hướng dẫn bàn giao cho các task tiếp theo
 
-- **Bàn giao cho Khang ([F1-04 — EDA](tasks/F1-04-exploratory-analysis.md))**:
-  + Khang nạp `configs/experiment.json` để lấy định nghĩa target (`LapTimeSec`), phạm vi lọc (loại Pre-Season và SC/VSC) và ranh giới tập Train (2022–2023).
-  + EDA được thực hiện tập trung trên **tập Train (2022–2023)**; không tiến hành phân tích phân phối hay tương quan trên tập Final Test (2025).
+- [F1-04](eda-findings.ipynb) khảo sát **train 2022–2023**. Các bảng EDA dùng cùng nguồn,
+  bộ lọc, split và cách chuẩn hóa `Compound` với bản bàn giao. [Metadata EDA](../reports/eda/metadata.json)
 - **Bàn giao cho Nguyên ([F1-05 — Chuẩn bị dữ liệu chung](tasks/F1-05-shared-data-preparation.md))**:
-  + Nguyên cài đặt logic làm sạch và phân chia dữ liệu dựa trên các quy tắc lọc ở Mục 3 và Mục 4.
-  + Đảm bảo xuất `base.csv` và `splits.csv` với đúng **84.641 dòng**, xử lý chuỗi giả thiếu `'None'` và `'nan'` trong `Compound` thành `np.nan`.
+  + Đọc config để áp dụng bộ lọc và split ở Mục 3–4, sau đó chuẩn hóa và xuất dữ liệu theo Mục 6.1.
+  + Kiểm tra `base.csv` và `splits.csv` cùng có **84.641 dòng** và khớp từng `row_id`.
+    Đối chiếu **39.433 / 23.426 / 21.782** dòng cho train/validation/test cùng các số đếm
+    giá trị thiếu trên train ở Mục 6.1.
 - **Bàn giao cho cả nhóm ([F1-06 — Mô hình và đánh giá](tasks/F1-06-models-evaluation.md))**:
   + Bốn mô hình Linear Regression dùng chung đúng một bộ dữ liệu nền và ánh xạ split từ F1-05.
   + Mọi biến đổi đặc trưng phải nằm trong `Pipeline` và tuân thủ nguyên tắc không rò rỉ dữ liệu (chỉ fit trên Train, xử lý category mới qua `OneHotEncoder(handle_unknown='ignore')`).
