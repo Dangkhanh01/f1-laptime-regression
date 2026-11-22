@@ -1,0 +1,102 @@
+{
+  "task": "F1-05 — Shared Data Preparation",
+  "timestamp_utc": "2026-11-22T16:54:31.040252+00:00",
+  "command": "uv run python -m scripts.prepare_data",
+  "python_version": "3.11.15 (main, May 10 2026, 19:31:25) [MSC v.1944 64 bit (AMD64)]",
+  "data_source": {
+    "path": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+    "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+    "source_doi": "10.17632/djr8rnjtjp.1",
+    "version": 1,
+    "raw_rows": 89980,
+    "raw_columns": 35
+  },
+  "provenance": {
+    "config_path": "configs/experiment.json",
+    "config_sha256": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d",
+    "git_commit_hash": "26068e831667ff372dd5663ecbfbbf04267ddc97",
+    "git_dirty_flag": true,
+    "code_files_sha256": {
+      "scripts/prepare_data.py": "92f1219a3bbdaf4bf6d5a6fdd97494143da493e459d7bdbc3393c5037d53359e",
+      "src/f1_lap_time/data_preparation.py": "cc8618ac209d7cebc8323aa68364c7b00e7f305fb5ed676df05929cf56939a15",
+      "src/f1_lap_time/protocol.py": "6639208d03e260ef1b71114edabe45550dd9e1a98b3c0cd04bac14363c8301d0"
+    }
+  },
+  "processed_outputs": {
+    "base_csv": {
+      "path": "data/processed/base.csv",
+      "sha256": "0c02b83d2efc47b72dc85c855271950c19e6c9773d2d9c234d866480aa731bde",
+      "rows": 84641,
+      "columns": 14,
+      "column_names": [
+        "row_id",
+        "Year",
+        "EventName",
+        "Session",
+        "Driver",
+        "LapNumber",
+        "Team",
+        "Compound",
+        "FreshTyre",
+        "Stint",
+        "TyreLife",
+        "EventKey",
+        "IsAccurate",
+        "LapTimeSec"
+      ]
+    },
+    "splits_csv": {
+      "path": "data/processed/splits.csv",
+      "sha256": "cb5d5c6691204d084ec2cad21f6bf6d1fb92c7838d23161842b7599fa7e47114",
+      "rows": 84641,
+      "columns": 2,
+      "column_names": [
+        "row_id",
+        "split"
+      ]
+    }
+  },
+  "step_counts": {
+    "raw_rows": 89980,
+    "rows_after_scope_filters": 84641,
+    "duplicate_rows_dropped": 0,
+    "clean_rows": 84641
+  },
+  "split_counts": {
+    "train": 39433,
+    "validation": 23426,
+    "test": 21782
+  },
+  "split_event_groups": {
+    "train_distinct_events": 24,
+    "train_session_groups": 43,
+    "val_distinct_events": 24,
+    "val_session_groups": 24,
+    "test_distinct_events": 23,
+    "test_session_groups": 23
+  },
+  "missing_counts": {
+    "total_missing_compound": 762,
+    "total_missing_tyrelife": 882,
+    "total_missing_stint": 382,
+    "train_missing_compound": 327,
+    "train_missing_tyrelife": 428,
+    "train_missing_stint": 0,
+    "val_missing_compound": 0,
+    "val_missing_tyrelife": 0,
+    "val_missing_stint": 0,
+    "test_missing_compound": 435,
+    "test_missing_tyrelife": 454,
+    "test_missing_stint": 382,
+    "austrian_2022_total_rows": 1176,
+    "austrian_2022_missing_compound": 259,
+    "austrian_2022_missing_tyrelife": 307,
+    "austrian_2022_missing_stint": 0
+  },
+  "target_stats": {
+    "min": 67.012,
+    "max": 149.321,
+    "mean": 89.04243378504508,
+    "std": 11.010681240254561
+  }
+}

@@ -18,15 +18,15 @@ F1-06 tập trung thiết kế/train model; không cam kết dữ liệu không 
 | `src/f1_lap_time/data_preparation.py` | Tạo khi làm; logic làm sạch chung, lọc scope, chuẩn hóa đơn vị/kiểu và gán split theo protocol |
 | `scripts/prepare_data.py` | Tạo khi làm; lệnh chạy chuẩn bị dữ liệu từ manifest/config |
 | `scripts/check_prepared_data.py` | Tạo khi làm; kiểm tra đầu ra đã lưu, dùng lại logic kiểm tra chung, trả mã lỗi khi không đạt |
-| `data/processed/base.csv` | Xuất local; dữ liệu nền với target, feature ứng viên được phép và mã dòng ổn định |
-| `data/processed/splits.csv` | Xuất local; ánh xạ mã dòng sang train/validation/test đúng protocol |
-| `data/processed/metadata.json` | Xuất local; hash nguồn/đầu ra, config thực tế, code version, số dòng trước/sau từng bước và theo split |
+| `data/processed/base.csv` | Dữ liệu nền với target, feature ứng viên được phép và mã dòng ổn định; chia sẻ qua Git |
+| `data/processed/splits.csv` | Ánh xạ mã dòng sang train/validation/test đúng protocol; chia sẻ qua Git |
+| `data/processed/metadata.json` | Hash nguồn/đầu ra, config thực tế, code version, số dòng trước/sau từng bước và theo split; chia sẻ qua Git |
 | `tests/test_data_preparation.py` | Kiểm tra quy tắc làm sạch/split bằng dữ liệu nhỏ, không cần dataset thật trong CI |
 | `reports/data-preparation/checks.json` | Kết quả chạy; từng kiểm tra đạt/không đạt, số vi phạm và cảnh báo được phép theo protocol; gắn với hash đầu ra |
 | `README.md` | Thêm lệnh chuẩn bị và cách tái tạo dữ liệu/split cho các thành viên |
 
-Các file trong `data/processed/` không commit. Cả nhóm chạy cùng lệnh/config để tái tạo
-cùng phiên bản dữ liệu; dùng metadata/hash kiểm tra kết quả khớp nhau.
+Các file trong `data/processed/` được theo dõi và chia sẻ qua Git để cả nhóm clone về là có dữ liệu
+chuẩn dùng ngay; dùng metadata/hash để kiểm tra tính toàn vẹn khi tái tạo lại.
 
 ## Cách làm
 
