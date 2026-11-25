@@ -63,7 +63,7 @@ uv run python scripts/check_environment.py
 
 * **Cách 1 (Khuyên dùng):** Dùng tiền tố `uv run`, không cần kích hoạt môi trường thủ công:
   ```sh
-  uv run python scripts/prepare_data.py
+  uv run python -m scripts.prepare_data
   uv run pytest -q
   ```
 * **Cách 2 (Kích hoạt thủ công):** Bật `.venv` vào terminal rồi gõ lệnh trực tiếp:
@@ -103,9 +103,8 @@ tests/            Kiểm thử
 docs/tasks/       Hướng dẫn giao việc và bàn giao theo từng task
 ```
 
-Hiện các thư mục nghiệp vụ mới là bộ khung. `.gitignore` không loại trừ thư mục nào trong
-`data/`; nhóm có thể chia sẻ dữ liệu cần thiết qua Git mà không phải tải riêng. Model artifacts
-và môi trường Python vẫn bị loại khỏi Git.
+Git theo dõi dữ liệu nguồn trong `data/raw/`. Lệnh chuẩn bị tái tạo `base.csv`,
+`splits.csv` và `metadata.json` trong `data/processed/` trên máy từng thành viên.
 
 ## Phát triển và kiểm tra
 
@@ -115,7 +114,7 @@ uv run ruff format --check .
 uv run pytest -q
 uv run python scripts/check_experiment_config.py
 uv run python -m scripts.prepare_data
-uv run python -m scripts.check_prepared_data
+uv run python -m scripts.check_prepared_data --reference reports/data-preparation/checks.json --report tmp/f1-05-checks.json
 ```
 
 CI chạy lint/format và pytest trên Linux; kiểm tra môi trường, checksum toàn bộ dữ liệu,
@@ -138,10 +137,15 @@ Chỉ dùng các cột trong `features.allowed_candidate_features` của `config
 làm đầu vào mô hình. `LapTimeSec` là target; `row_id`, `split`, `Year`, `Session`, `EventKey`
 và `IsAccurate` chỉ dùng để chia tập/truy vết, không đưa vào ma trận đặc trưng.
 
-> [!IMPORTANT]
-> **Lưu ý thiết kế Pipeline cho F1-06:**
-> - Cột `Stint` có **382 dòng khuyết trên tập Final Test 2025** (trong khi Train và Validation không khuyết). Bắt buộc phải đóng gói `SimpleImputer(strategy='median')` cho cả `Stint` và `TyreLife_start` vào Scikit-Learn Pipeline khi huấn luyện để tránh lỗi crash khi dự đoán tập Test.
-> - `base.csv` giữ nguyên raw `TyreLife`; Pipeline trong F1-06 có trách nhiệm chuyển thành `TyreLife_start = TyreLife - 1.0` trước khi đưa vào mô hình.
+Theo giao thức F1-03, nếu dùng tuổi lốp, Pipeline phải đổi `TyreLife` thành
+`TyreLife_start = TyreLife - 1` trước khi điền thiếu. Với feature đã chọn, điền số bằng
+trung vị, điền category bằng `UNKNOWN` và mã hóa với `handle_unknown="ignore"`. Chỉ fit
+trên train hoặc fold train. Loại feature toàn khuyết trên train của lượt fit.
+
+Lệnh kiểm tra ở trên đối chiếu hai CSV với SHA-256 trong báo cáo bàn giao và ghi kết quả
+vào `tmp/f1-05-checks.json`. Khi chốt phiên bản dữ liệu mới, chạy
+`uv run python -m scripts.check_prepared_data` để ghi báo cáo bàn giao. Metadata lưu
+thời điểm và phiên bản code của từng lượt chạy nên hash của metadata có thể khác giữa các máy.
 
 **Nói miệng để tranh luận — Issue chỉ để chốt hạ và lưu vết.** Nhóm dùng đúng một Issue
 cho mỗi mã task lớn F1-01 đến F1-08. F1-05 chuẩn bị dữ liệu/split dùng chung; F1-06 xây

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import shutil
+import sys
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +25,8 @@ from f1_lap_time.data_preparation import (
     validate_tyrelife_column,
 )
 from f1_lap_time.protocol import sha256_file
+from scripts import check_prepared_data
+from scripts.prepare_data import CODE_FILES, run_data_preparation
 
 
 @pytest.fixture
@@ -292,8 +296,9 @@ def test_assign_splits_unassigned_raises(sample_config: dict[str, Any]) -> None:
         assign_splits(df, sample_config)
 
 
-def test_prepare_base_and_splits_pipeline(sample_config: dict[str, Any]) -> None:
-    raw_df = pd.DataFrame(
+@pytest.fixture
+def sample_laps() -> pd.DataFrame:
+    return pd.DataFrame(
         {
             "Year": [2022, 2022, 2023, 2024, 2025, 2022, 2023],
             "EventName": [
@@ -328,7 +333,14 @@ def test_prepare_base_and_splits_pipeline(sample_config: dict[str, Any]) -> None
         }
     )
 
-    base_df, splits_df, stats = prepare_base_and_splits(raw_df, sample_config)
+
+def test_prepare_base_and_splits_pipeline(sample_config, sample_laps) -> None:
+    base_df, splits_df, stats = prepare_base_and_splits(sample_laps, sample_config)
+    assert [stats[k] for k in ("excluded_session", "excluded_preseason", "excluded_sc_vsc")] == [
+        1,
+        1,
+        1,
+    ]
 
     # Clean rows: 4 rows remain (VER 2022, HAM 2023, NOR 2024, LEC 2025)
     assert len(base_df) == 4
@@ -529,6 +541,8 @@ def test_load_prepared_data_missing_hash_in_metadata_raises(tmp_path: Path) -> N
 @pytest.mark.parametrize(
     "column, invalid_value, error_substr",
     [
+        ("Stint", np.inf, "finite numbers"),
+        ("LapNumber", np.inf, "finite numbers"),
         ("TyreLife", 0.0, "contains values < 1.0"),
         ("TyreLife", "2.0", "must be numeric"),
         ("FreshTyre", "False", "FreshTyre.*boolean"),
@@ -561,3 +575,143 @@ def test_prepare_base_and_splits_rejects_invalid_source_values(
     raw_df[column] = invalid_value
     with pytest.raises(ValueError, match=error_substr):
         prepare_base_and_splits(raw_df, sample_config)
+
+
+def test_duplicate_conflict_when_both_versions_repeat(sample_laps):
+    lap = sample_laps.iloc[[1]]
+    different = lap.assign(LapTimeSec=90.0)
+    with pytest.raises(ValueError, match="Candidate key conflicts"):
+        check_candidate_key_duplicates(pd.concat([lap, lap, different, different]))
+
+
+@pytest.fixture
+def prepared_repo(tmp_path, sample_laps, monkeypatch):
+    """Produce a real on-disk handover using a seven-lap Parquet and scaled train expectations."""
+    project = Path(__file__).resolve().parents[1]
+    config = json.loads((project / "configs/experiment.json").read_text("utf-8"))
+    raw = tmp_path / config["data_source"]["primary_file"]
+    raw.parent.mkdir(parents=True)
+    sample_laps.to_parquet(raw, index=False)
+    digest = sha256_file(raw)
+    config["data_source"].update(
+        sha256=digest, raw_rows=len(sample_laps), raw_columns=len(sample_laps.columns)
+    )
+    scope = config["scope_and_filters"]
+    scope["expected_clean_rows"] = 4
+    scope["preseason_filter"]["rows_excluded"] = 1
+    scope["safety_car_filter"]["rows_excluded_outside_preseason"] = 1
+    for key, count in (("train", 2), ("validation", 1), ("final_test", 1)):
+        config["split_protocol"][key].update(
+            expected_rows=count, event_session_groups=count, distinct_event_names=1
+        )
+    cfg_path = Path("configs/experiment.json")
+    (tmp_path / cfg_path).parent.mkdir()
+    (tmp_path / cfg_path).write_text(json.dumps(config), encoding="utf-8")
+    manifest = {
+        "selected_file": {"filename": raw.name, "size_bytes": raw.stat().st_size, "sha256": digest},
+        "source": {
+            "doi": config["data_source"]["source_doi"],
+            "version": config["data_source"]["version"],
+        },
+    }
+    (tmp_path / "data/manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    for path in CODE_FILES:
+        (tmp_path / path).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(project / path, tmp_path / path)
+    monkeypatch.setattr(
+        check_prepared_data,
+        "TRAIN_MISSING_COUNTS",
+        {
+            "train_missing_compound": 1,
+            "train_missing_tyrelife": 1,
+            "austrian_2022_total_rows": 0,
+            "austrian_2022_missing_compound": 0,
+            "austrian_2022_missing_tyrelife": 0,
+        },
+    )
+    run_data_preparation(tmp_path, cfg_path)
+    return tmp_path
+
+
+@pytest.mark.parametrize(
+    "damage,reason",
+    [
+        ("missing_manifest", "Manifest"),
+        ("source_metadata", "Source identity"),
+        ("missing_split", "row_id mismatch"),
+        ("extra_split", "row_id mismatch"),
+        ("duplicate_split", "unique"),
+        ("wrong_year", "Invalid split assignments"),
+        ("bad_file_hash", "SHA-256 mismatch"),
+        ("pseudo_missing", "Unnormalized Compound"),
+        ("infinite_stint", "Non-finite Stint"),
+        ("shifted_target", "LapTimeSec values differing"),
+        ("forbidden_column", "base_csv header"),
+        ("release_hash", "Release base_csv_sha256"),
+    ],
+)
+def test_acceptance_cli_replaces_passing_report_on_failure(
+    prepared_repo, monkeypatch, damage, reason
+):
+    root = prepared_repo
+    monkeypatch.setattr(check_prepared_data, "ROOT", root)
+    monkeypatch.setattr(sys, "argv", ["check_prepared_data"])
+    assert check_prepared_data.main() == 0
+    report_path = root / check_prepared_data.REPORT_PATH
+    proc = root / "data/processed"
+    meta_path = proc / "metadata.json"
+    meta = json.loads(meta_path.read_text("utf-8"))
+    if damage == "release_hash":
+        release = json.loads(report_path.read_text("utf-8"))
+        release["hashes"]["base_csv_sha256"] = "0" * 64
+        (root / "reference.json").write_text(json.dumps(release), encoding="utf-8")
+        monkeypatch.setattr(sys, "argv", ["check_prepared_data", "--reference", "reference.json"])
+    elif damage == "missing_manifest":
+        (root / "data/manifest.json").unlink()
+    elif damage == "source_metadata":
+        meta["data_source"]["sha256"] = "0" * 64
+    elif damage == "bad_file_hash":
+        with (proc / "base.csv").open("ab") as fp:
+            fp.write(b"\n")
+    else:
+        is_split = damage in {"missing_split", "extra_split", "duplicate_split", "wrong_year"}
+        name = "splits" if is_split else "base"
+        path = proc / f"{name}.csv"
+        frame = pd.read_csv(path, keep_default_na=False)
+        if damage == "missing_split":
+            frame = frame.iloc[1:]
+        elif damage == "extra_split":
+            frame.loc[len(frame)] = ["orphan", "train"]
+        elif damage == "duplicate_split":
+            frame.loc[1, "row_id"] = frame.loc[0, "row_id"]
+        elif damage == "wrong_year":
+            frame.loc[[0, 2], "split"] = ["validation", "train"]
+        elif damage == "pseudo_missing":
+            frame.loc[0, "Compound"] = "None"
+        elif damage == "infinite_stint":
+            frame.loc[0, "Stint"] = np.inf
+        elif damage == "forbidden_column":
+            frame["LapTime"] = frame["LapTimeSec"]
+        elif damage == "shifted_target":
+            frame["LapTimeSec"] = frame["LapTimeSec"].iloc[::-1].to_numpy()
+        frame.to_csv(path, index=False)
+        meta["processed_outputs"][f"{name}_csv"]["sha256"] = sha256_file(path)
+        if damage in {"extra_split", "missing_split", "duplicate_split"}:
+            with pytest.raises(ValueError, match=reason):
+                load_prepared_data(root, verify_hashes=False)
+    meta_path.write_text(json.dumps(meta), encoding="utf-8")
+    assert check_prepared_data.main() == 1
+    report = json.loads(report_path.read_text("utf-8"))
+    assert not report["all_passed"]
+    assert report["failed_checks"] > 0
+    failures = [c for c in report["checks"] if not c["passed"]]
+    assert reason in json.dumps(failures)
+    assert "base_csv_sha256" in report["hashes"]
+
+
+def test_loader_joins_reordered_splits_by_id(prepared_repo):
+    expected, _ = load_prepared_data(prepared_repo)
+    path = prepared_repo / "data/processed/splits.csv"
+    pd.read_csv(path).iloc[::-1].to_csv(path, index=False)
+    actual, _ = load_prepared_data(prepared_repo, verify_hashes=False)
+    pd.testing.assert_frame_equal(actual, expected)

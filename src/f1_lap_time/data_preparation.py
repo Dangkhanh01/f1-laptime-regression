@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 from f1_lap_time.protocol import (
-    apply_protocol_filters,
+    filter_with_counts,
     sha256_file,
 )
 
@@ -196,21 +196,14 @@ def check_candidate_key_duplicates(
     if not dup_key_mask.any():
         return df.copy(), 0
 
-    # Duplicates exist: check if they are identical across all columns
-    exact_dup_mask = df.duplicated(keep=False)
-    conflict_mask = dup_key_mask & (~exact_dup_mask)
-    if conflict_mask.any():
-        num_conflicts = conflict_mask.sum()
-        sample_keys = df.loc[conflict_mask, key].head(3).to_dict(orient="records")
+    distinct = df.drop_duplicates()
+    conflicts = distinct.duplicated(subset=key, keep=False)
+    if conflicts.any():
+        sample = distinct.loc[conflicts, key].head(3).to_dict(orient="records")
         raise ValueError(
-            f"Candidate key conflicts found: {num_conflicts} rows have identical keys "
-            f"but conflicting values. Sample conflicts: {sample_keys}"
+            f"Candidate key conflicts found in {int(conflicts.sum())} distinct rows: {sample}"
         )
-
-    # Identical duplicates: keep first occurrence
-    num_exact_dups = df.duplicated(subset=key, keep="first").sum()
-    dedup_df = df.drop_duplicates(subset=key, keep="first").copy()
-    return dedup_df, int(num_exact_dups)
+    return distinct.copy(), len(df) - len(distinct)
 
 
 def generate_row_id(
@@ -341,7 +334,7 @@ def prepare_base_and_splits(
     raw_rows = len(raw_df)
 
     # 1. Apply protocol scope and filters
-    clean_df = apply_protocol_filters(raw_df, config)
+    clean_df, exclusions = filter_with_counts(raw_df, config)
     clean_rows_after_filter = len(clean_df)
 
     # 2. Check and handle duplicates
@@ -361,6 +354,13 @@ def prepare_base_and_splits(
         if not pd.api.types.is_bool_dtype(clean_df[col]) or clean_df[col].isna().any():
             raise ValueError(f"Column '{col}' must be boolean and non-null")
 
+    for col in ("LapNumber", "Stint"):
+        values = clean_df[col].dropna()
+        if not values.empty and (
+            not pd.api.types.is_numeric_dtype(values) or not np.isfinite(values).all()
+        ):
+            raise ValueError(f"Column '{col}' must contain finite numbers")
+
     # 4. Standardize dtypes
     clean_df["FreshTyre"] = clean_df["FreshTyre"].astype(bool)
     clean_df["IsAccurate"] = clean_df["IsAccurate"].astype(bool)
@@ -377,25 +377,18 @@ def prepare_base_and_splits(
     split_series = assign_splits(clean_df, config)
 
     # 7. Construct base_df (only row_id, candidate keys, target, allowed candidates, tracking columns)
-    forbidden_in_base = [
-        c for c in config.get("features", {}).get("forbidden_features", []) if c in clean_df.columns
-    ]
-    pending_in_base = [
-        c
-        for c in config.get("features", {}).get("pending_verification_features", [])
-        if c in clean_df.columns
-    ]
-
-    base_cols = [c for c in BASE_COLUMNS if c in clean_df.columns]
-    base_df = clean_df[base_cols].copy()
-
-    # Leakage check: ensure no forbidden or pending columns leaked into base_df
-    forbidden_leaked = [c for c in forbidden_in_base if c in base_df.columns]
-    pending_leaked = [c for c in pending_in_base if c in base_df.columns]
-    if forbidden_leaked:
-        raise ValueError(f"Forbidden columns leaked into base_df: {forbidden_leaked}")
-    if pending_leaked:
-        raise ValueError(f"Pending weather columns leaked into base_df: {pending_leaked}")
+    features = config["features"]
+    permitted = {
+        "row_id",
+        TARGET_COLUMN,
+        *features["allowed_candidate_features"],
+        *features["tracking_and_split_columns"],
+    }
+    if set(BASE_COLUMNS) != permitted or permitted.intersection(
+        features["forbidden_features"] + features["pending_verification_features"]
+    ):
+        raise ValueError("Base schema conflicts with the feature roles in the protocol")
+    base_df = clean_df[BASE_COLUMNS].copy()
 
     # 8. Construct splits_df
     splits_df = pd.DataFrame({"row_id": clean_df["row_id"].values, "split": split_series.values})
@@ -418,6 +411,7 @@ def prepare_base_and_splits(
 
     stats: dict[str, Any] = {
         "raw_rows": int(raw_rows),
+        **exclusions,
         "rows_after_scope_filters": int(clean_rows_after_filter),
         "duplicate_rows_dropped": int(dups_dropped),
         "clean_rows": int(len(base_df)),
@@ -439,28 +433,13 @@ def prepare_base_and_splits(
             "test_session_groups": int(test_base.groupby(["Year", "EventName", "Session"]).ngroups),
         },
         "missing_counts": {
-            "total_missing_compound": int(base_df["Compound"].isna().sum()),
-            "total_missing_tyrelife": int(base_df["TyreLife"].isna().sum()),
-            "total_missing_stint": int(base_df["Stint"].isna().sum()),
             "train_missing_compound": int(train_base["Compound"].isna().sum()),
             "train_missing_tyrelife": int(train_base["TyreLife"].isna().sum()),
             "train_missing_stint": int(train_base["Stint"].isna().sum()),
-            "val_missing_compound": int(val_base["Compound"].isna().sum()),
-            "val_missing_tyrelife": int(val_base["TyreLife"].isna().sum()),
-            "val_missing_stint": int(val_base["Stint"].isna().sum()),
-            "test_missing_compound": int(test_base["Compound"].isna().sum()),
-            "test_missing_tyrelife": int(test_base["TyreLife"].isna().sum()),
-            "test_missing_stint": int(test_base["Stint"].isna().sum()),
             "austrian_2022_total_rows": int(len(austrian_base)),
             "austrian_2022_missing_compound": int(austrian_base["Compound"].isna().sum()),
             "austrian_2022_missing_tyrelife": int(austrian_base["TyreLife"].isna().sum()),
             "austrian_2022_missing_stint": int(austrian_base["Stint"].isna().sum()),
-        },
-        "target_stats": {
-            "min": float(base_df[TARGET_COLUMN].min()),
-            "max": float(base_df[TARGET_COLUMN].max()),
-            "mean": float(base_df[TARGET_COLUMN].mean()),
-            "std": float(base_df[TARGET_COLUMN].std()),
         },
     }
 
@@ -531,15 +510,16 @@ def load_prepared_data(
                 f"splits.csv SHA-256 mismatch: got {splits_hash}, expected {expected_splits_hash}"
             )
 
-    base_df = pd.read_csv(base_file, dtype=BASE_DTYPES)
-    splits_df = pd.read_csv(splits_file, dtype=SPLIT_DTYPES)
+    base_df = pd.read_csv(base_file, dtype=BASE_DTYPES, keep_default_na=False, na_values=[""])
+    splits_df = pd.read_csv(splits_file, dtype=SPLIT_DTYPES, keep_default_na=False, na_values=[""])
 
+    if base_df["row_id"].isna().any() or splits_df["row_id"].isna().any():
+        raise ValueError("Null row_id in base.csv or splits.csv")
     merged = base_df.merge(splits_df, on="row_id", how="inner", validate="1:1")
-    if len(merged) != len(base_df):
-        raise ValueError(
-            f"Inner join between base.csv ({len(base_df)}) and splits.csv ({len(splits_df)}) "
-            f"yielded {len(merged)} rows (mismatch)"
-        )
+    if len(merged) != len(base_df) or len(merged) != len(splits_df):
+        raise ValueError("row_id mismatch between base.csv and splits.csv")
+    if not merged["split"].isin(["train", "validation", "test"]).all():
+        raise ValueError("Unknown or missing split label in splits.csv")
 
     if split is not None:
         target_split = "test" if split == "final_test" else split

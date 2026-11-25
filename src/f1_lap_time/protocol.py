@@ -483,6 +483,14 @@ def apply_protocol_filters(
     Raises:
         ValueError: If filtering conditions or required columns are invalid.
     """
+    clean, _ = filter_with_counts(df, config)
+    return clean
+
+
+def filter_with_counts(
+    df: pd.DataFrame, config: dict[str, Any]
+) -> tuple[pd.DataFrame, dict[str, int]]:
+    """Apply the protocol once and count sequential exclusions without double-counting."""
     sf = config["scope_and_filters"]
     for filter_name in ["preseason_filter", "safety_car_filter"]:
         if sf[filter_name].get("action") != "exclude":
@@ -522,7 +530,11 @@ def apply_protocol_filters(
         raise ValueError(f"Unsupported safety car condition in config: '{sc_cond}'")
 
     clean_mask = sess_mask & (~preseason_mask) & (~sc_mask)
-    return df[clean_mask].copy()
+    return df[clean_mask].copy(), {
+        "excluded_session": int((~sess_mask).sum()),
+        "excluded_preseason": int((sess_mask & preseason_mask).sum()),
+        "excluded_sc_vsc": int((sess_mask & ~preseason_mask & sc_mask).sum()),
+    }
 
 
 def extract_split_subset(
@@ -568,16 +580,8 @@ def extract_split_subset(
     return clean_df[clean_df["Year"].isin(years)].copy()
 
 
-def verify_config_against_raw_data(
-    config: dict[str, Any],
-    repo_root: Path,
-) -> dict[str, Any]:
-    """Verify configuration rules against raw dataset.
-
-    Raises:
-        FileNotFoundError: If raw dataset file or manifest file is missing.
-        ValueError: If validation checks fail.
-    """
+def read_verified_source(config: dict[str, Any], repo_root: Path) -> pd.DataFrame:
+    """Read the Parquet after verifying its identity, manifest, and dimensions."""
     primary_rel = config["data_source"]["primary_file"]
     raw_path = repo_root / primary_rel
     if not raw_path.is_file():
@@ -638,6 +642,20 @@ def verify_config_against_raw_data(
             f"Raw columns mismatch: {df.shape[1]} != {config['data_source']['raw_columns']}"
         )
 
+    return df
+
+
+def verify_config_against_raw_data(
+    config: dict[str, Any],
+    repo_root: Path,
+) -> dict[str, Any]:
+    """Verify configuration rules against raw dataset.
+
+    Raises:
+        FileNotFoundError: If raw dataset file or manifest file is missing.
+        ValueError: If validation checks fail.
+    """
+    df = read_verified_source(config, repo_root)
     raw_cols = set(df.columns)
     target = config["scope_and_filters"]["target_validity"].get("target_column")
     if (
