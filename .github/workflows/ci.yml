@@ -34,3 +34,5 @@ jobs:
       - run: uv run python -m scripts.inspect_data
       - run: git diff --exit-code -- reports/data-inventory
       - run: uv run python scripts/check_experiment_config.py
+      - run: uv run python -m scripts.prepare_data
+      - run: uv run python -m scripts.check_prepared_data --reference reports/data-preparation/checks.json --report tmp/f1-05-checks.json

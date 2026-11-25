@@ -1,0 +1,549 @@
+{
+  "task": "F1-05",
+  "timestamp_utc": "2026-11-25T19:27:23.241109+00:00",
+  "all_passed": true,
+  "total_checks": 54,
+  "passed_checks": 54,
+  "failed_checks": 0,
+  "hashes": {
+    "base_csv_sha256": "0c02b83d2efc47b72dc85c855271950c19e6c9773d2d9c234d866480aa731bde",
+    "splits_csv_sha256": "cb5d5c6691204d084ec2cad21f6bf6d1fb92c7838d23161842b7599fa7e47114",
+    "metadata_json_sha256": "be1de8da152ac8e521bd79af986e5de04937ef80b45591784ac1ea2b28af466d"
+  },
+  "step_counts": {
+    "raw_rows": 89980,
+    "excluded_session": 0,
+    "excluded_preseason": 4526,
+    "excluded_sc_vsc": 813,
+    "rows_after_scope_filters": 84641,
+    "duplicate_rows_dropped": 0,
+    "clean_rows": 84641
+  },
+  "split_counts": {
+    "train": 39433,
+    "validation": 23426,
+    "test": 21782
+  },
+  "source_sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+  "config_sha256": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d",
+  "preparation_commit": "e54beac05673626e51a060f6dec9e501e58378b0",
+  "preparation_dirty": false,
+  "checks": [
+    {
+      "name": "Verified raw dimensions",
+      "passed": true,
+      "actual": [
+        89980,
+        35
+      ],
+      "expected": [
+        89980,
+        35
+      ]
+    },
+    {
+      "name": "Source identity",
+      "passed": true,
+      "actual": {
+        "path": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+        "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+        "source_doi": "10.17632/djr8rnjtjp.1",
+        "version": 1,
+        "raw_rows": 89980,
+        "raw_columns": 35
+      },
+      "expected": {
+        "path": "data/raw/f1_research_dataset_with_risk_safetycar.parquet",
+        "sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+        "version": 1,
+        "source_doi": "10.17632/djr8rnjtjp.1",
+        "raw_rows": 89980,
+        "raw_columns": 35
+      }
+    },
+    {
+      "name": "Config SHA-256",
+      "passed": true,
+      "actual": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d",
+      "expected": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d"
+    },
+    {
+      "name": "Config snapshot matches",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "Config path matches",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "name": "Preparation code SHA-256",
+      "passed": true,
+      "actual": {
+        "scripts/prepare_data.py": "26e516501cb37ce448d69fcad53f3141073f4871e83001e65e6ed43927ebe1e6",
+        "src/f1_lap_time/data_preparation.py": "af6d1ea37f533d4d94d1703befcead42f1200dde59a5fe5093e5c77294dc2ad1",
+        "src/f1_lap_time/protocol.py": "b93ed264f89691d7012d017bba5526ba747a843f30caecc5a7a3668143454d71"
+      },
+      "expected": {
+        "scripts/prepare_data.py": "26e516501cb37ce448d69fcad53f3141073f4871e83001e65e6ed43927ebe1e6",
+        "src/f1_lap_time/data_preparation.py": "af6d1ea37f533d4d94d1703befcead42f1200dde59a5fe5093e5c77294dc2ad1",
+        "src/f1_lap_time/protocol.py": "b93ed264f89691d7012d017bba5526ba747a843f30caecc5a7a3668143454d71"
+      }
+    },
+    {
+      "name": "base_csv header",
+      "passed": true,
+      "actual": [
+        "row_id",
+        "Year",
+        "EventName",
+        "Session",
+        "Driver",
+        "LapNumber",
+        "Team",
+        "Compound",
+        "FreshTyre",
+        "Stint",
+        "TyreLife",
+        "EventKey",
+        "IsAccurate",
+        "LapTimeSec"
+      ],
+      "expected": [
+        "row_id",
+        "Year",
+        "EventName",
+        "Session",
+        "Driver",
+        "LapNumber",
+        "Team",
+        "Compound",
+        "FreshTyre",
+        "Stint",
+        "TyreLife",
+        "EventKey",
+        "IsAccurate",
+        "LapTimeSec"
+      ]
+    },
+    {
+      "name": "base_csv metadata",
+      "passed": true,
+      "actual": {
+        "path": "data/processed/base.csv",
+        "sha256": "0c02b83d2efc47b72dc85c855271950c19e6c9773d2d9c234d866480aa731bde",
+        "rows": 84641,
+        "columns": 14,
+        "column_names": [
+          "row_id",
+          "Year",
+          "EventName",
+          "Session",
+          "Driver",
+          "LapNumber",
+          "Team",
+          "Compound",
+          "FreshTyre",
+          "Stint",
+          "TyreLife",
+          "EventKey",
+          "IsAccurate",
+          "LapTimeSec"
+        ]
+      },
+      "expected": {
+        "path": "data/processed/base.csv",
+        "sha256": "0c02b83d2efc47b72dc85c855271950c19e6c9773d2d9c234d866480aa731bde",
+        "rows": 84641,
+        "columns": 14,
+        "column_names": [
+          "row_id",
+          "Year",
+          "EventName",
+          "Session",
+          "Driver",
+          "LapNumber",
+          "Team",
+          "Compound",
+          "FreshTyre",
+          "Stint",
+          "TyreLife",
+          "EventKey",
+          "IsAccurate",
+          "LapTimeSec"
+        ]
+      }
+    },
+    {
+      "name": "splits_csv header",
+      "passed": true,
+      "actual": [
+        "row_id",
+        "split"
+      ],
+      "expected": [
+        "row_id",
+        "split"
+      ]
+    },
+    {
+      "name": "splits_csv metadata",
+      "passed": true,
+      "actual": {
+        "path": "data/processed/splits.csv",
+        "sha256": "cb5d5c6691204d084ec2cad21f6bf6d1fb92c7838d23161842b7599fa7e47114",
+        "rows": 84641,
+        "columns": 2,
+        "column_names": [
+          "row_id",
+          "split"
+        ]
+      },
+      "expected": {
+        "path": "data/processed/splits.csv",
+        "sha256": "cb5d5c6691204d084ec2cad21f6bf6d1fb92c7838d23161842b7599fa7e47114",
+        "rows": 84641,
+        "columns": 2,
+        "column_names": [
+          "row_id",
+          "split"
+        ]
+      }
+    },
+    {
+      "name": "Saved row count",
+      "passed": true,
+      "actual": 84641,
+      "expected": 84641
+    },
+    {
+      "name": "Duplicate candidate keys",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Non-finite Stint values among observed laps",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Non-finite LapNumber values among observed laps",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Invalid split assignments",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Event groups assigned to multiple splits",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Unnormalized Compound values",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Row IDs differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Year values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "EventName values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Session values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Driver values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "LapNumber values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Team values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Compound values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "FreshTyre values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Stint values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "TyreLife values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "EventKey values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "IsAccurate values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "LapTimeSec values differing from verified source",
+      "passed": true,
+      "actual": 0,
+      "expected": 0
+    },
+    {
+      "name": "Filtering and deduplication counts",
+      "passed": true,
+      "actual": {
+        "raw_rows": 89980,
+        "excluded_session": 0,
+        "excluded_preseason": 4526,
+        "excluded_sc_vsc": 813,
+        "rows_after_scope_filters": 84641,
+        "duplicate_rows_dropped": 0,
+        "clean_rows": 84641
+      },
+      "expected": {
+        "raw_rows": 89980,
+        "excluded_session": 0,
+        "excluded_preseason": 4526,
+        "excluded_sc_vsc": 813,
+        "rows_after_scope_filters": 84641,
+        "duplicate_rows_dropped": 0,
+        "clean_rows": 84641
+      }
+    },
+    {
+      "name": "Pre-Season exclusions",
+      "passed": true,
+      "actual": 4526,
+      "expected": 4526
+    },
+    {
+      "name": "SC/VSC exclusions after Pre-Season",
+      "passed": true,
+      "actual": 813,
+      "expected": 813
+    },
+    {
+      "name": "Metadata split counts",
+      "passed": true,
+      "actual": {
+        "train": 39433,
+        "validation": 23426,
+        "test": 21782
+      },
+      "expected": {
+        "train": 39433,
+        "validation": 23426,
+        "test": 21782
+      }
+    },
+    {
+      "name": "Metadata event counts",
+      "passed": true,
+      "actual": {
+        "train_distinct_events": 24,
+        "train_session_groups": 43,
+        "val_distinct_events": 24,
+        "val_session_groups": 24,
+        "test_distinct_events": 23,
+        "test_session_groups": 23
+      },
+      "expected": {
+        "train_distinct_events": 24,
+        "train_session_groups": 43,
+        "val_distinct_events": 24,
+        "val_session_groups": 24,
+        "test_distinct_events": 23,
+        "test_session_groups": 23
+      }
+    },
+    {
+      "name": "train rows",
+      "passed": true,
+      "actual": 39433,
+      "expected": 39433
+    },
+    {
+      "name": "train years",
+      "passed": true,
+      "actual": [
+        2022,
+        2023
+      ],
+      "expected": [
+        2022,
+        2023
+      ]
+    },
+    {
+      "name": "train event names",
+      "passed": true,
+      "actual": 24,
+      "expected": 24
+    },
+    {
+      "name": "train event groups",
+      "passed": true,
+      "actual": 43,
+      "expected": 43
+    },
+    {
+      "name": "validation rows",
+      "passed": true,
+      "actual": 23426,
+      "expected": 23426
+    },
+    {
+      "name": "validation years",
+      "passed": true,
+      "actual": [
+        2024
+      ],
+      "expected": [
+        2024
+      ]
+    },
+    {
+      "name": "validation event names",
+      "passed": true,
+      "actual": 24,
+      "expected": 24
+    },
+    {
+      "name": "validation event groups",
+      "passed": true,
+      "actual": 24,
+      "expected": 24
+    },
+    {
+      "name": "test rows",
+      "passed": true,
+      "actual": 21782,
+      "expected": 21782
+    },
+    {
+      "name": "test years",
+      "passed": true,
+      "actual": [
+        2025
+      ],
+      "expected": [
+        2025
+      ]
+    },
+    {
+      "name": "test event names",
+      "passed": true,
+      "actual": 23,
+      "expected": 23
+    },
+    {
+      "name": "test event groups",
+      "passed": true,
+      "actual": 23,
+      "expected": 23
+    },
+    {
+      "name": "Train missing counts in metadata",
+      "passed": true,
+      "actual": {
+        "train_missing_compound": 327,
+        "train_missing_tyrelife": 428,
+        "train_missing_stint": 0,
+        "austrian_2022_total_rows": 1176,
+        "austrian_2022_missing_compound": 259,
+        "austrian_2022_missing_tyrelife": 307,
+        "austrian_2022_missing_stint": 0
+      },
+      "expected": {
+        "train_missing_compound": 327,
+        "train_missing_tyrelife": 428,
+        "train_missing_stint": 0,
+        "austrian_2022_total_rows": 1176,
+        "austrian_2022_missing_compound": 259,
+        "austrian_2022_missing_tyrelife": 307,
+        "austrian_2022_missing_stint": 0
+      }
+    },
+    {
+      "name": "train_missing_compound",
+      "passed": true,
+      "actual": 327,
+      "expected": 327
+    },
+    {
+      "name": "train_missing_tyrelife",
+      "passed": true,
+      "actual": 428,
+      "expected": 428
+    },
+    {
+      "name": "austrian_2022_total_rows",
+      "passed": true,
+      "actual": 1176,
+      "expected": 1176
+    },
+    {
+      "name": "austrian_2022_missing_compound",
+      "passed": true,
+      "actual": 259,
+      "expected": 259
+    },
+    {
+      "name": "austrian_2022_missing_tyrelife",
+      "passed": true,
+      "actual": 307,
+      "expected": 307
+    }
+  ]
+}

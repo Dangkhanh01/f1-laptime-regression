@@ -13,3 +13,8 @@ build/
 artifacts/
 tmp/
 *.log
+
+# Rebuild the shared F1-05 outputs from the tracked raw data.
+/data/processed/base.csv
+/data/processed/splits.csv
+/data/processed/metadata.json

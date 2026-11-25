@@ -4,9 +4,9 @@ Dự án Machine Learning nghiên cứu và dự đoán thời gian hoàn thành
 bằng Linear Regression. Dự án tập trung vào thiết kế đặc trưng, đánh giá công bằng giữa
 các mô hình và diễn giải kết quả trên dữ liệu nhiều mùa giải.
 
-**Trạng thái:** đã có cấu trúc, môi trường, kiểm kê dữ liệu F1-02, giao thức thực nghiệm F1-03
-và [notebook EDA F1-04 trên tập train](docs/eda-findings.ipynb).
-Pipeline tiền xử lý, mô hình và ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
+**Trạng thái:** đã có cấu trúc, môi trường, kiểm kê dữ liệu F1-02, giao thức thực nghiệm F1-03,
+[notebook EDA F1-04 trên tập train](docs/eda-findings.ipynb) và pipeline chuẩn bị dữ liệu chung F1-05.
+Mô hình và ứng dụng demo sẽ được triển khai trong các giai đoạn tiếp theo.
 
 ## Mục tiêu
 
@@ -48,20 +48,42 @@ chốt trước khi làm EDA.
 | Giao diện demo | Streamlit chạy local |
 | Chất lượng code | Ruff, pytest, GitHub Actions |
 
-## Cài đặt
+## Cài đặt và sử dụng môi trường
 
-Cài [uv](https://docs.astral.sh/uv/getting-started/installation/), sau đó chạy từ thư mục repo:
+Cài [uv](https://docs.astral.sh/uv/getting-started/installation/), sau đó chạy từ thư mục repo để đồng bộ môi trường:
 
 ```sh
 uv sync --locked
 uv run python scripts/check_environment.py
 ```
 
-Áp dụng trên Windows, macOS và Linux. `uv` sử dụng Python 3.11 và tạo `.venv` riêng cho
-project; không cần activate môi trường khi dùng `uv run`.
+Áp dụng trên Windows, macOS và Linux. `uv` sử dụng Python 3.11 và tạo `.venv` riêng cho project.
 
-`pyproject.toml` khai báo dependencies, `uv.lock` khóa phiên bản dùng chung.
-`requirements.txt` là bản export phục vụ bàn giao và nộp bài. Khi thay dependencies:
+### 2 cách chạy lệnh
+
+* **Cách 1 (Khuyên dùng):** Dùng tiền tố `uv run`, không cần kích hoạt môi trường thủ công:
+  ```sh
+  uv run python -m scripts.prepare_data
+  uv run pytest -q
+  ```
+* **Cách 2 (Kích hoạt thủ công):** Bật `.venv` vào terminal rồi gõ lệnh trực tiếp:
+  * Windows PowerShell: `.venv\Scripts\Activate.ps1`
+  * Windows CMD: `.venv\Scripts\activate.bat`
+  * macOS / Linux / Git Bash: `source .venv/bin/activate` (hoặc `source .venv/Scripts/activate` trên Git Bash)
+  *(Khi thấy `(.venv)` xuất hiện ở đầu dòng lệnh, có thể gõ trực tiếp `python ...`, `pytest`, `ruff`. Để thoát gõ `deactivate`).*
+
+### Quản lý thư viện (Dependencies)
+
+* Khi bạn muốn **cài thêm thư viện mới** vào dự án:
+  ```sh
+  uv add <tên_thư_viện>
+  ```
+  `uv` sẽ tự động tải thư viện vào `.venv`, ghi nhận vào `pyproject.toml` và cập nhật phiên bản chính xác vào `uv.lock`.
+* Khi **pull code mới từ nhóm về** (có thư viện mới từ người khác):
+  ```sh
+  uv sync --locked
+  ```
+* `pyproject.toml` khai báo dependencies, `uv.lock` khóa phiên bản dùng chung. `requirements.txt` là bản export phục vụ bàn giao và nộp bài. Khi thay dependencies:
 
 ```sh
 uv export --frozen --no-dev --no-emit-project --output-file requirements.txt
@@ -81,9 +103,8 @@ tests/            Kiểm thử
 docs/tasks/       Hướng dẫn giao việc và bàn giao theo từng task
 ```
 
-Hiện các thư mục nghiệp vụ mới là bộ khung. `.gitignore` không loại trừ thư mục nào trong
-`data/`; nhóm có thể chia sẻ dữ liệu cần thiết qua Git mà không phải tải riêng. Model artifacts
-và môi trường Python vẫn bị loại khỏi Git.
+Git theo dõi dữ liệu nguồn trong `data/raw/`. Lệnh chuẩn bị tái tạo `base.csv`,
+`splits.csv` và `metadata.json` trong `data/processed/` trên máy từng thành viên.
 
 ## Phát triển và kiểm tra
 
@@ -92,10 +113,39 @@ uv run ruff check .
 uv run ruff format --check .
 uv run pytest -q
 uv run python scripts/check_experiment_config.py
+uv run python -m scripts.prepare_data
+uv run python -m scripts.check_prepared_data --reference reports/data-preparation/checks.json --report tmp/f1-05-checks.json
 ```
 
-CI chạy lint/format và pytest trên Linux; kiểm tra môi trường, checksum toàn bộ dữ liệu
-và tái tạo báo cáo kiểm kê trên Windows/Linux/macOS.
+CI chạy lint/format và pytest trên Linux; kiểm tra môi trường, checksum toàn bộ dữ liệu,
+chuẩn bị dữ liệu và nghiệm thu trên Windows/Linux/macOS.
+
+### Nạp dữ liệu nền cho mô hình (F1-06)
+
+Sau khi chạy `scripts.prepare_data`, các thành viên nạp cùng phiên bản dữ liệu và split bằng hàm dùng chung:
+
+```python
+from f1_lap_time.data_preparation import load_prepared_data
+
+# Nạp từng tập, kiểm tra checksum và reset index 0-based:
+train_df, meta = load_prepared_data(split="train")  # 39.433 dòng (2022–2023)
+val_df, _ = load_prepared_data(split="validation")  # 23.426 dòng (2024)
+test_df, _ = load_prepared_data(split="test")  # 21.782 dòng (2025, hoặc dùng split="final_test")
+```
+
+Chỉ dùng các cột trong `features.allowed_candidate_features` của `configs/experiment.json`
+làm đầu vào mô hình. `LapTimeSec` là target; `row_id`, `split`, `Year`, `Session`, `EventKey`
+và `IsAccurate` chỉ dùng để chia tập/truy vết, không đưa vào ma trận đặc trưng.
+
+Theo giao thức F1-03, nếu dùng tuổi lốp, Pipeline phải đổi `TyreLife` thành
+`TyreLife_start = TyreLife - 1` trước khi điền thiếu. Với feature đã chọn, điền số bằng
+trung vị, điền category bằng `UNKNOWN` và mã hóa với `handle_unknown="ignore"`. Chỉ fit
+trên train hoặc fold train. Loại feature toàn khuyết trên train của lượt fit.
+
+Lệnh kiểm tra ở trên đối chiếu hai CSV với SHA-256 trong báo cáo bàn giao và ghi kết quả
+vào `tmp/f1-05-checks.json`. Khi chốt phiên bản dữ liệu mới, chạy
+`uv run python -m scripts.check_prepared_data` để ghi báo cáo bàn giao. Metadata lưu
+thời điểm và phiên bản code của từng lượt chạy nên hash của metadata có thể khác giữa các máy.
 
 **Nói miệng để tranh luận — Issue chỉ để chốt hạ và lưu vết.** Nhóm dùng đúng một Issue
 cho mỗi mã task lớn F1-01 đến F1-08. F1-05 chuẩn bị dữ liệu/split dùng chung; F1-06 xây
