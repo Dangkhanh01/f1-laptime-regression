@@ -1,0 +1,106 @@
+{
+  "model": "M1",
+  "run_id": "m1-20261128T100841Z-eeeb6586",
+  "timestamp_utc": "2026-11-28T10:08:41.213746+00:00",
+  "data_source_sha256": "55f28446acf03790fcb79475f0dc3bcd5b059889af2c681c5cdb6550d7d7fd91",
+  "processed_base_sha256": "0c02b83d2efc47b72dc85c855271950c19e6c9773d2d9c234d866480aa731bde",
+  "processed_splits_sha256": "cb5d5c6691204d084ec2cad21f6bf6d1fb92c7838d23161842b7599fa7e47114",
+  "split_version": "F1-05:cb5d5c6691204d084ec2cad21f6bf6d1fb92c7838d23161842b7599fa7e47114",
+  "config_path": "configs/experiment.json",
+  "config_sha256": "3100ee0eaa92e6c082562f07f8480e6d5ca2316c407a8b0c57265420dbb2fe5d",
+  "model_config_path": "configs/models/m1.json",
+  "model_config_sha256": "992b776decda71dd3885a694397197f78e5ecf65859015229e37a25b77c3be4a",
+  "model_config": {
+    "model": "M1",
+    "features": [
+      "EventName",
+      "LapNumber"
+    ],
+    "estimator": {
+      "fit_intercept": true
+    },
+    "numeric_imputer": {
+      "strategy": "median"
+    },
+    "scaler": "StandardScaler",
+    "categorical_imputer": {
+      "strategy": "constant",
+      "fill_value": "UNKNOWN"
+    },
+    "encoder": {
+      "drop": "first",
+      "handle_unknown": "ignore",
+      "sparse_output": false
+    }
+  },
+  "command": "uv run python -m scripts.train_m1",
+  "git_commit_hash": "881774fbb3c9b5b2c29031ce440a13cc02fcd6f4",
+  "git_dirty_flag": true,
+  "code_files_sha256": {
+    "src/f1_lap_time/m1.py": "beda3b25a055c06b705269f45b5c02a2311cccae4aade4d5d96df9b7ec8481ef",
+    "src/f1_lap_time/evaluation.py": "3fcc6855daed75a67f06e4ab63ddde3e15055e928be56e75c76aa85c476151a5",
+    "scripts/train_m1.py": "e09c940ff68cd2186a27906269531b37383a1df7103b8c5ff6da18374982c68b",
+    "scripts/score_predictions.py": "7099fcf43bcb7c77933353c1d01722d44b56d37ecf64fe94aa04e42223108155",
+    "src/f1_lap_time/data_preparation.py": "af6d1ea37f533d4d94d1703befcead42f1200dde59a5fe5093e5c77294dc2ad1",
+    "src/f1_lap_time/protocol.py": "b93ed264f89691d7012d017bba5526ba747a843f30caecc5a7a3668143454d71",
+    "scripts/prepare_data.py": "26e516501cb37ce448d69fcad53f3141073f4871e83001e65e6ed43927ebe1e6"
+  },
+  "uv_lock_sha256": "711352b5e948841d5c818992a88a868a9b79e952f53751de87d1233de6bbd6d0",
+  "python_version": "3.11.9",
+  "library_versions": {
+    "scikit-learn": "1.9.1",
+    "pandas": "3.1.1",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "joblib": "1.6.0"
+  },
+  "model_class": "LinearRegression",
+  "hyperparameters": {
+    "copy_X": true,
+    "fit_intercept": true,
+    "n_jobs": null,
+    "positive": false,
+    "tol": 1e-06
+  },
+  "random_seed": null,
+  "features_list": [
+    "EventName",
+    "LapNumber"
+  ],
+  "metrics": [
+    {
+      "model": "M1",
+      "run_id": "m1-20261128T100841Z-eeeb6586",
+      "split": "train",
+      "n_laps": 39433,
+      "mae_s": 2.1285706387271044,
+      "rmse_s": 3.838955973405636,
+      "mse_s2": 14.737582965746814,
+      "r2": 0.892069965832306
+    },
+    {
+      "model": "M1",
+      "run_id": "m1-20261128T100841Z-eeeb6586",
+      "split": "validation",
+      "n_laps": 23426,
+      "mae_s": 3.434872842406511,
+      "rmse_s": 4.757563481834633,
+      "mse_s2": 22.63441028368647,
+      "r2": 0.7792299461206554
+    }
+  ],
+  "reference_event": "Abu Dhabi Grand Prix",
+  "lap_number_scale": 18.108408682138037,
+  "artifact_path": "artifacts/M1/m1-20261128T100841Z-eeeb6586/pipeline.joblib",
+  "artifact_sha256": "27b70dc2b2993d9b7fc55414be85b4b6ffc5d750a91b48dfe3218d7d05de7ab2",
+  "predictions_sha256": "e8a57580c343401477219cbd1db95533a5564adecf3493e15d7a2b721f38813a",
+  "validation_example": {
+    "row_id": "2024_Bahrain_Grand_Prix_R_VER_2",
+    "input": {
+      "EventName": "Bahrain Grand Prix",
+      "LapNumber": 2.0
+    },
+    "y_pred_s": 100.35860272259391,
+    "y_true_s": 96.296
+  }
+}

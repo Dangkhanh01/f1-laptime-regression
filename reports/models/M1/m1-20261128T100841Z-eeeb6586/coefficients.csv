@@ -1,0 +1,26 @@
+feature,coefficient_s,run_id
+lap__LapNumber,-0.9523148526056839,m1-20261128T100841Z-eeeb6586
+event__EventName_Australian Grand Prix,-6.988170593922639,m1-20261128T100841Z-eeeb6586
+event__EventName_Austrian Grand Prix,-19.571763060332565,m1-20261128T100841Z-eeeb6586
+event__EventName_Azerbaijan Grand Prix,17.447785475952095,m1-20261128T100841Z-eeeb6586
+event__EventName_Bahrain Grand Prix,8.156896631162734,m1-20261128T100841Z-eeeb6586
+event__EventName_Belgian Grand Prix,22.664828910643116,m1-20261128T100841Z-eeeb6586
+event__EventName_British Grand Prix,2.9287868588728148,m1-20261128T100841Z-eeeb6586
+event__EventName_Canadian Grand Prix,-12.255874527219905,m1-20261128T100841Z-eeeb6586
+event__EventName_Dutch Grand Prix,-12.508372351515535,m1-20261128T100841Z-eeeb6586
+event__EventName_Emilia Romagna Grand Prix,-5.6915089770338705,m1-20261128T100841Z-eeeb6586
+event__EventName_French Grand Prix,8.75724476213403,m1-20261128T100841Z-eeeb6586
+event__EventName_Hungarian Grand Prix,-5.747134666661381,m1-20261128T100841Z-eeeb6586
+event__EventName_Italian Grand Prix,-4.013979235108065,m1-20261128T100841Z-eeeb6586
+event__EventName_Japanese Grand Prix,11.504870086815535,m1-20261128T100841Z-eeeb6586
+event__EventName_Las Vegas Grand Prix,8.08450681558589,m1-20261128T100841Z-eeeb6586
+event__EventName_Mexico City Grand Prix,-6.110604663969183,m1-20261128T100841Z-eeeb6586
+event__EventName_Miami Grand Prix,3.9635707703917213,m1-20261128T100841Z-eeeb6586
+event__EventName_Monaco Grand Prix,-5.58030748594074,m1-20261128T100841Z-eeeb6586
+event__EventName_Qatar Grand Prix,-2.2440782422270447,m1-20261128T100841Z-eeeb6586
+event__EventName_Saudi Arabian Grand Prix,4.259383132391317,m1-20261128T100841Z-eeeb6586
+event__EventName_Singapore Grand Prix,16.854975534791553,m1-20261128T100841Z-eeeb6586
+event__EventName_Spanish Grand Prix,-6.210379298354957,m1-20261128T100841Z-eeeb6586
+event__EventName_São Paulo Grand Prix,-13.799602608023363,m1-20261128T100841Z-eeeb6586
+event__EventName_United States Grand Prix,11.906925243161016,m1-20261128T100841Z-eeeb6586
+intercept,90.66003172863934,m1-20261128T100841Z-eeeb6586

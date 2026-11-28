@@ -60,9 +60,8 @@ cùng các cột lốp trong dữ liệu F1-05. M2 có thể train ngay cả khi
 Đặt config từng model ở `configs/models/`, logic ở `src/f1_lap_time/` và lệnh train ở
 `scripts/`. Mỗi người ghi lại lệnh tái tạo run của mình.
 
-Song song với việc train M1, Khánh chuẩn bị hàm chấm điểm theo mục 4. Mỗi người lưu
-dự đoán train và validation cùng `row_id`, `split`, `y_true` và `y_pred`. Khánh có
-thể chấm các bảng đã lưu ngay khi hàm hoàn thiện, kể cả khi lượt train đã kết thúc.
+Mỗi người lưu dự đoán train và validation cùng `row_id`, `split`, `y_true` và `y_pred`,
+rồi tự chấm CSV bằng lệnh chung ở mục 6.
 
 1. **Biến đổi đầu vào.** Với M2–M4, kiểm tra các giá trị `TyreLife` quan sát được là
    số hữu hạn ≥ 1, rồi thay cột này bằng `TyreLife_start = TyreLife - 1` trong pipeline.
@@ -81,6 +80,14 @@ thể chấm các bảng đã lưu ngay khi hàm hoàn thiện, kể cả khi l�
    validation. Kiểm tra thống kê imputer/scaler chỉ dựa trên train và pipeline sau khi
    lưu, nạp lại cho cùng dự đoán trên cùng đầu vào.
 
+**Khi validation có nhãn chưa gặp trong train.** Áp dụng cho từng cột phân loại mà model
+sử dụng. Giữ nguyên nhãn quan sát được và gọi `predict` bằng pipeline đã fit trên train.
+Chỉ dùng `UNKNOWN` để điền giá trị thiếu. Với nhãn mới, encoder tạo toàn số 0 trong
+nhóm cột của riêng đặc trưng đó. Ở M1–M3, nhãn mới vì thế cho cùng dự đoán với nhãn
+tham chiếu khi giữ cố định các đầu vào khác. Ở M4, đóng góp của nhóm cột đó bằng 0,
+còn intercept và các đặc trưng khác vẫn tham gia dự đoán. Giữ cách mã hóa đã chốt
+cho cả lượt chạy, kể cả khi một nhóm có sai số validation lớn.
+
 ## 4. Chấm validation và giải thích kết quả
 
 - **Ghép theo vòng.** Lưu bảng dự đoán từng run gồm `row_id`, `split`, `y_true`,
@@ -94,6 +101,11 @@ thể chấm các bảng đã lưu ngay khi hàm hoàn thiện, kể cả khi l�
   sai số có dấu trung bình (`y_pred - y_true`, dương nghĩa là dự đoán vòng chậm hơn).
   Chọn một chặng để giải thích chênh lệch với đối chứng trên cùng các vòng. Điểm tổng
   được tính trực tiếp từ từng vòng để mỗi vòng có trọng số như nhau.
+- **Kiểm tra sai số ở nhãn mới.** Đối chiếu từng cột phân loại với các nhãn quan sát
+  được trên train. Nếu có nhãn mới, ghi số vòng, MAE và sai số có dấu trung bình của
+  nhóm vòng liên quan. Khi so hai model trên nhóm đó, dùng cùng danh sách `row_id`.
+  Nếu xét nhiều cột cùng lúc, mỗi vòng có nhãn mới ở ít nhất một cột chỉ tính một lần.
+  Tất cả các vòng này vẫn có đủ trọng số trong bốn metric validation.
 - **Đọc hệ số.** Xuất tên feature sau biến đổi cùng hệ số và intercept. Mỗi người chọn
   hai hoặc ba hệ số từ chính run của mình, giải thích dấu và đơn vị khi giữ các biến
   còn lại cố định. Với `StandardScaler`, hệ số số ứng với tăng một độ lệch chuẩn train.
@@ -139,3 +151,80 @@ thể chấm các bảng đã lưu ngay khi hàm hoàn thiện, kể cả khi l�
 model có đối chiếu trên cùng vòng validation và Nguyên nạp được cả bốn pipeline để tái tạo
 bốn dự đoán trên vòng mẫu. Chốt thiết kế và kết luận trong 2–3 gạch ở Issue #5. PR từng phần ghi `Refs #5`,
 PR tổng hợp hoàn tất task ghi `Closes #5`.
+
+## 6. Chạy M1 và chấm CSV của từng thành viên
+
+Sau khi đối chiếu F1-05 ở mục 2, chạy từ gốc repo với [config M1](../../configs/models/m1.json).
+Lệnh sinh `run_id` mới, in đường dẫn báo cáo và lưu pipeline cùng CSV dự đoán vào
+`artifacts/M1/<run_id>/` trên máy chạy.
+
+```sh
+uv run python -m scripts.train_m1
+```
+
+Nguyên, Khang và Danh tự fit pipeline của mình trên train. Với `frames = [train, val]`,
+`pipeline` đã fit và `features` là danh sách cột đầu vào gốc của model, có thể xuất cả hai tập
+bằng đoạn dưới. Đổi thư mục và mã lượt chạy theo model thực tế.
+
+```python
+from pathlib import Path
+import pandas as pd
+
+out = Path("artifacts/M2/m2-001/predictions.csv")
+out.parent.mkdir(parents=True, exist_ok=True)
+tables = []
+for frame in frames:
+    table = frame[["row_id", "split", "LapTimeSec"]].rename(columns={"LapTimeSec": "y_true"})
+    table["y_pred"] = pipeline.predict(frame[features])
+    tables.append(table)
+pd.concat(tables).to_csv(out, index=False)
+```
+
+Chấm CSV đã lưu ở bất kỳ thứ tự dòng nào. Dùng target trực tiếp từ bộ nạp F1-05 và giữ
+đủ độ chính xác khi xuất. Lệnh đối chiếu ID, split, target và giá trị hữu hạn trước khi
+tính điểm từng vòng. Bỏ `--output` để chỉ in điểm, hoặc truyền đường dẫn CSV mới để lưu.
+
+```sh
+uv run python -m scripts.score_predictions --model M2 --run-id m2-001 --predictions artifacts/M2/m2-001/predictions.csv --output reports/models/M2/m2-001/scores.csv
+```
+
+### Bàn giao M1 của Khánh
+
+Khánh giữ run chuẩn `m1-20261128T100841Z-eeeb6586`. Đây là run M1 duy nhất, nên chưa
+cần phá hòa theo RMSE. OLS có intercept, số vòng chuẩn hóa bằng `StandardScaler`, chặng
+mã hóa với `drop="first"`. Khánh giữ cách xử lý chặng mới đã chốt để M2–M3 có cùng
+mốc so sánh. Điểm dưới đây làm tròn để đọc.
+[Bảng điểm gốc](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/scores.csv) ·
+[Metadata, hash và vòng mẫu](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/metadata.json)
+
+| Tập | Số vòng | MAE (s) | RMSE (s) | MSE (s²) | R² |
+|---|---:|---:|---:|---:|---:|
+| Train 2022–2023 | 39.433 | 2,128571 | 3,838956 | 14,737583 | 0,892070 |
+| Validation 2024 | 23.426 | 3,434873 | 4,757563 | 22,634410 | 0,779230 |
+
+- **Sai số theo chặng.** Trên 694 vòng có nhãn chặng mới, M1 dự đoán nhanh hơn thực
+  tế trung bình 10,776 s. Trong nhóm chặng đã thấy ở train, chặng có MAE cao nhất
+  gồm 1.109 vòng, với dự đoán chậm hơn thực tế trung bình 8,907 s.
+  [Sai số của 24 chặng](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/validation_by_event.csv)
+- **Hệ số** cho thấy ở cùng chặng, tăng 18,108 vòng (một độ lệch chuẩn train) ứng với
+  dự đoán giảm 0,952 s. Mỗi hệ số chặng cho biết dự đoán chênh bao nhiêu giây so với
+  chặng tham chiếu ở cùng số vòng.
+  [Hệ số và intercept](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/coefficients.csv)
+
+F1-07 truyền một `DataFrame` có `EventName` (chuỗi tên chặng) và `LapNumber`
+(số nguyên hoặc thực, đơn vị vòng). Trường `validation_example` trong metadata chứa
+`row_id` chung, đầu vào và dự đoán mẫu theo giây để đối chiếu trên máy demo.
+
+```python
+from pathlib import Path
+import json
+import joblib
+import pandas as pd
+
+run = Path("reports/models/M1/m1-20261128T100841Z-eeeb6586")
+meta = json.loads((run / "metadata.json").read_text(encoding="utf-8"))
+model = joblib.load(meta["artifact_path"])
+sample = meta["validation_example"]
+lap = pd.DataFrame([sample["input"]])
+assert abs(model.predict(lap)[0] - sample["y_pred_s"]) < 1e-9
+```
