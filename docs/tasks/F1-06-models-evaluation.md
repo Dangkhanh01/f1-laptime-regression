@@ -1,54 +1,141 @@
-# F1-06 — Xây dựng và đánh giá các mô hình
+# F1-06 — Huấn luyện và đánh giá bốn mô hình hồi quy tuyến tính
 
-**Phụ trách:** cả nhóm, mỗi người một Linear Regression model; Khánh điều phối.
-**Issue:** #5.
-Chờ dữ liệu nền và split từ F1-05. Chi tiết thiết kế sẽ bổ sung sau khi nhóm bàn bạc.
+**Khánh điều phối Issue #5.** Mỗi thành viên chịu trách nhiệm một mô hình dự đoán
+`LapTimeSec` (giây) trước khi vòng đua bắt đầu. Phạm vi là các vòng đua chính thức
+đã lọc theo F1-03. Cả nhóm dùng chung dữ liệu F1-05 và một hàm chấm điểm. Bàn giao cả bốn
+pipeline cho demo dự đoán trực tiếp. Model thắng theo validation được đánh dấu trên app
+và đánh giá một lần trên final test. [Giao thức F1-03](../experiment-protocol.md) · [Cấu hình thực nghiệm](../../configs/experiment.json)
 
-Mục tiêu: xây dựng và so sánh ít nhất bốn model trên cùng dữ liệu nền, target và tập đánh giá.
-Mỗi người dùng lại đầu ra F1-05, không tự làm sạch, lọc dòng hoặc chia tập riêng.
+## 1. Mỗi người kiểm chứng một câu hỏi
 
-## Làm ở file nào
+| Người, mô hình | Thiết kế đã chốt | Câu hỏi khi đọc kết quả validation 2024 |
+|---|---|---|
+| **Khánh · M1** | OLS (`LinearRegression` có intercept) với `EventName`, `LapNumber` | Khi chỉ biết chặng và số vòng, dự đoán lệch trung bình bao nhiêu giây? Chặng nào có sai số lớn? |
+| **Nguyên · M2** | OLS như M1, thêm `Compound`, `FreshTyre`, `Stint`, `TyreLife_start` | So với M1, thêm cả nhóm thông tin lốp và stint làm MAE thay đổi bao nhiêu? Mức thay đổi có đồng đều giữa các chặng? |
+| **Khang · M3** | OLS như M2, thêm `Driver` và `Team` | So với M2, thông tin tay đua và đội giúp dự đoán thế nào? Đo riêng các vòng có tay đua hoặc đội chưa xuất hiện trong train và ghi số vòng của nhóm này. |
+| **Danh · M4** | `Ridge` có intercept, dùng đúng các đầu vào của M3 | So với M3, thiết kế Ridge cho MAE và RMSE thế nào trên cùng các vòng? Ghi các giá trị `alpha` vào config trước khi thử, lưu kết quả validation của từng giá trị và lý do chọn. |
 
-| File/vị trí | Trách nhiệm dự kiến khi bắt đầu |
-|---|---|
-| `docs/eda-findings.ipynb`, `docs/experiment-protocol.md`, `configs/experiment.json` | Đầu vào dùng chung từ F1-03/04 |
-| `data/processed/base.csv`, `data/processed/splits.csv`, `data/processed/metadata.json` | Đầu ra local từ F1-05; dùng đúng phiên bản dữ liệu và danh sách dòng của từng tập |
-| `src/f1_lap_time/data_preparation.py` | Dùng lại phần chuẩn bị dữ liệu của Nguyên khi cần; không sao chép thành bốn bản |
-| `scripts/check_prepared_data.py`, `reports/data-preparation/checks.json` | Chạy kiểm tra đầu vào F1-05; đối chiếu kết quả đạt và hash phiên bản bàn giao |
-| `src/f1_lap_time/` | Pipeline biến đổi feature, train và evaluation; tên module chốt khi có thiết kế |
-| `configs/models/` | Cấu hình cho ít nhất 4 thiết kế LR, chưa tạo trước khi thống nhất |
-| `scripts/` | Lệnh chạy train/evaluate và tổng hợp; tên file bổ sung sau khi chốt cấu trúc |
-| `artifacts/` | Model và kết quả từng run ở local, không commit binary |
-| `reports/models/` | Bảng/ảnh so sánh cần chia sẻ, có run ID và provenance |
-| `tests/` | Kiểm tra tính đúng pipeline, split và tránh leakage |
+EDA ghi nhận `LapNumber` tương quan âm với lap time ở 42/43 phiên train, còn quan hệ giữa tuổi
+lốp và lap time thay đổi theo phiên. Đây là căn cứ để đưa số vòng vào M1 và kiểm tra M2 theo
+chặng. Chênh lệch M2–M1 đo đóng góp chung của bốn biến được thêm. M3–M4 so sánh hai pipeline
+hoàn chỉnh vì F1-03 quy định cách mã hóa category khác nhau cho OLS và Ridge. [Kết quả EDA F1-04](../eda-findings.ipynb)
 
-## Cách làm khi đủ đầu vào
+## 2. Bắt đầu từ dữ liệu bàn giao
 
-1. Chạy kiểm tra đầu vào của F1-05; chỉ bắt đầu khi đạt và hash dữ liệu/split/config khớp
-   phiên bản bàn giao. Không cần làm lại inventory/EDA. Nạp dữ liệu theo mã dòng để X/y/split
-   khớp nhau. Call để thống nhất bốn thiết kế LR,
-   lý do chọn features/biến đổi và người phụ trách phần train/evaluation dùng chung.
-2. Mỗi người xây một model; có thể chọn feature hoặc biến đổi khác nhau nhưng giữ nguyên
-   target, dữ liệu nền và các dòng đánh giá. Không tự bỏ dòng để làm đẹp metrics.
-   Điền thiếu có học từ dữ liệu, scaling, encoding và chọn feature có học phải nằm trong
-   Pipeline, chỉ fit trên train rồi transform validation/test; không fit trước trên toàn bộ data.
-   Dùng chính sách missing/category đã chốt ở F1-05. Kiểm tra Pipeline trên train/validation
-   theo protocol và dữ liệu giả cho tình huống thiếu/category mới; không dùng final test
-   để thử và sửa thiết kế. Biến đổi do model tạo ra NaN/vô cực là phần cần xử lý trong model.
-3. Lưu config/code/data version, artifact và metrics thật của từng run; diễn giải hệ số/sai số.
-4. So sánh trên cùng tập đánh giá, khóa thiết kế rồi mới đánh giá final test theo protocol.
-5. Bàn giao pipeline/artifact và cách dùng cho F1-07, bảng kết quả cho F1-08.
+Từ thư mục gốc repo, đồng bộ môi trường. Nếu máy chưa có dữ liệu trong `data/processed/`,
+chạy bước chuẩn bị trước khi đối chiếu với [báo cáo chuẩn F1-05](../../reports/data-preparation/checks.json).
 
-Nếu phát hiện dữ liệu cần sửa, trao đổi với Nguyên/Danh để cập nhật F1-05/protocol chung,
-phân biệt lỗi dữ liệu chung với lỗi Pipeline riêng. Lỗi dữ liệu chung phải sửa một nơi,
-chạy lại kiểm tra, cập nhật hash/metadata và chạy lại các model bị ảnh hưởng trước khi so sánh.
-PR sửa tiếp vẫn liên kết Issue F1-05, mở lại Issue đó nếu cần; không tạo Issue con.
-Không tạo dataset riêng cho từng người hoặc âm thầm sửa file đã bàn giao.
-Diễn giải hệ số phải theo quy tắc F1-03: dựa trên run thật, hiểu dấu/đơn vị và ảnh hưởng
-của biến đổi, không copy nguyên văn lời giải thích tự động từ AI.
+```sh
+uv sync --locked
+uv run python -m scripts.prepare_data
+uv run python -m scripts.check_prepared_data --reference reports/data-preparation/checks.json --report tmp/f1-05-checks.json
+```
 
-Chỉ có **một Issue #5**, không tách Issue cho từng model. Chốt thiết kế và kết luận bằng
-2–3 gạch sau trao đổi. Mỗi PR phần việc ghi `Refs #5`; PR tổng hợp hoàn tất task mới `Closes #5`.
+Sau khi kiểm tra đạt, nạp train 2022–2023 (39.433 vòng) và validation 2024 (23.426 vòng).
+Ví dụ lấy đầu vào của M1 bằng [hàm nạp chung](../../src/f1_lap_time/data_preparation.py).
 
-**Xong khi:** ít nhất 4 LR models có thiết kế được giải thích, kết quả tái tạo/so sánh được
-và pipeline dùng được cho demo. Không điền sẵn features hoặc kết quả khi nhóm chưa quyết định/chạy thật.
+```python
+from f1_lap_time.data_preparation import load_prepared_data
+
+train, metadata = load_prepared_data(split="train")
+val, _ = load_prepared_data(split="validation")
+features = ["EventName", "LapNumber"]
+X_train, y_train = train[features], train["LapTimeSec"]
+X_val, y_val = val[features], val["LapTimeSec"]
+val_ids = val["row_id"]  # Gắn lại vào dự đoán để so sánh cùng vòng.
+```
+
+Mỗi config khai báo rõ các cột đầu vào thuộc `features.allowed_candidate_features`.
+Với M2–M4, cột đọc từ dữ liệu là `TyreLife`. Giữ `row_id`, `split`, `Year`, `Session`,
+`EventKey` và `IsAccurate` ở ngoài ma trận đặc trưng. Giữ nguyên các vòng có feature
+thiếu hoặc được EDA đánh dấu ngoại lệ. Nếu kiểm tra dữ liệu chung thất bại, đối chiếu với
+Nguyên/Danh, sửa tại F1-05 hoặc protocol và chạy lại các model bị ảnh hưởng.
+
+## 3. Train độc lập, chấm điểm chung
+
+**Khánh, Nguyên, Khang và Danh có thể bắt đầu song song ngay khi dữ liệu F1-05 trên máy
+của mình đã đạt kiểm tra.** Mỗi người dùng bộ nạp ở mục 2, tự xây, fit và kiểm thử
+pipeline từ đầu. Ví dụ, “M2 thêm thông tin lốp” nghĩa là Nguyên dùng các cột của M1
+cùng các cột lốp trong dữ liệu F1-05. M2 có thể train ngay cả khi M1 chưa có artifact.
+Đặt config từng model ở `configs/models/`, logic ở `src/f1_lap_time/` và lệnh train ở
+`scripts/`. Mỗi người ghi lại lệnh tái tạo run của mình.
+
+Song song với việc train M1, Khánh chuẩn bị hàm chấm điểm theo mục 4. Mỗi người lưu
+dự đoán train và validation cùng `row_id`, `split`, `y_true` và `y_pred`. Khánh có
+thể chấm các bảng đã lưu ngay khi hàm hoàn thiện, kể cả khi lượt train đã kết thúc.
+
+1. **Biến đổi đầu vào.** Với M2–M4, kiểm tra các giá trị `TyreLife` quan sát được là
+   số hữu hạn ≥ 1, rồi thay cột này bằng `TyreLife_start = TyreLife - 1` trong pipeline.
+   Giữ NaN để điền ở bước sau. Giá trị sai kiểu, vô cực hoặc nhỏ hơn 1 phải báo lỗi.
+2. **Tiền xử lý.** Loại cột toàn khuyết trên tập dùng để fit. Điền số bằng trung vị,
+   chuẩn hóa biến số theo F1-03. Điền category thiếu bằng `UNKNOWN`, giữ nguyên nhãn đội
+   và loại lốp. Dùng `OneHotEncoder(handle_unknown="ignore", sparse_output=False)`,
+   với `drop="first"` cho M1–M3 và `drop=None` cho M4. Dùng cùng cách xử lý các đầu vào
+   chung để có thể đối chiếu từng cặp thiết kế.
+3. **Fit và dự đoán.** Gói toàn bộ biến đổi và estimator vào một scikit-learn `Pipeline`.
+   Gọi `fit(X_train, y_train)` rồi `predict` cho train và validation. Nếu dùng fold trong
+   train, tách theo thời gian và fit lại cả pipeline trong từng fold. Tập 2025 dành riêng
+   cho lần đánh giá cuối ở mục 5.
+4. **Kiểm thử trong `tests/`.** Kiểm tra `TyreLife=1` thành 0 và giá trị thiếu được
+   điền sau phép trừ. Thử category mới và cột toàn khuyết ở train nhưng có giá trị ở
+   validation. Kiểm tra thống kê imputer/scaler chỉ dựa trên train và pipeline sau khi
+   lưu, nạp lại cho cùng dự đoán trên cùng đầu vào.
+
+## 4. Chấm validation và giải thích kết quả
+
+- **Ghép theo vòng.** Lưu bảng dự đoán từng run gồm `row_id`, `split`, `y_true`,
+  `y_pred`. Hàm chấm đối chiếu đúng tập ID theo F1-05, mỗi ID có đúng một dự đoán hữu hạn
+  và target khớp theo ID. Nếu thiếu, trùng hoặc lệch dòng, sửa run rồi chấm lại.
+- **Tổng hợp.** Mỗi dòng bảng điểm ghi `model`, `run_id`, `split`, số vòng,
+  MAE (s), RMSE (s), MSE (s²), R². Tính trên toàn bộ vòng của từng tập train và
+  validation. Khi so hai model, lấy MAE validation của model mới trừ MAE của đối chứng.
+  Giá trị âm cho biết sai số tuyệt đối trung bình giảm bao nhiêu giây.
+- **Tìm nơi model sai.** Trên validation, nhóm dự đoán theo chặng, ghi số vòng, MAE và
+  sai số có dấu trung bình (`y_pred - y_true`, dương nghĩa là dự đoán vòng chậm hơn).
+  Chọn một chặng để giải thích chênh lệch với đối chứng trên cùng các vòng. Điểm tổng
+  được tính trực tiếp từ từng vòng để mỗi vòng có trọng số như nhau.
+- **Đọc hệ số.** Xuất tên feature sau biến đổi cùng hệ số và intercept. Mỗi người chọn
+  hai hoặc ba hệ số từ chính run của mình, giải thích dấu và đơn vị khi giữ các biến
+  còn lại cố định. Với `StandardScaler`, hệ số số ứng với tăng một độ lệch chuẩn train.
+  Với OLS, ghi category tham chiếu. Với Ridge, có thể lấy hiệu hai hệ số category để
+  giải thích chênh lệch dự đoán. Khi `Driver` và `Team` đi cùng nhau, nêu giới hạn của
+   việc tách riêng hai hệ số và tránh diễn giải chúng như tác động nhân quả. Tự kiểm
+   chứng từng nhận xét với số liệu trước khi viết báo cáo.
+
+## 5. Khóa model, đánh giá 2025 và bàn giao
+
+1. **Mỗi người chốt đúng một phiên bản cho model mình phụ trách.** Có thể thử nhiều
+   phiên bản trong phạm vi thiết kế ở mục 1. Gán mỗi lượt train một `run_id` riêng.
+   Dùng quy tắc validation dưới đây để chọn một run, ghi lý do chọn và bàn giao đúng
+   một pipeline đã fit. Ví dụ, dù Danh thử nhiều giá trị `alpha`, M4 chỉ có một
+   `run_id` trong bảng so sánh cuối và một file `.joblib` cho demo.
+2. **Khánh chọn model thắng trong bốn run đã chốt.** Chọn MAE thấp nhất. Trong nhóm cách MAE
+   tốt nhất ≤ 0,005 giây, ưu tiên RMSE thấp nhất. Nếu RMSE cũng chênh ≤ 0,005 giây,
+   ưu tiên mô hình đơn giản hơn, ít feature hơn. So bằng số chưa làm tròn, ghi lý do chọn
+   và khóa `run_id`, config, pipeline đã fit trên train cùng siêu tham số.
+3. **Chỉ đánh giá final test một lần.** Nạp `split="final_test"` (21.782 vòng mùa 2025)
+   và gọi `predict` từ artifact đã khóa. Báo cáo đủ bốn metric và số vòng cho run đó.
+   Nếu sai số cao hơn validation, ghi nhận mức chênh và giới hạn khi dự đoán mùa mới.
+4. **Lưu vết các lần thử.** Trong khi huấn luyện, lưu pipeline `.joblib` và đầu ra chi tiết ở `artifacts/` local.
+   Đưa config, lệnh tái tạo và các bảng/ảnh dùng trong báo cáo vào Git. Mỗi bảng/ảnh
+   trong `reports/models/` dẫn về `run_id`. Metadata ghi đủ các trường của
+   `evaluation.provenance_metadata`, gồm cả hash dữ liệu/split/config, Git commit và
+   trạng thái working tree. [Danh sách trường bắt buộc](../../configs/experiment.json)
+5. **Cho demo và báo cáo.** Khánh, Nguyên, Khang và Danh mỗi người bàn giao cho Nguyên
+   pipeline đã fit của mình, `run_id`, lệnh tái tạo, tên, kiểu và đơn vị của các cột đầu vào.
+   Nhóm chọn cùng một `row_id` trên validation làm vòng mẫu. Mỗi người nạp lại pipeline,
+   dự đoán vòng đó và ghi kết quả theo giây để Nguyên đối chiếu với app.
+   Khánh gửi bảng MAE validation 2024 của bốn run bàn giao và đánh dấu run thắng.
+   Khang nhận bảng so sánh validation, kết quả test của model đã khóa, bảng hệ số
+   và nhận xét sai số của từng người. [F1-07 · Demo](F1-07-demo-video.md) · [F1-08 · Báo cáo](F1-08-report-outline.md)
+6. **Dọn phiên bản thử trước khi kết thúc.** Sau khi Nguyên nạp đúng bốn run và đối
+   chiếu dự đoán vòng mẫu, mỗi người xóa các binary của phiên bản cũ, bản sao và đầu
+   ra tạm do mình tạo trong F1-06. Giữ config, metadata và bảng điểm của các lần thử
+   để truy lại quyết định, cùng các đầu ra dùng trong báo cáo. Đối chiếu lần cuối:
+   gói bàn giao có đúng bốn file model, mỗi mã M1–M4 đúng một file, và `run_id`
+   của mỗi file khớp bảng điểm cùng hướng dẫn nạp cho F1-07.
+
+**Hoàn tất F1-06 khi** một thành viên khác chạy lại được kết quả từ config đã lưu, cả bốn
+model có đối chiếu trên cùng vòng validation và Nguyên nạp được cả bốn pipeline để tái tạo
+bốn dự đoán trên vòng mẫu. Chốt thiết kế và kết luận trong 2–3 gạch ở Issue #5. PR từng phần ghi `Refs #5`,
+PR tổng hợp hoàn tất task ghi `Closes #5`.

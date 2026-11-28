@@ -196,7 +196,7 @@ Mọi thí nghiệm và báo cáo kết quả đều phải tính toán và côn
 | **Coefficient of Determination** | **R²** | **Không đơn vị** | Tỷ lệ phương sai của lap time được giải thích bởi mô hình. **Tuyệt đối không gọi R² là "phần trăm độ chính xác"**. |
 
 ### 7.2. Tiêu chí chọn mô hình tốt nhất (Model Selection Criterion)
-- **Tiêu chí chính**: Mô hình có **MAE thấp nhất trên tập Validation (mùa 2024)** sẽ được chọn làm mô hình chiến thắng (best model) để triển khai trên ứng dụng demo và báo cáo kết quả cuối cùng.
+- **Tiêu chí chính** là MAE thấp nhất trên tập validation 2024, với quy tắc phá hòa bên dưới. App demo chạy trực tiếp cả bốn mô hình và đánh dấu mô hình thắng theo validation. Chỉ mô hình thắng đã khóa được đánh giá một lần trên final test 2025.
 - **Quy tắc phá hoà (Tie-breaking Rule)**:
   - Nếu hai hoặc nhiều mô hình có giá trị Validation MAE chênh lệch rất nhỏ ($\le 0,005$ giây):
     1. Ưu tiên mô hình có **Validation RMSE thấp hơn**.

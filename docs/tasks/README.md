@@ -22,8 +22,8 @@ Các trang dưới đây là hướng dẫn kỹ thuật để biết làm ở f
 Khi mở PR, tra số Issue GitHub theo mã task trong bảng trên.
 
 Khánh là leader; các phân công ghi “đề xuất” được nhóm thống nhất khi nói chuyện.
-F1-06/07 hiện chỉ mô tả phạm vi và vị trí đầu ra; chi tiết bổ sung trong chính trang task
-khi đủ dữ liệu/quyết định, không mở thêm Issue để chia vụn.
+F1-06 đã chốt bốn thiết kế, người phụ trách và cách đánh giá trong trang task.
+F1-07 sẽ bổ sung chi tiết giao diện sau khi nhận pipeline được chọn.
 
 ## Chỉ ghi lại kết luận
 
