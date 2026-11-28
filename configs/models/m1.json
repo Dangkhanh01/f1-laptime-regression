@@ -1,0 +1,9 @@
+{
+  "model": "M1",
+  "features": ["EventName", "LapNumber"],
+  "estimator": {"fit_intercept": true},
+  "numeric_imputer": {"strategy": "median"},
+  "scaler": "StandardScaler",
+  "categorical_imputer": {"strategy": "constant", "fill_value": "UNKNOWN"},
+  "encoder": {"drop": "first", "handle_unknown": "ignore", "sparse_output": false}
+}

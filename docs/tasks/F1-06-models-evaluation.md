@@ -139,3 +139,78 @@ thể chấm các bảng đã lưu ngay khi hàm hoàn thiện, kể cả khi l�
 model có đối chiếu trên cùng vòng validation và Nguyên nạp được cả bốn pipeline để tái tạo
 bốn dự đoán trên vòng mẫu. Chốt thiết kế và kết luận trong 2–3 gạch ở Issue #5. PR từng phần ghi `Refs #5`,
 PR tổng hợp hoàn tất task ghi `Closes #5`.
+
+## 6. Chạy M1 và chấm CSV của từng thành viên
+
+Sau khi đối chiếu F1-05 ở mục 2, chạy từ gốc repo với [config M1](../../configs/models/m1.json).
+Lệnh sinh `run_id` mới, in đường dẫn báo cáo và lưu pipeline cùng CSV dự đoán vào
+`artifacts/M1/<run_id>/` trên máy chạy.
+
+```sh
+uv run python -m scripts.train_m1
+```
+
+Nguyên, Khang và Danh tự fit pipeline của mình trên train. Với `frames = [train, val]`,
+`pipeline` đã fit và `features` là danh sách cột đầu vào gốc của model, có thể xuất cả hai tập
+bằng đoạn dưới. Đổi thư mục và mã lượt chạy theo model thực tế.
+
+```python
+from pathlib import Path
+import pandas as pd
+
+out = Path("artifacts/M2/m2-001/predictions.csv")
+out.parent.mkdir(parents=True, exist_ok=True)
+tables = []
+for frame in frames:
+    table = frame[["row_id", "split", "LapTimeSec"]].rename(columns={"LapTimeSec": "y_true"})
+    table["y_pred"] = pipeline.predict(frame[features])
+    tables.append(table)
+pd.concat(tables).to_csv(out, index=False)
+```
+
+Chấm CSV đã lưu ở bất kỳ thứ tự dòng nào. Dùng target trực tiếp từ bộ nạp F1-05 và giữ
+đủ độ chính xác khi xuất. Lệnh đối chiếu ID, split, target và giá trị hữu hạn trước khi
+tính điểm từng vòng. Bỏ `--output` để chỉ in điểm, hoặc truyền đường dẫn CSV mới để lưu.
+
+```sh
+uv run python -m scripts.score_predictions --model M2 --run-id m2-001 --predictions artifacts/M2/m2-001/predictions.csv --output reports/models/M2/m2-001/scores.csv
+```
+
+### Bàn giao M1 của Khánh
+
+Khánh giữ run chuẩn `m1-20261128T100841Z-eeeb6586`. Đây là run M1 duy nhất, nên chưa
+cần phá hòa theo RMSE. OLS có intercept, số vòng chuẩn hóa bằng `StandardScaler`, chặng
+mã hóa với `drop="first"`. Khánh giữ cách xử lý chặng mới đã chốt để M2–M3 có cùng
+mốc so sánh. Cả 694 vòng Chinese GP đều góp vào MAE validation. Điểm dưới đây làm tròn để đọc.
+[Bảng điểm gốc](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/scores.csv) ·
+[Metadata, hash và vòng mẫu](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/metadata.json)
+
+| Tập | Số vòng | MAE (s) | RMSE (s) | MSE (s²) | R² |
+|---|---:|---:|---:|---:|---:|
+| Train 2022–2023 | 39.433 | 2,128571 | 3,838956 | 14,737583 | 0,892070 |
+| Validation 2024 | 23.426 | 3,434873 | 4,757563 | 22,634410 | 0,779230 |
+
+- **Chinese GP** có sai số lớn nhất, MAE 10,776 s trên 694 vòng. Đây là chặng mới.
+  Encoder gán toàn số 0 cho nhóm cột chặng, nên ở cùng số vòng M1 cho cùng dự đoán
+  với Abu Dhabi (chặng tham chiếu). Sai số có dấu trung bình −10,776 s.
+- **Singapore GP** đã xuất hiện trong train, nhưng trên 1.109 vòng validation M1 vẫn dự
+  đoán chậm hơn thực tế trung bình 8,907 s. Khi so M2 với M1, có thể kiểm tra bao nhiêu
+  phần sai lệch này còn lại sau khi thêm thông tin lốp và stint.
+  [Sai số của 24 chặng](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/validation_by_event.csv)
+- **Hệ số** cho thấy ở cùng chặng, tăng 18,108 vòng (một độ lệch chuẩn train) ứng với
+  dự đoán giảm 0,952 s. Ở cùng số vòng, M1 dự đoán Bahrain chậm hơn Abu Dhabi 8,157 s.
+  [Hệ số và intercept](../../reports/models/M1/m1-20261128T100841Z-eeeb6586/coefficients.csv)
+
+F1-07 truyền một `DataFrame` có `EventName` (chuỗi tên chặng) và `LapNumber`
+(số nguyên hoặc thực, đơn vị vòng). Vòng đối chiếu `2024_Bahrain_Grand_Prix_R_VER_2`
+có target 96,296 s. Nạp pipeline local và kiểm tra dự đoán mẫu theo giây:
+
+```python
+from pathlib import Path
+import joblib
+import pandas as pd
+
+model = joblib.load(Path("artifacts/M1/m1-20261128T100841Z-eeeb6586/pipeline.joblib"))
+lap = pd.DataFrame([{"EventName": "Bahrain Grand Prix", "LapNumber": 2.0}])
+assert abs(model.predict(lap)[0] - 100.35860272259391) < 1e-9
+```
